@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mrsnow.petstore.mapper.StoreMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mrsnow.petstore.dao.Store">
+        <id column="id" property="id" />
+        <result column="MANAGER_ID" property="managerId" />
+        <result column="STORE_NAME" property="storeName" />
+        <result column="IS_OPENNING" property="isOpenning" />
+        <result column="STORE_POSITION" property="storePosition" />
+        <result column="MANAGER_NAME" property="managerName" />
+        <result column="PREFERENTIAL_ID" property="preferentialId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, MANAGER_ID, STORE_NAME, IS_OPENNING, STORE_POSITION, MANAGER_NAME, PREFERENTIAL_ID
+    </sql>
+
+</mapper>

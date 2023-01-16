@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mrsnow.petstore.mapper.GoodsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mrsnow.petstore.dao.Goods">
+        <id column="ID" property="id" />
+        <result column="CLASS_NAME" property="className" />
+        <result column="STORE_ID" property="storeId" />
+        <result column="STORE_NAME" property="storeName" />
+        <result column="PRICE" property="price" />
+        <result column="PREFERENTIAL_ID" property="preferentialId" />
+        <result column="INVENTORY_NUM" property="inventoryNum" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID, CLASS_NAME, STORE_ID, STORE_NAME, PRICE, PREFERENTIAL_ID, INVENTORY_NUM
+    </sql>
+
+</mapper>

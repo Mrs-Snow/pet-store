@@ -1,6 +1,6 @@
 <template>
     <my-header></my-header>
-    <router-view class="container"></router-view>
+    <router-view></router-view>
     <my-footer></my-footer>
 </template>
 <script setup lang="ts">
@@ -9,7 +9,5 @@ import MyHeader from './components/layout/MyHeader.vue';
 </script>
 
 <style scoped>
-   .container {
-     height: 90vh;
-   }
+   
 </style>

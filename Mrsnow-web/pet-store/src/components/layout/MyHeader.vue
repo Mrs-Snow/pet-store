@@ -9,26 +9,31 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted,ref } from 'vue'
 import user from './header/user.vue';
 import cart from './header/cart.vue';
 import { useRouter } from 'vue-router';
 import { number, string } from 'vue-types';
 
 export default defineComponent({
-    props:{
-        username:{
-            type: String,
-            default:'游客'
-        },
-    },
+    
     name:'my-header',
     components: {
         user,
-        cart,
+        cart
   },
     setup (props) {
-        return {}
+        const username = ref('游客')
+        onMounted(()=>{
+            const { user } =sessionStorage.getItem('user')
+            if(user){
+                username.value=user.username
+            }
+            
+        })
+        return {
+            username
+        }
     }
 })
 </script>

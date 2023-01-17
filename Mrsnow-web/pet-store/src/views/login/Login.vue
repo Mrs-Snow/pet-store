@@ -76,6 +76,7 @@ export default defineComponent({
           if(res.data.code===200){
             message.success("登录成功！")
             sessionStorage.setItem("token",res.data.token)
+            sessionStorage.setItem("user",res.data.data)
             router.push({
               path: '/',
               params: {

@@ -1,6 +1,7 @@
 package com.mrsnow.petstore.controller;
 
 
+import com.mrsnow.petstore.dao.Goods;
 import com.mrsnow.petstore.service.GoodsService;
 import com.mrsnow.petstore.utils.JO;
 import com.mrsnow.petstore.utils.R;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * <p>
@@ -29,8 +32,9 @@ public class GoodsController {
     private GoodsService goodsService;
 
     @PostMapping(value = "/searchByKey")
-    public R searchByKey(JO<String> key){
-        return R.success("将大赛大家撒");
+    public R searchByKey(JO<String> jo){
+        List<Goods> goods = goodsService.searchGood(jo.getData());
+        return R.success(goods,"搜索完成！");
     }
 }
 

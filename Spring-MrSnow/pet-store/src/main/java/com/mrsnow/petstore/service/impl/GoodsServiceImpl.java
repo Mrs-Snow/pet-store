@@ -1,5 +1,6 @@
 package com.mrsnow.petstore.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.mrsnow.petstore.dao.Goods;
 import com.mrsnow.petstore.mapper.GoodsMapper;
 import com.mrsnow.petstore.service.GoodsService;
@@ -21,6 +22,8 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
     @Override
     public List<Goods> searchGood(String searchKey) {
-        return null;
+        LambdaQueryWrapper<Goods> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(Goods::getClassName,searchKey);
+        return baseMapper.selectList(wrapper);
     }
 }

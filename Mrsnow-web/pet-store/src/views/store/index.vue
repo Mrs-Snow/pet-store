@@ -9,23 +9,24 @@
             </div>
         </div>
         <div class="center">
-        
-
-
-
-
-
-        <Carousel
-        v-if="showCarousel"
-        class="carousel"
-        effect="fade"
-        autoplay
-        :dots=false
-        >
-            <img class="img" src="../../assets/cat1.jpeg" />
-            <img class="img" src="../../assets/cat2.jpeg" />
-            <img class="img" src="../../assets/cat3.jpg" />
-        </Carousel>
+            <span v-if="showGoods">搜索结果</span>
+            <div v-if="showGoods" class="goodsList">
+                <div v-for="(item,index) in goodsList" >
+                <goodsItem/>
+                </div>
+            </div>
+            
+            <Carousel
+                v-if="showCarousel"
+                class="carousel"
+                effect="fade"
+                autoplay
+                :dots=false
+            >
+                <img class="img" src="../../assets/cat1.jpeg" />
+                <img class="img" src="../../assets/cat2.jpeg" />
+                <img class="img" src="../../assets/cat3.jpg" />
+            </Carousel>
         </div>
        
         <div class="right">
@@ -40,6 +41,7 @@ import MyFooter from '../../components/layout/MyFooter.vue';
 import MyHeader from '../../components/layout/MyHeader.vue';
 import search from '../../components/store/content/search.vue';
 import guide from '../../components/store/content/guide.vue';
+import goodsItem from './goodsItem.vue';
 import { AlibabaOutlined } from '@ant-design/icons-vue';
 import { Carousel } from 'ant-design-vue';
 import searchByKey from '@/api/goods';
@@ -50,19 +52,24 @@ export default defineComponent({
         search,
         guide,
         Carousel,
-        AlibabaOutlined
+        AlibabaOutlined,
+        goodsItem
     },
     setup () {
         const showCarousel=ref(true)
+        const showGoods=ref(false)
         const searchKey = ref('')
-        const goodsList = ref([])
+        const goodsList = ref([1,2,5,6,2])
 
         const showTab = (val:Ref) =>{
             const proxy = val.value
+            showGoods.value=true
             showCarousel.value=proxy.showCarousel
         }
 
         function keyValue(key:Ref){
+            showGoods.value=true
+            showCarousel.value = false
             searchKey.value = key.value
             // doSearch(key.value)
         }
@@ -72,6 +79,7 @@ export default defineComponent({
         }
         return {
             showCarousel,
+            showGoods,
             showTab,
             searchKey,
             keyValue,
@@ -83,6 +91,12 @@ export default defineComponent({
 </script>
 
 <style scoped>
+    .goodsList {
+        margin-left: 10%;
+        /* border: 1px solid #000; */
+        width: 80%;
+        height: 90%;
+    }
     .center{
         width: 80%;
         height: 100%;

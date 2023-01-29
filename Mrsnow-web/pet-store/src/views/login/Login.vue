@@ -92,9 +92,9 @@ export default defineComponent({
             const user:User = res.data.data
             sessionStorage.setItem("user",JSON.stringify(user))
 
-            // if(app){
-            //    app.appContext.config.globalProperties.$setUser()
-            // }
+            if(app){
+               app.appContext.config.globalProperties.$setUser()
+            }
            reloadHeader()
            
 

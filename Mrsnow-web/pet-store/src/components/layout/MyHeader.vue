@@ -30,18 +30,16 @@ export default defineComponent({
         const app = getCurrentInstance()
         
         
-        const setUsername =()=> {
-                const user = sessionStorage.getItem('user')
-                console.log(user)
-                if(user){
-                    const {nickName} = JSON.parse(user)
-                    console.log(nickName)
-                    username.value=nickName
-                }
+        // const setUsername =()=> {
+        //         const user = sessionStorage.getItem('user')
+        //         // console.log(user)
+        //         if(user){
+        //             const {nickName} = JSON.parse(user)
+        //             console.log(nickName)
+        //             username.value=nickName
+        //         }
            
-        }
-
-        defineExpose({setUsername})
+        // }
 
         function userLoginOut(){
 
@@ -49,7 +47,6 @@ export default defineComponent({
 
         return {
             uname,
-            setUsername,
             userLoginOut
         }
     }

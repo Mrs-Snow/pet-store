@@ -17,11 +17,11 @@ export function updatePassword(data: JO){
 }
 
 export function setUsername(){
-    console.log("运行了全局方法")
+    // console.log("运行了全局方法")
     const userInfo = sessionStorage.getItem('user')
     if(userInfo){
         const info = JSON.parse(userInfo)
-        console.log(info)
+        // console.log(info)
         return info.data.nickName
     }else{
         return '游客'

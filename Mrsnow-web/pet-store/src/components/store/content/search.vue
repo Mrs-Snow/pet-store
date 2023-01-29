@@ -26,7 +26,7 @@
     import IndexTitle from '../../login/IndexTitle.vue';
     import { defineComponent,ref } from 'vue'
     import { SearchOutlined,SafetyCertificateOutlined,GlobalOutlined,AccountBookOutlined,PhoneFilled } from '@ant-design/icons-vue';
-    import searchByKey from '../../../api/goods';
+    import searchByKey from '@/api/goods';
     export default defineComponent({
 
         name:'search-line',

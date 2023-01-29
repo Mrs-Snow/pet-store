@@ -6,10 +6,11 @@
 </template>
 
 <script lang="ts">
+
 import { defineComponent,onMounted,ref } from 'vue'
 
 export default defineComponent({
-    name: 'My-tab',
+    name: 'Mytab',
     props:{
         index:{
             type:String,
@@ -24,14 +25,16 @@ export default defineComponent({
             default: 'deeppink'
         }
     },
-    setup (props) {
+    
+    setup (props,{emit}) {
         const tabs = ['罐头','猫条','猫粮','冻干','猫薄荷','饭盆','饮料','磨牙食品'];
-        const tabElements=ref<any>([]);
+        const tabName = ref(props.tab)
         onMounted(()=>{
            
         })
 
         function click(e:Event) {
+            emit('tabName',tabName)
             //刷新一下整体,再单独变色
             for(var i=0;i<8;i++){
                 const id = tabs[i]+(i+1)
@@ -47,7 +50,7 @@ export default defineComponent({
               const box =  document.getElementById(id)
               if(box){
                 if(props.selectColor){
-                    console.log("传入有颜色",props.selectColor)
+                    // console.log("传入有颜色",props.selectColor)
                     box.style.color=props.selectColor
                 }else{
                     box.style.color='deeppink'
@@ -62,7 +65,7 @@ export default defineComponent({
 
         return { 
             click,
-            
+            tabName
         }
     }
 })

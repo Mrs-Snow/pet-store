@@ -1,8 +1,8 @@
 <template>
     <div class="box">
         <span class="guide">商品分类</span>
-        <Mtab :index="'1'" :tab="'罐头'" style="margin-left: 5%"/>
-        <Mtab :index="'2'" :tab="'猫条'" style="margin-left: 5%"/>
+        <Mtab :index="'1'" :tab="'罐头'" style="margin-left: 5%" @tabName="tabChange"/>
+        <Mtab :index="'2'" :tab="'猫条'" style="margin-left: 5%" @tabName="tabChange"/>
         <Mtab :index="'3'" :tab="'猫粮'" style="margin-left: 5%"/>
         <Mtab :index="'4'" :tab="'冻干'" style="margin-left: 5%"/>
         <Mtab :index="'5'" :tab="'猫薄荷'" style="margin-left: 5%"/>
@@ -13,18 +13,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent,ref } from 'vue'
+import { defineComponent,Ref,ref } from 'vue'
 import Mtab from '../../tabs/Mtab.vue';
 export default defineComponent({
     name: 'my-guide',
     components:{
         Mtab
     },
-    setup () {
-        
+    setup (props,{emit}) {
+        const tabs = ['罐头','猫条','猫粮','冻干','猫薄荷','饭盆','饮料','磨牙食品']
+        const tab = ref({})
+        function tabChange(e:Ref){
+            const val = {
+                showCarousel:false,
+                tabName:e.value
+            }
+            tab.value=val
+            emit('showTab',tab)
+        }
         
         return {
-            
+            tabChange,
+            tab,
+            tabs,
             
         }
     }
@@ -58,6 +69,7 @@ export default defineComponent({
 
     .guide:hover{
         transform: matrix(1.2,0,0,1.2,0,3);
+        z-index: 10;
     }
 
  

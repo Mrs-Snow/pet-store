@@ -1,7 +1,6 @@
 <template>
-    <search style="margin-top: 15px"/>
-    <guide style="margin-top: 15px"/>
-    
+    <search style="margin-top: 15px" @doSearch="searchByKey"/>
+    <guide style="margin-top: 15px" @showTab="showTab"/>
     <div class="content">
         <div class="left">
             <div class="kefu">
@@ -9,7 +8,15 @@
                 客服
             </div>
         </div>
+        <div class="center">
+        
+
+
+
+
+            
         <Carousel
+        v-if="showCarousel"
         class="carousel"
         effect="fade"
         autoplay
@@ -19,14 +26,16 @@
             <img class="img" src="../../assets/cat2.jpeg" />
             <img class="img" src="../../assets/cat3.jpg" />
         </Carousel>
-        <div class="right"> sadsadsa</div>
+        </div>
+       
+        <div class="right">
+            广告位招租
+        </div>
     </div>
-    
-    
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent,Ref,ref } from 'vue'
 import MyFooter from '../../components/layout/MyFooter.vue';
 import MyHeader from '../../components/layout/MyHeader.vue';
 import search from '../../components/store/content/search.vue';
@@ -43,14 +52,35 @@ export default defineComponent({
         AlibabaOutlined
     },
     setup () {
-        
+        const showCarousel=ref(true)
 
-        return {}
+        const showTab = (val:Ref) =>{
+            const proxy = val.value
+            showCarousel.value=proxy.showCarousel
+        }
+
+        function searchByKey(key:Ref){
+
+        }
+
+        function doSearch(){
+
+        }
+        return {
+            showCarousel,
+            showTab,
+            searchByKey,
+            doSearch
+        }
     }
 })
 </script>
 
 <style scoped>
+    .center{
+        width: 80%;
+        height: 100%;
+    }
     .kefu{
         margin-left: 10%;
         margin-top: 50%;
@@ -75,10 +105,13 @@ export default defineComponent({
         background-color: rgb(242, 149, 189);
         height: 100%;
         float: right;
+        font-weight: 600;
+        font-size: large;
+        color: blueviolet;
     }
     .carousel{
         cursor: pointer;
-        width: 80%;
+        width: 100%;
     }
 
     .img{

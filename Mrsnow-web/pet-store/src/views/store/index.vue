@@ -1,5 +1,5 @@
 <template>
-    <search style="margin-top: 15px" @doSearch="searchByKey"/>
+    <search style="margin-top: 15px" @doSearch="keyValue"/>
     <guide style="margin-top: 15px" @showTab="showTab"/>
     <div class="content">
         <div class="left">
@@ -14,7 +14,7 @@
 
 
 
-            
+
         <Carousel
         v-if="showCarousel"
         class="carousel"
@@ -42,6 +42,7 @@ import search from '../../components/store/content/search.vue';
 import guide from '../../components/store/content/guide.vue';
 import { AlibabaOutlined } from '@ant-design/icons-vue';
 import { Carousel } from 'ant-design-vue';
+import searchByKey from '@/api/goods';
 export default defineComponent({
     components: {
         MyHeader,
@@ -53,24 +54,29 @@ export default defineComponent({
     },
     setup () {
         const showCarousel=ref(true)
+        const searchKey = ref('')
+        const goodsList = ref([])
 
         const showTab = (val:Ref) =>{
             const proxy = val.value
             showCarousel.value=proxy.showCarousel
         }
 
-        function searchByKey(key:Ref){
-
+        function keyValue(key:Ref){
+            searchKey.value = key.value
+            // doSearch(key.value)
         }
 
-        function doSearch(){
-
+        async function doSearch(key:String){
+             goodsList.value = await searchByKey({data:key})
         }
         return {
             showCarousel,
             showTab,
-            searchByKey,
-            doSearch
+            searchKey,
+            keyValue,
+            doSearch,
+            goodsList
         }
     }
 })

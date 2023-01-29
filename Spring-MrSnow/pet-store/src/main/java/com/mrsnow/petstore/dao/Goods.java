@@ -1,10 +1,10 @@
 package com.mrsnow.petstore.dao;
 
 import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
 
 /**
@@ -23,38 +23,50 @@ public class Goods extends Model<Goods> {
     /**
      * id
      */
-      @TableId(value = "ID", type = IdType.ASSIGN_ID)
+    @TableId(value = "ID", type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
      * 商品类名
      */
+    @TableField(value = "CLASS_NAME",  condition = SqlCondition.LIKE)
     private String className;
 
     /**
      * 商店id
      */
+    @TableField(value = "STORE_ID",  condition = SqlCondition.EQUAL)
     private Long storeId;
 
     /**
      * 商店名称
      */
+    @TableField(value = "STORE_NAME",  condition = SqlCondition.LIKE)
     private String storeName;
 
     /**
      * 价格
      */
+    @TableField(value = "PRICE",  condition = SqlCondition.LIKE)
     private BigDecimal price;
 
     /**
      * 优惠活动id
      */
+    @TableField(value = "PREFERENTIAL_ID",  condition = SqlCondition.LIKE)
     private Long preferentialId;
 
     /**
      * 库存数量
      */
+    @TableField(value = "INVENTORY_NUM",  condition = SqlCondition.LIKE)
     private Integer inventoryNum;
+
+    /**
+     * 商品名称
+     */
+    @TableField(value = "GOODS_NAME",  condition = SqlCondition.LIKE)
+    private Integer goodsName;
 
 
     public Long getId() {
@@ -118,16 +130,25 @@ public class Goods extends Model<Goods> {
         return this.id;
     }
 
+    public Integer getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(Integer goodsName) {
+        this.goodsName = goodsName;
+    }
+
     @Override
     public String toString() {
         return "Goods{" +
-        "id=" + id +
-        ", className=" + className +
-        ", storeId=" + storeId +
-        ", storeName=" + storeName +
-        ", price=" + price +
-        ", preferentialId=" + preferentialId +
-        ", inventoryNum=" + inventoryNum +
-        "}";
+                "id=" + id +
+                ", className='" + className + '\'' +
+                ", storeId=" + storeId +
+                ", storeName='" + storeName + '\'' +
+                ", price=" + price +
+                ", preferentialId=" + preferentialId +
+                ", inventoryNum=" + inventoryNum +
+                ", goodsName=" + goodsName +
+                '}';
     }
 }

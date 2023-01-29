@@ -26,7 +26,7 @@
     import IndexTitle from '../../login/IndexTitle.vue';
     import { defineComponent,ref } from 'vue'
     import { SearchOutlined,SafetyCertificateOutlined,GlobalOutlined,AccountBookOutlined,PhoneFilled } from '@ant-design/icons-vue';
-    import searchByKey from '@/api/goods';
+    
     export default defineComponent({
 
         name:'search-line',
@@ -38,16 +38,12 @@
             AccountBookOutlined,
             PhoneFilled
         },
-        setup(props){
+        setup(props,{emit}){
             const searchKey = ref<string>('');
 
             function goSearch(){
                 console.log("搜索关键字为:"+searchKey.value)
-                searchByKey({
-                    data:{
-                        searchKey: searchKey.value
-                    }
-                })
+                emit('doSearch',searchKey)
             }
             return{
                 goSearch,

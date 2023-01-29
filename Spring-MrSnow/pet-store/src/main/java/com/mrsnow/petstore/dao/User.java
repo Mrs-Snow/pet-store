@@ -80,6 +80,11 @@ public class User extends Model<User> {
     @TableField(value = "STORE_NAME", condition = SqlCondition.LIKE)
     private String storeName;
 
+    /**
+     * 昵称
+     */
+    @TableField(value = "NICK_NAME", condition = SqlCondition.LIKE)
+    private String nickName;
 
     public Long getId() {
         return id;
@@ -161,24 +166,35 @@ public class User extends Model<User> {
         this.storeName = storeName;
     }
 
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
     }
 
+
+
     @Override
     public String toString() {
         return "User{" +
-        "id=" + id +
-        ", userName=" + userName +
-        ", password=" + password +
-        ", isRoot=" + isRoot +
-        ", mobile=" + mobile +
-        ", email=" + email +
-        ", deliveryAddressId=" + deliveryAddressId +
-        ", userRole=" + userRole +
-        ", storeId=" + storeId +
-        ", storeName=" + storeName +
-        "}";
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", isRoot='" + isRoot + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", email='" + email + '\'' +
+                ", deliveryAddressId=" + deliveryAddressId +
+                ", userRole='" + userRole + '\'' +
+                ", storeId=" + storeId +
+                ", storeName='" + storeName + '\'' +
+                ", nickName='" + nickName + '\'' +
+                '}';
     }
 }

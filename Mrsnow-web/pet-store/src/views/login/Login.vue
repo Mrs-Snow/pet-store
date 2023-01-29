@@ -45,10 +45,13 @@
 
 <script lang="ts">
 import { message } from 'ant-design-vue';
-import doLogin from '@/api/login'
-import { defineComponent,reactive } from 'vue'
+import doLogin from '../../api/login'
+import { defineComponent,reactive,getCurrentInstance,onMounted, inject } from 'vue'
 import { useRouter } from 'vue-router';
 import IndexTitle from '../../components/login/IndexTitle.vue';
+import { func } from 'vue-types';
+
+
 interface FormState {
   username: string;
   password: string;
@@ -56,41 +59,57 @@ interface FormState {
 }
 export default defineComponent({
   components:{
-    IndexTitle
+    IndexTitle,
+    
   },
     setup () {
+      const app = getCurrentInstance()
       const router = useRouter();
+      const reload = inject('reload')
+      
       const formState = reactive<FormState>({
         username: '',
         password: '',
         remember: true,
       });
+
+      function reloadHeader(){
+          reload()
+      }
+      
       //登录按钮
-      const onFinish = (values: FormState) => {
-        doLogin(
+      async function onFinish(values: FormState){
+        const res = await doLogin(
           {
             userName: values.username,
             password: values.password
           }
-        ).then(res=>{
+        )
+      
+        if(res){
           if(res.data.code===200){
             message.success("登录成功！")
-            sessionStorage.setItem("token",res.data.token)
-            sessionStorage.setItem("user",res.data.data)
+            const user:User = res.data.data
+            sessionStorage.setItem("user",JSON.stringify(user))
+
+            // if(app){
+            //    app.appContext.config.globalProperties.$setUser()
+            // }
+           reloadHeader()
+           
+
             router.push({
               path: '/',
               params: {
                 user: res.data.data
               }
             })
+            
           }
-          if(res.data.code===-1){
-            message.error(res.data.message)
-          }
-        }).catch(err=>{
-           message.error(err)
-        })
-      };
+        }
+      }
+
+    
       //注册按钮
     const handleRegister=()=>{
       console.log("注册")
@@ -105,11 +124,14 @@ export default defineComponent({
     }
 
         return {
+            app,
             formState,
             onFinish,
             onFinishFailed,
             handleRegister,
             findPassword,
+            reloadHeader
+            
         } 
   }
 })

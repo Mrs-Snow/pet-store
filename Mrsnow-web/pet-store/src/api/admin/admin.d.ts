@@ -9,4 +9,5 @@ declare interface User{
     userRole?: string;
     storeId?: string;
     storeName?: string;
+    nickName?: string;
 }

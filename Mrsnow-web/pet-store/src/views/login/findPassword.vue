@@ -48,7 +48,7 @@ import { message } from 'ant-design-vue';
 import request from "@/utils/request";
 import { defineComponent,reactive } from 'vue'
 import { useRouter } from 'vue-router';
-import { doLogin } from '../../api/login';
+import { findPassword } from '../../api/login';
 import router from '../../router';
 import IndexTitle from '../../components/login/IndexTitle.vue';
 interface FormState {
@@ -70,8 +70,7 @@ export default defineComponent({
       });
       const router = useRouter();
       const onFinish = (values: FormState) => {
-        axios.post(
-          'http://127.0.0.1:17777/user/findPassword',
+        findPassword(
           {
             userName: values.username,
             mobile: values.mobile,
@@ -86,9 +85,6 @@ export default defineComponent({
                 username: values.username
               }
             })
-          }
-          if(res.data.code===-1){
-            message.warn(res.data.message)
           }
         }).catch(err=>{
           console.log(err)

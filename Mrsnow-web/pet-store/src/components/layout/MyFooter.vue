@@ -20,7 +20,7 @@ import { useRouter } from 'vue-router';
   </script>
   <style>
     .footer {
-      width: 100vw;
-      height: 10vh;
+      width: 100%;
+      height: 10%;
     }
   </style>

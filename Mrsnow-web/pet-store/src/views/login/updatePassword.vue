@@ -39,10 +39,9 @@
 
 <script lang="ts">
 import { message } from 'ant-design-vue';
-import request from "@/utils/request";
 import { defineComponent,onMounted,reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
-import { doLogin } from '../../api/login';
+import { updatePassword } from '../../api/login';
 import IndexTitle from '../../components/login/IndexTitle.vue';
 interface FormState {
   password1: string;
@@ -67,8 +66,7 @@ export default defineComponent({
       //登录按钮
       const onFinish = (values: FormState) => {
         console.log(route.params)
-        request.post(
-          'http://127.0.0.1:17777/user/findPassword/updatePassword',
+        updatePassword(
           {
             data:{
               old: values.password1,
@@ -80,9 +78,6 @@ export default defineComponent({
           if(res.data.code===200){
             message.success(res.data.message)
             router.push('/login')
-          }
-          if(res.data.code===-1){
-            message.error(res.data.message);
           }
         }).catch(err=>{
            message.error(err)

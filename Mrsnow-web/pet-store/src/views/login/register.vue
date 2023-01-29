@@ -57,12 +57,11 @@
 
 <script lang="ts">
 import { message } from 'ant-design-vue';
-import request from "@/utils/request";
 import { defineComponent,reactive } from 'vue'
 import { useRouter } from 'vue-router';
 import IndexTitle from '../../components/login/IndexTitle.vue';
-import { doLogin } from '../../api/login';
-import router from '../../router';
+import { register } from '../../api/login';
+
 interface FormState {
   username: string;
   password: string;
@@ -84,8 +83,7 @@ export default defineComponent({
       });
       const router = useRouter();
       const onFinish = (values: FormState) => {
-        request.post(
-          'http://127.0.0.1:17777/user/register',
+        register(
           {
             userName: values.username,
             password: values.password,
@@ -93,10 +91,6 @@ export default defineComponent({
             email: values.email
           }
         ).then(res=>{
-          console.log(res)
-          if(res.data.code === -1){
-              message.error(res.data.message);
-          }
           if(res.data.code===200){
             message.success("注册成功！")
             router.push('/login')

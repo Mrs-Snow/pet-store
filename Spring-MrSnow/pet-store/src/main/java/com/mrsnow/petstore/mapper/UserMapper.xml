@@ -14,11 +14,12 @@
         <result column="USER_ROLE" property="userRole" />
         <result column="STORE_ID" property="storeId" />
         <result column="STORE_NAME" property="storeName" />
+        <result column="NICK_NAME" property="nickName" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        ID, USER_NAME, PASSWORD, IS_ROOT, MOBILE, EMAIL, DELIVERY_ADDRESS_ID, USER_ROLE, STORE_ID, STORE_NAME
+        ID, USER_NAME, PASSWORD, IS_ROOT, MOBILE, EMAIL, DELIVERY_ADDRESS_ID, USER_ROLE, STORE_ID, STORE_NAME, NICK_NAME
     </sql>
 
 </mapper>

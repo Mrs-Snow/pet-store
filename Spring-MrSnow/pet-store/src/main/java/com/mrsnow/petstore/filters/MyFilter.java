@@ -23,9 +23,9 @@ public class MyFilter implements Filter {
         //校验URL，本简易系统不实现了
         String requestURI = request.getRequestURI();
         //校验token
-        String token = request.getHeader("token");
+        String token = request.getHeader("Token");
         if(token==null){
-            if(requestURI.contains("user")){
+            if(requestURI.contains("user")||requestURI.contains("goods")){
                 filterChain.doFilter(servletRequest,servletResponse);
                 return;
             }
@@ -34,7 +34,7 @@ public class MyFilter implements Filter {
         if(TokenUtil.verify(token)){
             filterChain.doFilter(servletRequest,servletResponse);
         } else {
-            wrapper.sendRedirect("/login");
+            wrapper.sendError(-1,"请登录");
         }
     }
 

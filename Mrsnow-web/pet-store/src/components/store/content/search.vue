@@ -26,7 +26,7 @@
     import IndexTitle from '../../login/IndexTitle.vue';
     import { defineComponent,ref } from 'vue'
     import { SearchOutlined,SafetyCertificateOutlined,GlobalOutlined,AccountBookOutlined,PhoneFilled } from '@ant-design/icons-vue';
-
+    import searchByKey from '../../../api/goods';
     export default defineComponent({
 
         name:'search-line',
@@ -43,6 +43,11 @@
 
             function goSearch(){
                 console.log("搜索关键字为:"+searchKey.value)
+                searchByKey({
+                    data:{
+                        searchKey: searchKey.value
+                    }
+                })
             }
             return{
                 goSearch,

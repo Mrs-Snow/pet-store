@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <div class="base">
-            <span class="welcome">您好, {{ username }}!</span>
+            <span class="welcome" ref="uname">您好, {{ $setUser() }}!</span>
             <cart :cartNum="5"></cart>
             <user></user>
         </div>
@@ -9,11 +9,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted,ref } from 'vue'
+import { defineComponent, onMounted,ref,getCurrentInstance,defineExpose } from 'vue'
 import user from './header/user.vue';
 import cart from './header/cart.vue';
 import { useRouter } from 'vue-router';
 import { number, string } from 'vue-types';
+
+
+
 
 export default defineComponent({
     
@@ -22,20 +25,37 @@ export default defineComponent({
         user,
         cart
   },
-    setup (props) {
-        const username = ref('游客')
-        onMounted(()=>{
-            const { user } =sessionStorage.getItem('user')
-            if(user){
-                username.value=user.username
-            }
-            
-        })
+    setup () {
+        const uname = ref()
+        const app = getCurrentInstance()
+        
+        
+        const setUsername =()=> {
+                const user = sessionStorage.getItem('user')
+                console.log(user)
+                if(user){
+                    const {nickName} = JSON.parse(user)
+                    console.log(nickName)
+                    username.value=nickName
+                }
+           
+        }
+
+        defineExpose({setUsername})
+
+        function userLoginOut(){
+
+        }
+
         return {
-            username
+            uname,
+            setUsername,
+            userLoginOut
         }
     }
 })
+
+
 </script>
 
 <style scoped>
@@ -46,11 +66,11 @@ export default defineComponent({
     }
     .header {
         flex-direction: row-reverse;
-        width: 100vw;
+        width: 100%;
         background-color:rgb(189, 36, 176);
     }
     .base{
         width: 100%;
-        margin-left: 43%;
+        margin-left: 40%;
     }
 </style>

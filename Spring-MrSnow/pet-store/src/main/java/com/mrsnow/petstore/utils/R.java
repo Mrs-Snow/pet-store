@@ -26,12 +26,20 @@ public class R<T> {
         this.message=message;
     }
 
+    public R(T data) {
+       this.data = data;
+    }
+
     public static <E> R<E> success(E data,String message){
         return new R<E>(SUCCESS_CODE,data,message);
     }
 
     public static R success(String message){
         return new R(SUCCESS_CODE,message);
+    }
+
+    public static <E> R<E> success(E data){
+        return new R(data);
     }
 
     public static  R fail(String message){

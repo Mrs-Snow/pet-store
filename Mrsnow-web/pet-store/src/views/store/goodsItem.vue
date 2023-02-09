@@ -6,10 +6,17 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { string } from 'vue-types';
 
 export default defineComponent({
     name: 'goodsItem',
-    setup () {
+    props:{
+        goodsName:{
+            type: string,
+            defalt: '商品'
+        }
+    },
+    setup (props) {
         
 
         return {}

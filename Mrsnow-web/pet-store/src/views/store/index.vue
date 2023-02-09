@@ -12,7 +12,7 @@
             <span v-if="showGoods">搜索结果</span>
             <div v-if="showGoods" class="goodsList">
                 <div v-for="(item,index) in goodsList" >
-                <goodsItem/>
+                <goodsItem :goodsName="item.goodsName"/>
                 </div>
             </div>
             
@@ -59,7 +59,7 @@ export default defineComponent({
         const showCarousel=ref(true)
         const showGoods=ref(false)
         const searchKey = ref('')
-        const goodsList = ref([1,2,5,6,2])
+        const goodsList = ref([])
 
         const showTab = (val:Ref) =>{
             const proxy = val.value
@@ -72,11 +72,14 @@ export default defineComponent({
             showGoods.value=true
             showCarousel.value = false
             searchKey.value = key.value
-            // doSearch(key.value)
+            doSearch(key.value)
         }
 
         async function doSearch(key:String){
-             goodsList.value = await searchByKey({data:key})
+            const res = await searchByKey({data:key})
+            if(res){
+                console.log(res)
+            }
         }
         return {
             showCarousel,

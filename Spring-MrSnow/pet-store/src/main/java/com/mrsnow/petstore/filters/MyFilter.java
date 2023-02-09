@@ -29,6 +29,8 @@ import java.util.List;
 @Data
 public class MyFilter implements Filter {
 
+    public static int REDIRECT_CODE = -1;
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletResponseWrapper wrapper = new HttpServletResponseWrapper((HttpServletResponse) servletResponse);
@@ -53,13 +55,13 @@ public class MyFilter implements Filter {
 //            }
 //            wrapper.sendRedirect("/login");
         if (token==null){
-            wrapper.sendError(-1, "请登录");
+            wrapper.sendError(REDIRECT_CODE, "请登录");
             return;
         }
         if (TokenUtil.verify(token)) {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
-            wrapper.sendError(-1, "登录已过期");
+            wrapper.sendError(REDIRECT_CODE, "登录已过期");
         }
     }
 

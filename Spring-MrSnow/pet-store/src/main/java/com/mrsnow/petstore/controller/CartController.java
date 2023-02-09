@@ -5,6 +5,7 @@ import com.mrsnow.petstore.dao.Cart;
 import com.mrsnow.petstore.service.CartService;
 import com.mrsnow.petstore.utils.JO;
 import com.mrsnow.petstore.utils.R;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ import java.util.List;
 public class CartController {
     @Autowired
     private CartService cartService;
+
 
     @PostMapping(value = "/myCart")
     public R<List<Cart>> myCart(@RequestBody JO<Long> jo){

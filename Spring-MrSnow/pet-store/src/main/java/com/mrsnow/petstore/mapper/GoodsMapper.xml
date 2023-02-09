@@ -12,11 +12,12 @@
         <result column="PREFERENTIAL_ID" property="preferentialId" />
         <result column="INVENTORY_NUM" property="inventoryNum" />
         <result column="GOODS_NAME" property="goodsName" />
+        <result column="GOODS_PIC" property="goodsPic" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        ID, CLASS_NAME, STORE_ID, STORE_NAME, PRICE, PREFERENTIAL_ID, INVENTORY_NUM, GOODS_NAME
+        ID, CLASS_NAME, STORE_ID, STORE_NAME, PRICE, PREFERENTIAL_ID, INVENTORY_NUM, GOODS_NAME,GOODS_PIC
     </sql>
 
 </mapper>

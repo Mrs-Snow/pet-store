@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -66,7 +69,7 @@ public class Goods extends Model<Goods> {
      * 商品名称
      */
     @TableField(value = "GOODS_NAME",  condition = SqlCondition.LIKE)
-    private Integer goodsName;
+    private String goodsName;
 
 
     public Long getId() {
@@ -130,11 +133,11 @@ public class Goods extends Model<Goods> {
         return this.id;
     }
 
-    public Integer getGoodsName() {
+    public String getGoodsName() {
         return goodsName;
     }
 
-    public void setGoodsName(Integer goodsName) {
+    public void setGoodsName(String goodsName) {
         this.goodsName = goodsName;
     }
 

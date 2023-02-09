@@ -38,25 +38,28 @@ public class MyFilter implements Filter {
         //校验token
         String token = request.getHeader("Token");
 
-        if(token==null){
-            FilterItem filterItem = BeanContextUtil.getBean(FilterItem.class);
-            List<String> passList = filterItem.getPassList();
-            for(String checkUrl : passList){
-                if(requestURI.contains(checkUrl)){
-                    filterChain.doFilter(servletRequest,servletResponse);
-                    return;
-                }
+
+        FilterItem filterItem = BeanContextUtil.getBean(FilterItem.class);
+        List<String> passList = filterItem.getPassList();
+        for (String checkUrl : passList) {
+            if (requestURI.contains(checkUrl)) {
+                filterChain.doFilter(servletRequest, servletResponse);
+                return;
             }
+        }
 //            if(requestURI.contains("user")||requestURI.contains("goods")){
 //                filterChain.doFilter(servletRequest,servletResponse);
 //                return;
 //            }
 //            wrapper.sendRedirect("/login");
+        if (token==null){
+            wrapper.sendError(-1, "请登录");
+            return;
         }
-        if(TokenUtil.verify(token)){
-            filterChain.doFilter(servletRequest,servletResponse);
+        if (TokenUtil.verify(token)) {
+            filterChain.doFilter(servletRequest, servletResponse);
         } else {
-            wrapper.sendError(-1,"请登录");
+            wrapper.sendError(-1, "登录已过期");
         }
     }
 

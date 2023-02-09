@@ -13,6 +13,7 @@
   
   <style scoped>
   .back {
+    height: 90%;
     background-size: cover;
     background-image: url(../assets/amly.jpeg);
   }

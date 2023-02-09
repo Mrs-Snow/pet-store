@@ -6,7 +6,7 @@ import { resolve } from 'path'
 
 export default defineConfig(({ command, mode }) => {
     const env = loadEnv(mode, process.cwd(),'')
-    console.log(env.VITE_APP_API_BASEURL)
+    console.log(env)
    return{
       plugins: [vue()],
 

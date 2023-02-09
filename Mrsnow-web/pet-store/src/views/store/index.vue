@@ -65,6 +65,7 @@ export default defineComponent({
             const proxy = val.value
             showGoods.value=true
             showCarousel.value=proxy.showCarousel
+            doSearch(proxy.tabName)
         }
 
         function keyValue(key:Ref){

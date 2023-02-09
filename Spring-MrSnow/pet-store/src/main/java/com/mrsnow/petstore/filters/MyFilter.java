@@ -1,13 +1,24 @@
 package com.mrsnow.petstore.filters;
 
+import com.mrsnow.petstore.utils.BeanContextUtil;
 import com.mrsnow.petstore.utils.TokenUtil;
+import lombok.Data;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
+import javax.annotation.Resource;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import java.applet.AppletContext;
 import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -15,7 +26,9 @@ import java.io.IOException;
  * @CreateTime: 2022-12-16  11:43
  **/
 @Component
+@Data
 public class MyFilter implements Filter {
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletResponseWrapper wrapper = new HttpServletResponseWrapper((HttpServletResponse) servletResponse);
@@ -24,12 +37,21 @@ public class MyFilter implements Filter {
         String requestURI = request.getRequestURI();
         //校验token
         String token = request.getHeader("Token");
+
         if(token==null){
-            if(requestURI.contains("user")||requestURI.contains("goods")){
-                filterChain.doFilter(servletRequest,servletResponse);
-                return;
+            FilterItem filterItem = BeanContextUtil.getBean(FilterItem.class);
+            List<String> passList = filterItem.getPassList();
+            for(String checkUrl : passList){
+                if(requestURI.contains(checkUrl)){
+                    filterChain.doFilter(servletRequest,servletResponse);
+                    return;
+                }
             }
-            wrapper.sendRedirect("/login");
+//            if(requestURI.contains("user")||requestURI.contains("goods")){
+//                filterChain.doFilter(servletRequest,servletResponse);
+//                return;
+//            }
+//            wrapper.sendRedirect("/login");
         }
         if(TokenUtil.verify(token)){
             filterChain.doFilter(servletRequest,servletResponse);
@@ -47,4 +69,5 @@ public class MyFilter implements Filter {
     public void destroy() {
         Filter.super.destroy();
     }
+
 }

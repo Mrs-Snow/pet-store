@@ -1,14 +1,14 @@
 <template>
     <div class="box">
         <span class="guide">商品分类</span>
-        <Mtab :index="'1'" :tab="'罐头'" style="margin-left: 5%" @tabName="tabChange"/>
+        <Mtab :index="'1'" :tab="'罐头'"  style="margin-left: 5%" @tabName="tabChange"/>
         <Mtab :index="'2'" :tab="'猫条'" style="margin-left: 5%" @tabName="tabChange"/>
-        <Mtab :index="'3'" :tab="'猫粮'" style="margin-left: 5%"/>
-        <Mtab :index="'4'" :tab="'冻干'" style="margin-left: 5%"/>
-        <Mtab :index="'5'" :tab="'猫薄荷'" style="margin-left: 5%"/>
-        <Mtab :index="'6'" :tab="'饭盆'" style="margin-left: 5%"/>
-        <Mtab :index="'7'" :tab="'饮料'" style="margin-left: 5%"/>
-        <Mtab :index="'8'" :tab="'磨牙食品'" style="margin-left: 5%"/>
+        <Mtab :index="'3'" :tab="'猫粮'" style="margin-left: 5%" @tabName="tabChange"/>
+        <Mtab :index="'4'" :tab="'冻干'" style="margin-left: 5%" @tabName="tabChange"/>
+        <Mtab :index="'5'" :tab="'猫薄荷'" style="margin-left: 5%" @tabName="tabChange"/>
+        <Mtab :index="'6'" :tab="'饭盆'" style="margin-left: 5%" @tabName="tabChange"/>
+        <Mtab :index="'7'" :tab="'饮料'" style="margin-left: 5%" @tabName="tabChange"/>
+        <Mtab :index="'8'" :tab="'磨牙食品'" style="margin-left: 5%" @tabName="tabChange"/>
     </div>
 </template>
 
@@ -20,9 +20,11 @@ export default defineComponent({
     components:{
         Mtab
     },
+
     setup (props,{emit}) {
         const tabs = ['罐头','猫条','猫粮','冻干','猫薄荷','饭盆','饮料','磨牙食品']
         const tab = ref({})
+        
         function tabChange(e:Ref){
             const val = {
                 showCarousel:false,

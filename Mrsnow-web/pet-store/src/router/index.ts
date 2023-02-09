@@ -32,7 +32,7 @@ const routes: RouteRecordRaw[] =[
     {
         path: '/:pathMatch(.*)*',
         component: ()=> import('../views/notFound.vue')
-        }
+    }
 ];
 const router = createRouter({
     routes,

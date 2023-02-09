@@ -13,3 +13,8 @@ server:
   servlet:
     context-path: /mrsnow
   port: 17777
+
+myFilter:
+    passList:
+      - /login
+      - /searchByKey

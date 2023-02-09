@@ -9,6 +9,7 @@ import com.mrsnow.petstore.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping(value = "/login")
-    public R<Map<String,Object>> login(@RequestBody User user, HttpServletResponse response){
+    public R<Map<String,Object>> login(@RequestBody User user){
         String userName = user.getUserName();
         String password = user.getPassword();
         User login = userService.login(userName, password);
@@ -44,7 +45,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/register")
-    public R<Integer> register(@RequestBody User user, HttpServletResponse response){
+    public R<Integer> register(@RequestBody User user){
         int register = userService.register(user);
         if(register==10){
             return R.fail("注册失败，此用户名已有人使用");

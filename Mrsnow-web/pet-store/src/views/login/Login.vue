@@ -88,6 +88,7 @@ export default defineComponent({
       
         if(res){
           if(res.data.code===200){
+            console.log(res.data)
             message.success("登录成功！")
             const user:User = res.data.data
             sessionStorage.setItem("user",JSON.stringify(user))

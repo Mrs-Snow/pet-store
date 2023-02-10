@@ -1,5 +1,7 @@
 import axios from "axios"
 import { message } from "ant-design-vue";
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const request = axios.create({
     baseURL: import.meta.env.VITE_APP_API_BASEURL,
     timeout:5000,
@@ -18,6 +20,7 @@ request.interceptors.request.use((c) => {
                 return c
             } else{
                  message.info("请登录!")
+                 router.push('/login')
               }       
         }
     }
@@ -35,10 +38,12 @@ request.interceptors.response.use(
     (res) => {
         if(res.data.code===-1){
             message.error(res.data.message)
+            router.push('/login')
         }
         if(res.data.data.token){
             sessionStorage.setItem('token',res.data.data.token)
         }
+        // console.log("响应拦截器返回前",res)
         return Promise.resolve(res)
     },
     (e) => {

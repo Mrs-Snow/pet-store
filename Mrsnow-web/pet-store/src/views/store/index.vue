@@ -9,10 +9,10 @@
             </div>
         </div>
         <div class="center">
-            <span v-if="showGoods">搜索结果</span>
+            <!-- <span v-if="showGoods" style="font-size: large; font-weight: 700; color: blueviolet;">搜索结果</span> -->
             <div v-if="showGoods" class="goodsList">
                 <div v-for="(item,index) in goodsList" >
-                <goodsItem :goodsName="item.goodsName"/>
+                <goodsItem :goodsName="item.goodsName" :goodsPic="item.goodsPic" :price="item.price" :storeName="item.storeName"/>
                 </div>
             </div>
             
@@ -45,6 +45,8 @@ import goodsItem from './goodsItem.vue';
 import { AlibabaOutlined } from '@ant-design/icons-vue';
 import { Carousel } from 'ant-design-vue';
 import searchByKey from '@/api/goods';
+import axios from 'axios';
+import { url } from 'inspector';
 export default defineComponent({
     components: {
         MyHeader,
@@ -59,7 +61,7 @@ export default defineComponent({
         const showCarousel=ref(true)
         const showGoods=ref(false)
         const searchKey = ref('')
-        const goodsList = ref([])
+        const goodsList = ref<Goods[]>([])
 
         const showTab = (val:Ref) =>{
             const proxy = val.value
@@ -76,10 +78,13 @@ export default defineComponent({
         }
 
         async function doSearch(key:String){
-            const res = await searchByKey({data:key})
-            if(res){
-                console.log(res)
-            }
+           const data =  await axios.post(
+                 'http://127.0.0.1:17777/mrsnow/goods/searchByKey',
+                 {
+                    data: key
+                 }
+                )
+            goodsList.value=data.data.data    
         }
         return {
             showCarousel,
@@ -97,9 +102,8 @@ export default defineComponent({
 <style scoped>
     .goodsList {
         margin-left: 10%;
-        /* border: 1px solid #000; */
         width: 80%;
-        height: 90%;
+        height: 700px;
     }
     .center{
         width: 80%;
@@ -145,7 +149,6 @@ export default defineComponent({
 
     .content {
         display: flex;
-        border: 1px solid #000;
         height: 80vh;
         width: 100%;
     }

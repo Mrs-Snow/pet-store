@@ -1,7 +1,7 @@
 <template>
     <a-layout>
       <a-layout-footer class="footer" style="text-align: center">
-        河南中医药大学 ©2022 Created by Ren
+        河南财经政法大学 ©2022 Created by Ren
       </a-layout-footer>
     </a-layout>
   </template>

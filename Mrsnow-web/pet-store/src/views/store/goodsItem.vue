@@ -1,12 +1,23 @@
 <template>
     <div class="box">
-        <span class="goodsImage">
-            <Image width="20" :src=goodsPic />
-        </span>
-        <span class="goodsName">{{ goodsName }}</span>
-        <span class="store">店铺: {{ storeName }}</span>
-        <span class="sales">月销量: 999 +</span>
-        <span class="price">{{ price }}¥</span>
+        <div class="goodsImage">
+            <a-image
+                :width="215"
+                :src="getImageUrl(goodsPic)"
+            />
+        </div>
+        <div class="price">{{ price }}¥</div>
+        <div class="inventoryNum">
+            <span style="margin-left: 5px;">库存: {{ inventoryNum }} 件</span>
+            <span style="width: 50%; color: gray; margin-left: 35px;">
+                月销量: 999 +
+            </span>
+        </div>
+        <div class="sales">
+            <span class="store">
+                <div>🏠进入店铺: {{ storeName }}</div>
+            </span>
+        </div>
     </div>
 </template>
 
@@ -14,7 +25,7 @@
 import { defineComponent } from 'vue'
 import { number, string } from 'vue-types';
 import { Image } from 'ant-design-vue';
-import { describe } from 'node:test';
+
 export default defineComponent({
     name: 'goodsItem',
     components:{
@@ -27,7 +38,7 @@ export default defineComponent({
         },
         goodsPic:{
             type: string,
-            defalt: '../../assets/goods/food1.webp'
+            defalt: 'food1.webp'
         },
         price:{
             type: string,
@@ -36,12 +47,18 @@ export default defineComponent({
         storeName:{
             type: string,
             defalt: ''
+        },
+        inventoryNum:{
+            type: number,
+            defalt: 99
         }
     },
     setup (props) {
-        
+        function getImageUrl(name){
+            return new URL('/src/assets/goods/'+name,import.meta.url).href
+        }
 
-        return {}
+        return {getImageUrl}
     }
 })
 </script>
@@ -49,60 +66,54 @@ export default defineComponent({
 <style scoped>
     .box {
         margin-top: 17px;
-        width: 100%px;
-        height: 100px;
-        border: 1px solid #ba11a3;
-        background-color: rgb(250, 252, 252);
-        display: flex;
+        width: 215px;
+        height: 300px;
+        background-color: rgb(249, 251, 252);
+        display: 'flexbox';
+        border: 1px solid #2a272a;
     }
 
-     .goodsImage{
-        width: 11%;
-        height: 100%;
-        border: 1px solid #000;
+    .goodsImage{
+        width: 100%;
+        height: 215px;
+        /* border: 1px solid #10130f; */
     }
 
-    .goodsName{
+    .inventoryNum{
         text-align: justify;
-        margin-top: 35px;
-        margin-left: 20px;
-        font-size: larger;
         font-weight: 800;
         color: rgb(222, 97, 170);
-        width: 30%;
-        height: 100%;
+        width: 100%;
+        margin-top: 5px;
     }
     
     .price{
-        height: 100%;
+        margin-top: 2px;
+        font-size: large;
+        height: 28px;
         text-shadow: #ba11a3;
-        margin-top: 40px;
-        margin-left: 300px;
-        font-size: larger;
         font-weight: 800;
         color: rgb(243, 35, 49);
     }
 
     .store{
-        font-size: medium;
         font-weight: 400;
         color: #20739d;
-        margin-top: 35px;
-        margin-left: -100px;
         cursor: pointer;
-        height: 100%;
+        height: 20px;
+        width: 100%;
+        text-align: center;
+        text-decoration:underline
     }
     .sales{
-        margin-left: 100px;
-        margin-top: 80px;
-        font-size: small;
+        margin-top: 6px;
         color: rgb(137, 128, 128);
-        font-size: small;
+        width: 100%;
+        text-align: justify;
     }
 
     .describe{
-        margin-left: 100px;
-        margin-top: 80px;
+        border: 1px solid #5be11d;
         font-size: small;
         color: rgb(212, 21, 142);
         height: 100%;

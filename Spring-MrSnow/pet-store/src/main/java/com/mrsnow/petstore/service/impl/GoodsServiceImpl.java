@@ -1,6 +1,9 @@
 package com.mrsnow.petstore.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mrsnow.petstore.dao.Goods;
 import com.mrsnow.petstore.mapper.GoodsMapper;
 import com.mrsnow.petstore.service.GoodsService;
@@ -21,9 +24,11 @@ import java.util.List;
 public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements GoodsService {
 
     @Override
-    public List<Goods> searchGood(String searchKey) {
-        LambdaQueryWrapper<Goods> wrapper = new LambdaQueryWrapper<>();
-        wrapper.like(Goods::getClassName,searchKey);
-        return baseMapper.selectList(wrapper);
+    public Page<Goods> searchGood(String searchKey) {
+        Page<Goods> goodsPage = new Page<>(1,6);
+        LambdaQueryChainWrapper<Goods> wrapper = new LambdaQueryChainWrapper<>(baseMapper);
+        Page<Goods> page = wrapper.like(Goods::getClassName, searchKey)
+                .page(goodsPage);
+        return page;
     }
 }

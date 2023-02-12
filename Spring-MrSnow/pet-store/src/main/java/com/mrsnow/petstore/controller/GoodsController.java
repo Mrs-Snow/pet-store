@@ -1,6 +1,7 @@
 package com.mrsnow.petstore.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mrsnow.petstore.dao.Goods;
 import com.mrsnow.petstore.service.GoodsService;
 import com.mrsnow.petstore.utils.JO;
@@ -30,7 +31,7 @@ public class GoodsController {
 
     @PostMapping(value = "/searchByKey")
     public R searchByKey(@RequestBody JO<String> jo){
-        List<Goods> goods = goodsService.searchGood(jo.getData());
+        Page<Goods> goods = goodsService.searchGood(jo.getData());
         return R.success(goods,"搜索完成！");
     }
 }

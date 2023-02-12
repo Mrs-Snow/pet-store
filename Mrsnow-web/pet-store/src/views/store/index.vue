@@ -11,9 +11,28 @@
         <div class="center">
             <!-- <span v-if="showGoods" style="font-size: large; font-weight: 700; color: blueviolet;">搜索结果</span> -->
             <div v-if="showGoods" class="goodsList">
-                <div v-for="(item,index) in goodsList" >
-                <goodsItem :goodsName="item.goodsName" :goodsPic="item.goodsPic" :price="item.price" :storeName="item.storeName"/>
-                </div>
+                <a-list
+                item-layout="horizontal"
+                bordered="true"
+                size="large"
+                :pagination="getPagination"
+                :data-source="record.records"
+                split="true"
+                :grid="{ gutter: 8, column: 4}"
+                >
+                <template #header>
+                    <h3>搜索结果</h3>
+                </template>
+                <template #renderItem="{ item }">
+                    <a-list-item>
+                        <span v-for="(goods,index) in record.records" >
+                            <goodsItem :goodsName="goods.goodsName" :goodsPic="goods.goodsPic"
+                             :price="goods.price" :storeName="goods.storeName" :inventoryNum="goods.inventoryNum"/>
+                        </span>
+                    </a-list-item>
+                </template>
+                </a-list>
+                
             </div>
             
             <Carousel
@@ -43,10 +62,11 @@ import search from '../../components/store/content/search.vue';
 import guide from '../../components/store/content/guide.vue';
 import goodsItem from './goodsItem.vue';
 import { AlibabaOutlined } from '@ant-design/icons-vue';
-import { Carousel } from 'ant-design-vue';
+import { Carousel, List, Row } from 'ant-design-vue';
 import searchByKey from '@/api/goods';
 import axios from 'axios';
 import { url } from 'inspector';
+import { pageRecord } from '../../api/pageRecord';
 export default defineComponent({
     components: {
         MyHeader,
@@ -55,13 +75,16 @@ export default defineComponent({
         guide,
         Carousel,
         AlibabaOutlined,
-        goodsItem
+        goodsItem,
+        List
     },
     setup () {
         const showCarousel=ref(true)
         const showGoods=ref(false)
         const searchKey = ref('')
         const goodsList = ref<Goods[]>([])
+        const record = ref();
+
 
         const showTab = (val:Ref) =>{
             const proxy = val.value
@@ -69,6 +92,35 @@ export default defineComponent({
             showCarousel.value=proxy.showCarousel
             doSearch(proxy.tabName)
         }
+
+        function getPagination(){
+            let current=1;
+            let pagesize=3;
+            console.log()
+            if(record.value){
+                const pagination = {
+                onChange: (page: number) => {
+                console.log(page);
+                },  
+                pageSize: record.value.size,
+                current: record.value.current,
+                total: record.value.total,
+                };
+                return pagination
+            }else{
+                const pagination={
+                    onChange: (page: number) => {
+                    console.log(page);
+                },  
+                    pageSize: pagesize,
+                    current: current,
+                }
+                return pagination;
+            }
+
+        }
+
+        
 
         function keyValue(key:Ref){
             showGoods.value=true
@@ -84,7 +136,8 @@ export default defineComponent({
                     data: key
                  }
                 )
-            goodsList.value=data.data.data    
+            record.value = data.data.data
+            console.log(record)     
         }
         return {
             showCarousel,
@@ -93,7 +146,9 @@ export default defineComponent({
             searchKey,
             keyValue,
             doSearch,
-            goodsList
+            goodsList,
+            getPagination,
+            record
         }
     }
 })

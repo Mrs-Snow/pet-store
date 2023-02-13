@@ -66,7 +66,7 @@ button:focus-visible {
   height: 100%;
   width: 100%;
   text-align: center;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 }
 
 @media (prefers-color-scheme: light) {

@@ -6,17 +6,22 @@
                 :src="getImageUrl(goodsPic)"
             />
         </div>
-        <div class="price">{{ price }}¥</div>
-        <div class="inventoryNum">
-            <span style="margin-left: 5px;">库存: {{ inventoryNum }} 件</span>
-            <span style="width: 50%; color: gray; margin-left: 35px;">
+        <div style="cursor: pointer;" @click="goodsDetail()">
+            <div class="price">
+                <span style="color: blueviolet; float: left;">{{ goodsName }}</span>
+            {{ price }}¥
+            </div>
+             <div class="inventoryNum">
+                <span style="margin-left: 5px;">库存: {{ inventoryNum }} 件</span>
+                <span style="width: 50%; color: gray; margin-left: 35px;">
                 月销量: 999 +
-            </span>
-        </div>
-        <div class="sales">
-            <span class="store">
-                <div>🏠进入店铺: {{ storeName }}</div>
-            </span>
+                </span>
+            </div>
+            <div class="sales">
+                <span class="store">
+                    <div>🏠进入店铺: {{ storeName }}</div>
+                </span>
+            </div>
         </div>
     </div>
 </template>
@@ -32,13 +37,17 @@ export default defineComponent({
         Image
     },
     props:{
+        id:{
+            type: string,
+            default: ''
+        },
         goodsName:{
             type: string,
             defalt: '商品'
         },
         goodsPic:{
             type: string,
-            defalt: 'food1.webp'
+            defalt: 'food2.jpg'
         },
         price:{
             type: string,
@@ -54,11 +63,15 @@ export default defineComponent({
         }
     },
     setup (props) {
-        function getImageUrl(name){
+        function getImageUrl(name:any){
             return new URL('/src/assets/goods/'+name,import.meta.url).href
         }
 
-        return {getImageUrl}
+        function goodsDetail(){
+            console.log('搜索id',props.id)
+        }
+
+        return {getImageUrl,goodsDetail}
     }
 })
 </script>

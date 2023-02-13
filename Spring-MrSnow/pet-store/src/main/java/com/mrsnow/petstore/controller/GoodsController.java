@@ -30,16 +30,12 @@ public class GoodsController {
     @Autowired
     private GoodsService goodsService;
 
-    @PostMapping(value = "/searchByKey")
+    @PostMapping(value = "/searchGoods")
     public R searchByKey(@RequestBody PJO<String> jo){
-        Page<Goods> goods = goodsService.searchGoodByKey(jo.getData(),jo.getCurrent(),jo.getPageSize());
+        Page<Goods> goods = goodsService.searchGoods(jo);
         return R.success(goods,"搜索完成！");
     }
 
-    @PostMapping(value = "/searchByKind")
-    public R searchByKind(@RequestBody PJO<String> jo){
-        Page<Goods> goods = goodsService.searchGoodByKind(jo.getData(),jo.getCurrent(),jo.getPageSize());
-        return R.success(goods,"搜索完成！");
-    }
+
 }
 

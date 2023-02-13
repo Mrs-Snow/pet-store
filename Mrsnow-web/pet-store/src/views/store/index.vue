@@ -1,5 +1,5 @@
 <template>
-    <search style="margin-top: 15px" @doSearch="keyValue"/>
+    <search style="margin-top: 15px" @doSearch="keyValue" ref="searchRef"/>
     <guide style="margin-top: 15px" @showTab="showTab" ref="guideRef"/>
     <div class="content">
         <div class="left">
@@ -76,17 +76,20 @@ export default defineComponent({
         const guideRef = ref();
         const noInfo = ref(false);
         const current = ref(1);
-        
+        const searchKind = ref();
+        const tabProxy = ref();
+        const searchRef = ref();
 
         const showTab = (val:Ref) =>{
-            const proxy = val.value
+            tabProxy.value = val.value
             showGoods.value=true
-            showCarousel.value=proxy.showCarousel
-            doSearchByKind(proxy.tabName)
+            showCarousel.value=tabProxy.value.showCarousel
+            doSearchByKind(tabProxy.value.tabName)
         }
 
         function changePage(page:number ,pagesize:number){
             current.value = page
+            doSearchByKey(searchRef.value.searchKey)
         }
 
         // function getPagination(){
@@ -128,10 +131,11 @@ export default defineComponent({
 
         async function doSearchByKey(key:String){
            const data =  await axios.post(
-                 'http://127.0.0.1:17777/mrsnow/goods/searchByKey',
+                 'http://127.0.0.1:17777/mrsnow/goods/searchGoods',
                  {
                     data: key,
-                    current: current.value
+                    current: current.value,
+                    extra: tabProxy.value.tabName
                  }
             )
             record.value = data.data.data
@@ -146,10 +150,11 @@ export default defineComponent({
 
         async function doSearchByKind(key:String){
            const data =  await axios.post(
-                 'http://127.0.0.1:17777/mrsnow/goods/searchByKind',
+                 'http://127.0.0.1:17777/mrsnow/goods/searchGoods',
                  {
                     data: key,
-                    current: current.value
+                    current: current.value,
+                    extra: tabProxy.value.tabName
                  }
                 )
             record.value = data.data.data
@@ -174,7 +179,8 @@ export default defineComponent({
             guideRef,
             noInfo,
             current,
-            changePage
+            changePage,
+            searchRef
         }
     }
 })

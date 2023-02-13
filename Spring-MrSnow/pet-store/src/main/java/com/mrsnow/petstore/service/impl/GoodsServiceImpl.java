@@ -8,6 +8,8 @@ import com.mrsnow.petstore.dao.Goods;
 import com.mrsnow.petstore.mapper.GoodsMapper;
 import com.mrsnow.petstore.service.GoodsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.mrsnow.petstore.utils.PJO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,20 +26,18 @@ import java.util.List;
 public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements GoodsService {
 
     @Override
-    public Page<Goods> searchGoodByKey(String searchKey,int current,int pageSize) {
-        Page<Goods> goodsPage = new Page<>(current,pageSize);
-        LambdaQueryChainWrapper<Goods> wrapper = new LambdaQueryChainWrapper<>(baseMapper);
-        Page<Goods> page = wrapper.like(Goods::getGoodsName, searchKey)
-                .page(goodsPage);
-        return page;
+    public Page<Goods> searchGoods(PJO<String> jo) {
+        Page<Goods> goodsPage = new Page<>(jo.getCurrent(), jo.getPageSize());
+        LambdaQueryWrapper<Goods> wrapper = new LambdaQueryWrapper<>();
+        //关键词过滤
+        wrapper.like(Goods::getGoodsName, jo.getData());
+        //如果有分类参数
+        if(StringUtils.isNotEmpty(jo.getExtra())){
+            wrapper.like(Goods::getClassName,jo.getExtra());
+        }
+        //分页查询
+        return baseMapper.selectPage(goodsPage,wrapper);
+
     }
 
-    @Override
-    public Page<Goods> searchGoodByKind(String kind,int current,int pageSize) {
-        Page<Goods> goodsPage = new Page<>(current,pageSize);
-        LambdaQueryChainWrapper<Goods> wrapper = new LambdaQueryChainWrapper<>(baseMapper);
-        Page<Goods> page = wrapper.like(Goods::getClassName, kind)
-                .page(goodsPage);
-        return page;
-    }
 }

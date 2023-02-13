@@ -76,20 +76,19 @@ export default defineComponent({
         const guideRef = ref();
         const noInfo = ref(false);
         const current = ref(1);
-        const searchKind = ref();
-        const tabProxy = ref();
+        const tabProxy = ref('');
         const searchRef = ref();
 
         const showTab = (val:Ref) =>{
-            tabProxy.value = val.value
+            tabProxy.value = val.value.tabName
             showGoods.value=true
-            showCarousel.value=tabProxy.value.showCarousel
-            doSearchByKind(tabProxy.value.tabName)
+            showCarousel.value=val.value.showCarousel
+            doSearchByKind(tabProxy.value)
         }
 
         function changePage(page:number ,pagesize:number){
             current.value = page
-            doSearchByKey(searchRef.value.searchKey)
+            doSearchByKey()
         }
 
         // function getPagination(){
@@ -126,16 +125,17 @@ export default defineComponent({
             showCarousel.value = false
             searchKey.value = key.value
             guideRef.value.allKinds()
-            doSearchByKey(key.value)
+            current.value=1
+            doSearchByKey()
         }
 
-        async function doSearchByKey(key:String){
+        async function doSearchByKey(){
            const data =  await axios.post(
                  'http://127.0.0.1:17777/mrsnow/goods/searchGoods',
                  {
-                    data: key,
+                    data: searchRef.value.searchKey,
                     current: current.value,
-                    extra: tabProxy.value.tabName
+                    extra: tabProxy.value
                  }
             )
             record.value = data.data.data
@@ -152,9 +152,9 @@ export default defineComponent({
            const data =  await axios.post(
                  'http://127.0.0.1:17777/mrsnow/goods/searchGoods',
                  {
-                    data: key,
+                    data: searchRef.value.searchKey,
                     current: current.value,
-                    extra: tabProxy.value.tabName
+                    extra: key
                  }
                 )
             record.value = data.data.data

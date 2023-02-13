@@ -24,9 +24,9 @@
                     <h3>搜索结果</h3>
                 </template>
                 <template #renderItem="{ item }">
-                    <a-list-item>
-                        <span v-for="(goods,index) in record.records" >
-                            <goodsItem :goodsName="goods.goodsName" :goodsPic="goods.goodsPic"
+                    <a-list-item  v-for="goods in record.records">
+                        <span >
+                            <goodsItem :id="goods.id" :goodsName="goods.goodsName" :goodsPic="goods.goodsPic"
                              :price="goods.price" :storeName="goods.storeName" :inventoryNum="goods.inventoryNum"/>
                         </span>
                     </a-list-item>
@@ -90,7 +90,7 @@ export default defineComponent({
             const proxy = val.value
             showGoods.value=true
             showCarousel.value=proxy.showCarousel
-            doSearch(proxy.tabName)
+            doSearchByKind(proxy.tabName)
         }
 
         function getPagination(){
@@ -126,18 +126,27 @@ export default defineComponent({
             showGoods.value=true
             showCarousel.value = false
             searchKey.value = key.value
-            doSearch(key.value)
+            doSearchByKey(key.value)
         }
 
-        async function doSearch(key:String){
+        async function doSearchByKey(key:String){
            const data =  await axios.post(
                  'http://127.0.0.1:17777/mrsnow/goods/searchByKey',
                  {
                     data: key
                  }
+            )
+            record.value = data.data.data  
+        }
+
+        async function doSearchByKind(key:String){
+           const data =  await axios.post(
+                 'http://127.0.0.1:17777/mrsnow/goods/searchByKind',
+                 {
+                    data: key
+                 }
                 )
-            record.value = data.data.data
-            console.log(record)     
+            record.value = data.data.data  
         }
         return {
             showCarousel,
@@ -145,7 +154,8 @@ export default defineComponent({
             showTab,
             searchKey,
             keyValue,
-            doSearch,
+            doSearchByKind,
+            doSearchByKey,
             goodsList,
             getPagination,
             record

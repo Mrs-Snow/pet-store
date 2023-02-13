@@ -24,10 +24,19 @@ import java.util.List;
 public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements GoodsService {
 
     @Override
-    public Page<Goods> searchGood(String searchKey) {
+    public Page<Goods> searchGoodByKey(String searchKey) {
         Page<Goods> goodsPage = new Page<>(1,6);
         LambdaQueryChainWrapper<Goods> wrapper = new LambdaQueryChainWrapper<>(baseMapper);
-        Page<Goods> page = wrapper.like(Goods::getClassName, searchKey)
+        Page<Goods> page = wrapper.like(Goods::getGoodsName, searchKey)
+                .page(goodsPage);
+        return page;
+    }
+
+    @Override
+    public Page<Goods> searchGoodByKind(String kind) {
+        Page<Goods> goodsPage = new Page<>(1,6);
+        LambdaQueryChainWrapper<Goods> wrapper = new LambdaQueryChainWrapper<>(baseMapper);
+        Page<Goods> page = wrapper.like(Goods::getClassName, kind)
                 .page(goodsPage);
         return page;
     }

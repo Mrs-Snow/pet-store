@@ -31,7 +31,13 @@ public class GoodsController {
 
     @PostMapping(value = "/searchByKey")
     public R searchByKey(@RequestBody JO<String> jo){
-        Page<Goods> goods = goodsService.searchGood(jo.getData());
+        Page<Goods> goods = goodsService.searchGoodByKey(jo.getData());
+        return R.success(goods,"搜索完成！");
+    }
+
+    @PostMapping(value = "/searchByKind")
+    public R searchByKind(@RequestBody JO<String> jo){
+        Page<Goods> goods = goodsService.searchGoodByKind(jo.getData());
         return R.success(goods,"搜索完成！");
     }
 }

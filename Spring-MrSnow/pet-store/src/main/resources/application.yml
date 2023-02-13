@@ -18,3 +18,4 @@ myFilter:
     passList:
       - /login
       - /searchByKey
+      - /searchByKind

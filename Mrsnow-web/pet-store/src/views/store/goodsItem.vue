@@ -8,7 +8,7 @@
         </div>
         <div style="cursor: pointer;" @click="goodsDetail()">
             <div class="price">
-                <span style="color: blueviolet; float: left;">{{ goodsName }}</span>
+                <span style="color: blueviolet; float: left; margin-left: 5px;">{{ goodsName }}</span>
             {{ price }}¥
             </div>
              <div class="inventoryNum">

@@ -15,6 +15,6 @@ import java.util.List;
  * @since 2022-12-14
  */
 public interface GoodsService extends IService<Goods> {
-    Page<Goods> searchGoodByKey(String searchKey);
-    Page<Goods> searchGoodByKind(String kind);
+    Page<Goods> searchGoodByKey(String searchKey,int current,int pageSize);
+    Page<Goods> searchGoodByKind(String kind,int current,int pageSize);
 }

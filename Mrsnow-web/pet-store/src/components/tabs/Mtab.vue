@@ -33,6 +33,18 @@ export default defineComponent({
            
         })
 
+        function allKinds(){
+            for(var i=0;i<8;i++){
+                const id = tabs[i]+(i+1)
+                let e =document.getElementById(id)
+                if(e){
+                    e.style.fontSize='16px'
+                    e.style.fontWeight='400'
+                    e.style.color='black'
+                }
+            }
+        }
+
         function click(e:Event) {
             emit('tabName',tabName)
             //刷新一下整体,再单独变色
@@ -65,7 +77,8 @@ export default defineComponent({
 
         return { 
             click,
-            tabName
+            tabName,
+            allKinds
         }
     }
 })

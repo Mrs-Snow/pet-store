@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mrsnow.petstore.dao.Goods;
 import com.mrsnow.petstore.service.GoodsService;
 import com.mrsnow.petstore.utils.JO;
+import com.mrsnow.petstore.utils.PJO;
 import com.mrsnow.petstore.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,14 +31,14 @@ public class GoodsController {
     private GoodsService goodsService;
 
     @PostMapping(value = "/searchByKey")
-    public R searchByKey(@RequestBody JO<String> jo){
-        Page<Goods> goods = goodsService.searchGoodByKey(jo.getData());
+    public R searchByKey(@RequestBody PJO<String> jo){
+        Page<Goods> goods = goodsService.searchGoodByKey(jo.getData(),jo.getCurrent(),jo.getPageSize());
         return R.success(goods,"搜索完成！");
     }
 
     @PostMapping(value = "/searchByKind")
-    public R searchByKind(@RequestBody JO<String> jo){
-        Page<Goods> goods = goodsService.searchGoodByKind(jo.getData());
+    public R searchByKind(@RequestBody PJO<String> jo){
+        Page<Goods> goods = goodsService.searchGoodByKind(jo.getData(),jo.getCurrent(),jo.getPageSize());
         return R.success(goods,"搜索完成！");
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <search style="margin-top: 15px" @doSearch="keyValue"/>
-    <guide style="margin-top: 15px" @showTab="showTab"/>
+    <guide style="margin-top: 15px" @showTab="showTab" ref="guideRef"/>
     <div class="content">
         <div class="left">
             <div class="kefu">
@@ -12,16 +12,19 @@
             <!-- <span v-if="showGoods" style="font-size: large; font-weight: 700; color: blueviolet;">搜索结果</span> -->
             <div v-if="showGoods" class="goodsList">
                 <div>
-                    <h3 >搜索结果</h3>
-                        <div class="list_box">
-                            <span v-for="goods in record.records">
-                                <goodsItem  :id="goods.id" :goodsName="goods.goodsName" :goodsPic="goods.goodsPic"
-                                :price="goods.price" :storeName="goods.storeName" :inventoryNum="goods.inventoryNum"/>
-                            </span>
-                        </div>
-                            
+                    <h3 style="color:darkorange; height: 3px;">🔍 搜 索 结 果</h3>
+                    <div class="list_box">
+                        <span style="margin-left: 80px;" v-for="goods in record.records">
+                            <goodsItem  :id="goods.id" :goodsName="goods.goodsName" :goodsPic="goods.goodsPic"
+                            :price="goods.price" :storeName="goods.storeName" :inventoryNum="goods.inventoryNum"/>
+                        </span>
+                    </div>
+                    <Pagination v-model:current="current" :defaultPageSize="6" :total="record.total" show-less-items @change="changePage"/>        
                 </div>
                 
+            </div>
+            <div v-if="noInfo" style="color: darkorchid; font-size: xx-large; font-weight: 900; text-align: center;">
+                <div style="margin-top:20% ;">😮‍💨没找到相关记录~</div>
             </div>
             
             <Carousel
@@ -51,7 +54,7 @@ import search from '../../components/store/content/search.vue';
 import guide from '../../components/store/content/guide.vue';
 import goodsItem from './goodsItem.vue';
 import { AlibabaOutlined } from '@ant-design/icons-vue';
-import { Carousel, Col, Row } from 'ant-design-vue';
+import { Carousel, Pagination } from 'ant-design-vue';
 import axios from 'axios';
 export default defineComponent({
     components: {
@@ -62,8 +65,7 @@ export default defineComponent({
         Carousel,
         AlibabaOutlined,
         goodsItem,
-        Row,
-        Col,
+        Pagination
     },
     setup () {
         const showCarousel=ref(true)
@@ -71,7 +73,10 @@ export default defineComponent({
         const searchKey = ref('')
         const goodsList = ref<Goods[]>([])
         const record = ref();
-
+        const guideRef = ref();
+        const noInfo = ref(false);
+        const current = ref(1);
+        
 
         const showTab = (val:Ref) =>{
             const proxy = val.value
@@ -80,32 +85,36 @@ export default defineComponent({
             doSearchByKind(proxy.tabName)
         }
 
-        function getPagination(){
-            let current=1;
-            let pagesize=3;
-            console.log()
-            if(record.value){
-                const pagination = {
-                onChange: (page: number) => {
-                console.log(page);
-                },  
-                pageSize: record.value.size,
-                current: record.value.current,
-                total: record.value.total,
-                };
-                return pagination
-            }else{
-                const pagination={
-                    onChange: (page: number) => {
-                    console.log(page);
-                },  
-                    pageSize: pagesize,
-                    current: current,
-                }
-                return pagination;
-            }
-
+        function changePage(page:number ,pagesize:number){
+            current.value = page
         }
+
+        // function getPagination(){
+        //     let current=1;
+        //     let pagesize=3;
+        //     console.log()
+        //     if(record.value){
+        //         const pagination = {
+        //         onChange: (page: number) => {
+        //         console.log(page);
+        //         },  
+        //         pageSize: record.value.size,
+        //         current: record.value.current,
+        //         total: record.value.total,
+        //         };
+        //         return pagination
+        //     }else{
+        //         const pagination={
+        //             onChange: (page: number) => {
+        //             console.log(page);
+        //         },  
+        //             pageSize: pagesize,
+        //             current: current,
+        //         }
+        //         return pagination;
+        //     }
+
+        // }
 
         
 
@@ -113,6 +122,7 @@ export default defineComponent({
             showGoods.value=true
             showCarousel.value = false
             searchKey.value = key.value
+            guideRef.value.allKinds()
             doSearchByKey(key.value)
         }
 
@@ -120,10 +130,17 @@ export default defineComponent({
            const data =  await axios.post(
                  'http://127.0.0.1:17777/mrsnow/goods/searchByKey',
                  {
-                    data: key
+                    data: key,
+                    current: current.value
                  }
             )
-            record.value = data.data.data  
+            record.value = data.data.data
+            if(!data.data.data.records.length||data.data.data.records.length===0){
+                noInfo.value=true
+                showGoods.value=false
+            }else{
+                noInfo.value=false
+            }  
             console.log(record) 
         }
 
@@ -131,10 +148,17 @@ export default defineComponent({
            const data =  await axios.post(
                  'http://127.0.0.1:17777/mrsnow/goods/searchByKind',
                  {
-                    data: key
+                    data: key,
+                    current: current.value
                  }
                 )
             record.value = data.data.data
+            if(!data.data.data.records.length||data.data.data.records.length===0){
+                noInfo.value=true
+                showGoods.value=false
+            }else{
+                noInfo.value=false
+            }  
             console.log(record)  
         }
         return {
@@ -146,8 +170,11 @@ export default defineComponent({
             doSearchByKind,
             doSearchByKey,
             goodsList,
-            getPagination,
-            record
+            record,
+            guideRef,
+            noInfo,
+            current,
+            changePage
         }
     }
 })
@@ -156,7 +183,9 @@ export default defineComponent({
 <style scoped>
 
     .list_box{
-        display: flexbox;
+        display: flex;
+        flex-wrap: wrap;
+        padding-bottom: 10px;
     }
     .goodsList {
         margin-left: 10%;

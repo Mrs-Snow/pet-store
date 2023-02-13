@@ -24,8 +24,8 @@ import java.util.List;
 public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements GoodsService {
 
     @Override
-    public Page<Goods> searchGoodByKey(String searchKey) {
-        Page<Goods> goodsPage = new Page<>(1,6);
+    public Page<Goods> searchGoodByKey(String searchKey,int current,int pageSize) {
+        Page<Goods> goodsPage = new Page<>(current,pageSize);
         LambdaQueryChainWrapper<Goods> wrapper = new LambdaQueryChainWrapper<>(baseMapper);
         Page<Goods> page = wrapper.like(Goods::getGoodsName, searchKey)
                 .page(goodsPage);
@@ -33,8 +33,8 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     }
 
     @Override
-    public Page<Goods> searchGoodByKind(String kind) {
-        Page<Goods> goodsPage = new Page<>(1,6);
+    public Page<Goods> searchGoodByKind(String kind,int current,int pageSize) {
+        Page<Goods> goodsPage = new Page<>(current,pageSize);
         LambdaQueryChainWrapper<Goods> wrapper = new LambdaQueryChainWrapper<>(baseMapper);
         Page<Goods> page = wrapper.like(Goods::getClassName, kind)
                 .page(goodsPage);

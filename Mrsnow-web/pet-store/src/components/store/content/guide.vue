@@ -1,7 +1,7 @@
 <template>
     <div class="box">
         <span class="guide">商品分类</span>
-        <Mtab :index="'1'" :tab="'罐头'"  style="margin-left: 5%" @tabName="tabChange"/>
+        <Mtab :index="'1'" :tab="'罐头'"  style="margin-left: 5%" @tabName="tabChange" ref="tabRef"/>
         <Mtab :index="'2'" :tab="'猫条'" style="margin-left: 5%" @tabName="tabChange"/>
         <Mtab :index="'3'" :tab="'猫粮'" style="margin-left: 5%" @tabName="tabChange"/>
         <Mtab :index="'4'" :tab="'冻干'" style="margin-left: 5%" @tabName="tabChange"/>
@@ -24,7 +24,7 @@ export default defineComponent({
     setup (props,{emit}) {
         const tabs = ['罐头','猫条','猫粮','冻干','猫薄荷','饭盆','饮料','磨牙食品']
         const tab = ref({})
-        
+        const tabRef = ref();
         function tabChange(e:Ref){
             const val = {
                 showCarousel:false,
@@ -33,11 +33,17 @@ export default defineComponent({
             tab.value=val
             emit('showTab',tab)
         }
+
+        function allKinds(){
+            tabRef.value.allKinds()
+        }
         
         return {
             tabChange,
             tab,
             tabs,
+            tabRef,
+            allKinds
             
         }
     }

@@ -30,6 +30,16 @@ const routes: RouteRecordRaw[] =[
         component: ()=> import('../views/store/goods.vue')
     },
     {
+        name: 'myCart',
+        path: '/myCart',
+        component: ()=> import('../views/cartInfo/myCart.vue')
+    },
+    {
+        name: 'personCenter',
+        path: '/personCenter',
+        component: ()=> import('../views/personInfo/personCenter.vue')
+    },
+    {
         path: '/:pathMatch(.*)*',
         component: ()=> import('../views/notFound.vue')
     }

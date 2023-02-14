@@ -1,6 +1,6 @@
 <template>
     <div class="box">
-        <span class="guide">商品分类</span>
+        <span class="guide" @click="reloadHere">全部分类</span>
         <Mtab :index="'1'" :tab="'罐头'"  style="margin-left: 5%" @tabName="tabChange" ref="tabRef"/>
         <Mtab :index="'2'" :tab="'猫条'" style="margin-left: 5%" @tabName="tabChange"/>
         <Mtab :index="'3'" :tab="'猫粮'" style="margin-left: 5%" @tabName="tabChange"/>
@@ -34,6 +34,10 @@ export default defineComponent({
             emit('showTab',tab)
         }
 
+        function reloadHere(){
+            location.reload()
+        }
+
         function allKinds(){
             tabRef.value.allKinds()
         }
@@ -43,7 +47,8 @@ export default defineComponent({
             tab,
             tabs,
             tabRef,
-            allKinds
+            allKinds,
+            reloadHere
             
         }
     }

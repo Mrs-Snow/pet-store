@@ -1,10 +1,9 @@
 package com.mrsnow.petstore.dao;
 
 import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,31 +32,37 @@ public class Cart extends Model<Cart> {
     /**
      * 是否结算
      */
+    @TableField(value = "IS_ACCOUNT", condition = SqlCondition.LIKE)
     private String isAccount;
 
     /**
      * 商品id
      */
+    @TableField(value = "GOODS_ID", condition = SqlCondition.LIKE)
     private Long goodsId;
 
     /**
      * 商品名字
      */
+    @TableField(value = "GOODS_NAME", condition = SqlCondition.LIKE)
     private String goodsName;
 
     /**
      * 商品数量
      */
+    @TableField(value = "GOODS_NUM", condition = SqlCondition.LIKE)
     private Integer goodsNum;
 
     /**
      * 总金额
      */
+    @TableField(value = "AMOUNT_MONEY", condition = SqlCondition.LIKE)
     private BigDecimal amountMoney;
 
     /**
      * 用户id
      */
+    @TableField(value = "USER_ID", condition = SqlCondition.LIKE)
     private Long userId;
 
 

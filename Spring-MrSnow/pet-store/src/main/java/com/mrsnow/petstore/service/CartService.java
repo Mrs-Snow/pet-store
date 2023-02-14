@@ -1,7 +1,9 @@
 package com.mrsnow.petstore.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.mrsnow.petstore.dao.Cart;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mrsnow.petstore.utils.PJO;
 
 import java.util.List;
 
@@ -14,5 +16,5 @@ import java.util.List;
  * @since 2022-12-14
  */
 public interface CartService extends IService<Cart> {
-    List<Cart> getMyCart(Long userId);
+    IPage<Cart> getMyCart(PJO<Long> pjo);
 }

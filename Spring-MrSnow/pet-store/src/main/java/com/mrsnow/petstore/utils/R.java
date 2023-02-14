@@ -45,4 +45,8 @@ public class R<T> {
     public static  R fail(String message){
         return new R(FAIL_CODE,message);
     }
+
+    public static  R noLogin(String message){
+        return new R(LOGIN_CODE,message);
+    }
 }

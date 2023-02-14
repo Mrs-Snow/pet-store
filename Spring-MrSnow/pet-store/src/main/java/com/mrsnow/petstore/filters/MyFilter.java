@@ -1,6 +1,8 @@
 package com.mrsnow.petstore.filters;
 
+import com.alibaba.fastjson.JSON;
 import com.mrsnow.petstore.utils.BeanContextUtil;
+import com.mrsnow.petstore.utils.R;
 import com.mrsnow.petstore.utils.TokenUtil;
 import lombok.Data;
 import org.springframework.beans.BeansException;
@@ -55,7 +57,7 @@ public class MyFilter implements Filter {
 //            }
 //            wrapper.sendRedirect("/login");
         if (token==null){
-            wrapper.sendError(REDIRECT_CODE, "请登录");
+            servletResponse.getWriter().write(JSON.toJSONString(R.fail("请登录!")));
             return;
         }
         if (TokenUtil.verify(token)) {

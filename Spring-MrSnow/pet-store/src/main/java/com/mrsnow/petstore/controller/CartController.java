@@ -1,16 +1,15 @@
 package com.mrsnow.petstore.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.mrsnow.petstore.dao.Cart;
 import com.mrsnow.petstore.service.CartService;
 import com.mrsnow.petstore.utils.JO;
+import com.mrsnow.petstore.utils.PJO;
 import com.mrsnow.petstore.utils.R;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
 
@@ -24,7 +23,7 @@ import java.util.List;
  * @author mrsnow
  * @since 2022-12-14
  */
-@Controller
+@RestController
 @RequestMapping("/cart")
 @CrossOrigin
 public class CartController {
@@ -33,10 +32,9 @@ public class CartController {
 
 
     @PostMapping(value = "/myCart")
-    public R<List<Cart>> myCart(@RequestBody JO<Long> jo){
-        Long userId = jo.getData();
-        List<Cart> carts = cartService.getMyCart(userId);
-        return R.success(carts);
+    public R<IPage<Cart>> myCart(@RequestBody PJO<Long> jo){
+        IPage<Cart> carts = cartService.getMyCart(jo);
+        return R.success(carts,"查询完成");
     }
 
 }

@@ -5,6 +5,7 @@ package com.mrsnow.petstore.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author mrsnow
  * @since 2022-12-14
  */
-@Controller
+@RestController
 @RequestMapping("/order")
 public class OrderController {
 

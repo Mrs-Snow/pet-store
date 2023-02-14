@@ -20,3 +20,4 @@ myFilter:
       - /searchByKey
       - /searchByKind
       - /searchGoods
+      - /myCart

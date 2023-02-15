@@ -8,7 +8,7 @@ const routes: RouteRecordRaw[] =[
     },
     {
         path: '/',
-        name: 'store',
+        name: 'index',
         component: ()=> import('../views/store/index.vue')
     },
     {
@@ -38,6 +38,16 @@ const routes: RouteRecordRaw[] =[
         name: 'personCenter',
         path: '/personCenter',
         component: ()=> import('../views/personInfo/personCenter.vue')
+    },
+    {
+        name: 'goodsDetail',
+        path: '/goodsDetail',
+        component: ()=> import('../views/goods/goodsDetail.vue')
+    },
+    {
+        name: 'store',
+        path: '/store',
+        component: ()=> import('../views/store/store.vue')
     },
     {
         path: '/:pathMatch(.*)*',

@@ -30,6 +30,7 @@
 import { defineComponent } from 'vue'
 import { number, string } from 'vue-types';
 import { Image } from 'ant-design-vue';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
     name: 'goodsItem',
@@ -63,11 +64,17 @@ export default defineComponent({
         }
     },
     setup (props) {
+        const router = useRouter()
         function getImageUrl(name:any){
             return new URL('/src/assets/goods/'+name,import.meta.url).href
         }
 
         function goodsDetail(){
+            const id = props.id.toString()
+            router.push({
+                path:'/goodsDetail',
+                query: {id: id}
+            })
             console.log('搜索id',props.id)
         }
 

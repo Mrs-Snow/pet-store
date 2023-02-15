@@ -18,10 +18,7 @@ request.interceptors.request.use((c) => {
                     token:token
                 }
                 return c
-            } else{
-                 message.info("请登录!")
-                 router.push('/login')
-              }       
+            }   
         }
     }
     // const token = sessionStorage.getItem('Token')

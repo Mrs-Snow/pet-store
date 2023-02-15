@@ -6,7 +6,7 @@
             <a-divider style="margin-left: 150px; margin-top: -10px;"></a-divider>
         </div>
         <div class="store">
-            <h1 style="color: blueviolet; cursor: pointer;" @click="goStore">欢迎光临 {{ goodsData.storeName }} </h1>
+            <h1 v-if="goodsData" style="color: blueviolet; cursor: pointer;" @click="goStore">欢迎光临 {{ goodsData.storeName }} </h1>
         </div>
         <div class="right">
             <h2 style="color:mediumorchid;">商家广告区</h2>
@@ -15,10 +15,10 @@
         </div>
         <div class="detail">
             <div class="detail_img">
-                <Image :src="getImageUrl()"/>
+                <Image v-if="goodsData" :src="getImageUrl()"/>
             </div>
             <div class="goods_title">
-                <h2 style="color: coral;">{{ goodsData.goodsName }}</h2>
+                <h2 v-if="goodsData" style="color: coral;">{{ goodsData.goodsName }}</h2>
             </div>
             <div class="price">
                 <div class="price_title1">原价:
@@ -27,7 +27,7 @@
                 <div class="price_title2">特惠价:
                     <span style=" margin-left: 10px; font-size: x-large; color: red;">{{ price }} 元</span>
                     <span v-if="goodsData.preferential" style=" color:deeppink; position: fixed; top:360px; left: 620px;">-{{ goodsData.preferential.preferentialPrice }} 元</span>
-                    <span v-if="goodsData.preferential.discount!==100" style=" color:blueviolet; position: fixed; top:334px; left: 710px;">{{ goodsData.preferential.discount }} 折</span>
+                    <span v-if="discount!==100" style=" color:blueviolet; position: fixed; top:334px; left: 710px;">{{ discount }} 折</span>
                 </div>
                 <div class="price_title3">月销量: 999+</div>
                 <div class="price_title4">💥 火 爆 销 售 💥</div>
@@ -70,21 +70,23 @@ export default defineComponent({
         const goodsData = ref()
         const num = ref<number>(1);
         const price = ref<any>(0);
-        const discount = ref();
+        const discount = ref(100);
 
-        onMounted(async ()=>{
+        onBeforeMount(async ()=>{
             const goodsId = route.query.id
             console.log(route.query)
-            goodsData.value = await (await request.post('/goods/goodsDetail',{data:goodsId})).data.data
+            goodsData.value = (await request.post('/goods/goodsDetail',{data:goodsId})).data.data
             const preferential = goodsData.value.preferential
+            price.value = goodsData.value.price
             if(preferential){
+                discount.value = preferential.discount
                 if(preferential.discount<100){
                     price.value = (goodsData.value.price * preferential.discount).toFixed(2)
                 }
                 if(preferential.preferentialPrice>0){
                     price.value = (goodsData.value.price - preferential.preferentialPrice).toFixed(2)
                 }
-            }
+            }else{return;}
         })
 
         function getImageUrl(){
@@ -124,7 +126,7 @@ export default defineComponent({
         }
 
         
-        return {getImageUrl,handleBack,goodsData,num,isMax,price,buy,addCart,goStore,kefu}
+        return {getImageUrl,handleBack,goodsData,num,isMax,price,buy,addCart,goStore,kefu,discount}
     }
 })
 </script>

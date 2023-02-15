@@ -1,10 +1,9 @@
 package com.mrsnow.petstore.dao;
 
 import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,31 +32,37 @@ public class Preferential extends Model<Preferential> {
     /**
      * 优惠价格
      */
+    @TableField(value = "PREFERENTIAL_PRICE",condition = SqlCondition.EQUAL)
     private BigDecimal preferentialPrice;
 
     /**
      * 价钱阈值
      */
+    @TableField(value = "PREFERENTIAL_PRICE",condition = SqlCondition.EQUAL)
     private BigDecimal priceValue;
 
     /**
      * 商店id
      */
+    @TableField(value = "STORE_ID",condition = SqlCondition.EQUAL)
     private Long storeId;
 
     /**
      * 折扣
      */
+    @TableField(value = "DISCOUNT",condition = SqlCondition.EQUAL)
     private BigDecimal discount;
 
     /**
      * 数量阈值
      */
+    @TableField(value = "COUNT_VALUE",condition = SqlCondition.EQUAL)
     private Integer countValue;
 
     /**
      * 描述
      */
+    @TableField(value = "COMMENT",condition = SqlCondition.LIKE)
     private String comment;
 
 

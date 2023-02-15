@@ -17,7 +17,6 @@ server:
 myFilter:
     passList:
       - /login
-      - /searchByKey
-      - /searchByKind
       - /searchGoods
       - /myCart
+      - /goodsDetail

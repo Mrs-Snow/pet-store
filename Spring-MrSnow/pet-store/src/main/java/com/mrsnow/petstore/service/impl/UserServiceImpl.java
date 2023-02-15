@@ -5,6 +5,7 @@ import com.mrsnow.petstore.dao.User;
 import com.mrsnow.petstore.mapper.UserMapper;
 import com.mrsnow.petstore.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 2022-12-14
  */
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Override

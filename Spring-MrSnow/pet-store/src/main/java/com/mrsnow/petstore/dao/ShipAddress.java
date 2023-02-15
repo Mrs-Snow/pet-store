@@ -1,12 +1,7 @@
 package com.mrsnow.petstore.dao;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.TableId;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -32,26 +27,31 @@ public class ShipAddress extends Model<ShipAddress> {
     /**
      * 发货人
      */
+    @TableField(value = "CONSIGNER",condition = SqlCondition.LIKE)
     private String consigner;
 
     /**
      * 发货人手机号
      */
-    private String consignerPhone;
+    @TableField(value = "CONSIGNER_PHONE",condition = SqlCondition.LIKE)
+    private String consignedPhone;
 
     /**
      * 发货人地址
      */
+    @TableField(value = "CONSIGNER_ADDRESS",condition = SqlCondition.LIKE)
     private String consignerAddress;
 
     /**
      * 商店id
      */
+    @TableField(value = "STORE_ID",condition = SqlCondition.LIKE)
     private String storeId;
 
     /**
      * 商店名称
      */
+    @TableField(value = "STORE_NAME",condition = SqlCondition.LIKE)
     private String storeName;
 
 
@@ -72,11 +72,11 @@ public class ShipAddress extends Model<ShipAddress> {
     }
 
     public String getConsignerPhone() {
-        return consignerPhone;
+        return consignedPhone;
     }
 
     public void setConsignerPhone(String consignerPhone) {
-        this.consignerPhone = consignerPhone;
+        this.consignedPhone = consignerPhone;
     }
 
     public String getConsignerAddress() {
@@ -113,7 +113,7 @@ public class ShipAddress extends Model<ShipAddress> {
         return "ShipAddress{" +
         "id=" + id +
         ", consigner=" + consigner +
-        ", consignerPhone=" + consignerPhone +
+        ", consignerPhone=" + consignedPhone +
         ", consignerAddress=" + consignerAddress +
         ", storeId=" + storeId +
         ", storeName=" + storeName +

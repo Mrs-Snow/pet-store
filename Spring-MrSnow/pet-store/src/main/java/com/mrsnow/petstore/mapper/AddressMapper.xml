@@ -6,14 +6,14 @@
     <resultMap id="BaseResultMap" type="com.mrsnow.petstore.dao.Address">
         <id column="id" property="id" />
         <result column="USER_ID" property="userId" />
-        <result column="收货人" property="收货人" />
-        <result column="收货人手机号" property="收货人手机号" />
-        <result column="收货地址" property="收货地址" />
+        <result column="CONSIGNEE" property="consignee" />
+        <result column="CONSIGNEE_TEL" property="consigneeTel" />
+        <result column="DELIVERY_ADDRESS" property="deliveryAddress" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, USER_ID, 收货人, 收货人手机号, 收货地址
+        id, USER_ID, CONSIGNEE, CONSIGNEE_TEL, DELIVERY_ADDRESS
     </sql>
 
 </mapper>

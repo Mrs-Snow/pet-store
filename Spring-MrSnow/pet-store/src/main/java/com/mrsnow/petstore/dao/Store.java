@@ -1,9 +1,7 @@
 package com.mrsnow.petstore.dao;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,6 +30,7 @@ public class Store extends Model<Store> {
     /**
      * 管理员id
      */
+    @TableField(value = "MANAGER_ID",condition = SqlCondition.LIKE)
     private Long managerId;
 
     /**

@@ -79,5 +79,11 @@ public class Goods extends Model<Goods> {
      */
     @TableField(value = "GOODS_PIC", condition = SqlCondition.EQUAL)
     private String goodsPic;
+
+    /**
+     * 优惠活动
+     */
+    @TableField(exist = false)
+    private Preferential preferential;
 }
 

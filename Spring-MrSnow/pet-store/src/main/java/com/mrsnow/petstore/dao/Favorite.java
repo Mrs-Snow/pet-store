@@ -1,9 +1,7 @@
 package com.mrsnow.petstore.dao;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,21 +30,25 @@ public class Favorite extends Model<Favorite> {
     /**
      * 商店id
      */
+    @TableField(value = "STORE_ID",condition = SqlCondition.LIKE)
     private Long storeId;
 
     /**
      * 商店名称
      */
+    @TableField(value = "STORE_NAME",condition = SqlCondition.LIKE)
     private String storeName;
 
     /**
      * 商品名称
      */
+    @TableField(value = "GOODS_NAME",condition = SqlCondition.LIKE)
     private String goodsName;
 
     /**
      * 商品id
      */
+    @TableField(value = "GOODS_ID",condition = SqlCondition.LIKE)
     private Long goodsId;
 
 

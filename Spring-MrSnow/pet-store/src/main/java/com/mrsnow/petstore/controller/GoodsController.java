@@ -36,6 +36,12 @@ public class GoodsController {
         return R.success(goods,"搜索完成！");
     }
 
+    @PostMapping(value = "/goodsDetail")
+    public R goodsDetail(@RequestBody JO<Long> jo){
+        Goods goods = goodsService.goodsDetail(jo);
+        return R.success(goods,"查询完成！");
+    }
+
 
 }
 

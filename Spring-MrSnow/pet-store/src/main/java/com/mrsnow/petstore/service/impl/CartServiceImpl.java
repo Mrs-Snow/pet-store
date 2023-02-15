@@ -8,7 +8,9 @@ import com.mrsnow.petstore.mapper.CartMapper;
 import com.mrsnow.petstore.service.CartService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mrsnow.petstore.utils.PJO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
@@ -22,6 +24,8 @@ import java.util.List;
  * @since 2022-12-14
  */
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements CartService {
 
     @Override

@@ -1,11 +1,11 @@
 package com.mrsnow.petstore.dao;
 
 import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
+
+import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.time.LocalDate;
-import com.baomidou.mybatisplus.annotation.TableId;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,41 +34,49 @@ public class Order extends Model<Order> {
     /**
      * 下单日期
      */
+    @TableField(value = "ORDER_TIME",condition = SqlCondition.LIKE)
     private LocalDate orderTime;
 
     /**
      * 状态
      */
+    @TableField(value = "STATUS",condition = SqlCondition.LIKE)
     private String status;
 
     /**
      * 金额
      */
+    @TableField(value = "AMOUNT",condition = SqlCondition.LIKE)
     private BigDecimal amount;
 
     /**
      * 购物车id
      */
+    @TableField(value = "CART_ID",condition = SqlCondition.LIKE)
     private Long cartId;
 
     /**
      * 快递单号
      */
+    @TableField(value = "EXPRESS_NO",condition = SqlCondition.LIKE)
     private String expressNo;
 
     /**
      * 订单编号
      */
+    @TableField(value = "ORDER_NO",condition = SqlCondition.LIKE)
     private String orderNo;
 
     /**
      * 买家id
      */
+    @TableField(value = "USER_ID",condition = SqlCondition.EQUAL)
     private Long userId;
 
     /**
      * 卖家id
      */
+    @TableField(value = "STORE_ID",condition = SqlCondition.EQUAL)
     private Long storeId;
 
 

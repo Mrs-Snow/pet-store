@@ -5,12 +5,21 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mrsnow.petstore.dao.Goods;
+import com.mrsnow.petstore.dao.Preferential;
 import com.mrsnow.petstore.mapper.GoodsMapper;
+import com.mrsnow.petstore.mapper.PreferentialMapper;
 import com.mrsnow.petstore.service.GoodsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.mrsnow.petstore.service.PreferentialService;
+import com.mrsnow.petstore.utils.JO;
 import com.mrsnow.petstore.utils.PJO;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,8 +32,11 @@ import java.util.List;
  * @since 2022-12-14
  */
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements GoodsService {
 
+    private final PreferentialMapper PreferentialMapper;
     @Override
     public Page<Goods> searchGoods(PJO<String> jo) {
         Page<Goods> goodsPage = new Page<>(jo.getCurrent(), jo.getPageSize());
@@ -40,4 +52,14 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
     }
 
+    @Override
+    public Goods goodsDetail(JO<Long> jo) {
+        Goods goods = baseMapper.selectById(jo.getData());
+        //查优惠活动
+        if (goods.getPreferentialId()!=null){
+            Preferential preferential = PreferentialMapper.selectById(goods.getPreferentialId());
+            goods.setPreferential(preferential);
+        }
+        return goods;
+    }
 }

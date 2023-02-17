@@ -7,6 +7,7 @@ import com.mrsnow.petstore.dao.Cart;
 import com.mrsnow.petstore.mapper.CartMapper;
 import com.mrsnow.petstore.service.CartService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.mrsnow.petstore.utils.JO;
 import com.mrsnow.petstore.utils.PJO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,5 +35,10 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
         LambdaQueryWrapper<Cart> queryWrapper = wrapper.eq(Cart::getUserId, pjo.getData());
         Page<Cart> page = new Page<>(pjo.getCurrent(), pjo.getPageSize());
         return baseMapper.selectPage(page,queryWrapper);
+    }
+
+    @Override
+    public void addCart(JO<Cart> jo) {
+        save(jo.getData());
     }
 }

@@ -11,11 +11,12 @@
         <result column="GOODS_NUM" property="goodsNum" />
         <result column="AMOUNT_MONEY" property="amountMoney" />
         <result column="USER_ID" property="userId" />
+        <result column="STORE_ID" property="storeId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, IS_ACCOUNT, GOODS_ID, GOODS_NAME, GOODS_NUM, AMOUNT_MONEY, USER_ID
+        id, IS_ACCOUNT, GOODS_ID, GOODS_NAME, GOODS_NUM, AMOUNT_MONEY, USER_ID,STORE_ID
     </sql>
 
 </mapper>

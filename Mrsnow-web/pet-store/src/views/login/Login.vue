@@ -90,9 +90,10 @@ export default defineComponent({
           if(res.data.code===200){
             console.log(res.data)
             message.success("登录成功！")
-            const user:User = res.data.data
+            const user:User = res.data.data.data
             sessionStorage.setItem("user",JSON.stringify(user))
-
+            sessionStorage.setItem("userId",user.id)
+            sessionStorage.setItem('token',res.data.data.token)
             if(app){
                app.appContext.config.globalProperties.$setUser()
             }

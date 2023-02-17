@@ -37,9 +37,6 @@ request.interceptors.response.use(
             message.error(res.data.message)
             router.push('/login')
         }
-        if(res.data.data.token){
-            sessionStorage.setItem('token',res.data.data.token)
-        }
         // console.log("响应拦截器返回前",res)
         return Promise.resolve(res)
     },

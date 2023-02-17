@@ -53,6 +53,14 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     }
 
     @Override
+    public Page<Goods> getStore(PJO<Long> jo) {
+        Page<Goods> goodsPage = new Page<>(jo.getCurrent(), jo.getPageSize());
+        LambdaQueryWrapper<Goods> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Goods::getStoreId,jo.getData());
+        return baseMapper.selectPage(goodsPage,wrapper);
+    }
+
+    @Override
     public Goods goodsDetail(JO<Long> jo) {
         Goods goods = baseMapper.selectById(jo.getData());
         //查优惠活动

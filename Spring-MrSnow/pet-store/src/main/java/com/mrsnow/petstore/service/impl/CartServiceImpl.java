@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mrsnow.petstore.dao.Cart;
+import com.mrsnow.petstore.dao.Goods;
 import com.mrsnow.petstore.mapper.CartMapper;
+import com.mrsnow.petstore.mapper.GoodsMapper;
 import com.mrsnow.petstore.service.CartService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mrsnow.petstore.utils.JO;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -28,17 +31,48 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements CartService {
+    private final GoodsMapper goodsMapper;
 
+    /**
+     * 01-未结算 02-已结算
+     * @param pjo
+     * @return
+     */
     @Override
     public IPage<Cart> getMyCart(@RequestBody PJO<Long> pjo) {
         LambdaQueryWrapper<Cart> wrapper = new LambdaQueryWrapper<>();
-        LambdaQueryWrapper<Cart> queryWrapper = wrapper.eq(Cart::getUserId, pjo.getData());
+        LambdaQueryWrapper<Cart> queryWrapper = wrapper.eq(Cart::getUserId, pjo.getData())
+                .eq(Cart::getIsAccount,"01");
         Page<Cart> page = new Page<>(pjo.getCurrent(), pjo.getPageSize());
         return baseMapper.selectPage(page,queryWrapper);
     }
 
     @Override
-    public void addCart(JO<Cart> jo) {
-        save(jo.getData());
+    @Transactional(rollbackFor = Exception.class)
+    public void addCart(JO<Cart> jo) throws Exception {
+        Cart cart = jo.getData();
+        LambdaQueryWrapper<Cart> wrapper = new LambdaQueryWrapper<>();
+        //查该用户购物车中是否有同样的商品(未结算的）
+        wrapper.eq(Cart::getGoodsId,cart.getGoodsId()).eq(Cart::getUserId,cart.getUserId());
+        List<Cart> carts = baseMapper.selectList(wrapper);
+        //有则更新数值金额，无则新增一条记录
+        if (!carts.isEmpty()){
+            Cart cart1 = carts.get(0);
+            //数量累加
+            int num = cart1.getGoodsNum() + cart.getGoodsNum();
+            //查商品库存是否够
+            Goods goods = goodsMapper.selectById(cart.getGoodsId());
+            if(num>goods.getInventoryNum()){
+                throw new Exception("本次添加后购物车中该商品的数量超出库存上限！");
+            }
+            cart1.setGoodsNum(num);
+            //金额累加
+            BigDecimal money = cart1.getAmountMoney();
+            BigDecimal money1 = cart.getAmountMoney();
+            cart1.setAmountMoney(money.add(money1));
+            updateById(cart1);
+        }else {
+            save(jo.getData());
+        }
     }
 }

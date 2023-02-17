@@ -22,7 +22,7 @@ export function setUsername(){
     if(userInfo){
         const info = JSON.parse(userInfo)
         // console.log(info)
-        return info.data.nickName
+        return info.nickName
     }else{
         return '游客'
     }

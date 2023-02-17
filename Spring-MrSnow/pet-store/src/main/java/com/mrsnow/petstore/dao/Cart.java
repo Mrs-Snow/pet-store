@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -19,6 +20,8 @@ import java.io.Serializable;
  * @since 2022-12-14
  */
 @TableName("pet_cart")
+@ToString(callSuper = true)
+@Data
 public class Cart extends Model<Cart> {
 
     private static final long serialVersionUID=1L;
@@ -26,7 +29,8 @@ public class Cart extends Model<Cart> {
     /**
      * id
      */
-      @TableId(value = "id", type = IdType.ASSIGN_ID)
+      @TableId(type = IdType.ASSIGN_ID)
+      @TableField(value = "id", condition = SqlCondition.EQUAL)
     private Long id;
 
     /**
@@ -65,78 +69,10 @@ public class Cart extends Model<Cart> {
     @TableField(value = "USER_ID", condition = SqlCondition.LIKE)
     private Long userId;
 
+    /**
+     * 用户id
+     */
+    @TableField(value = "STORE_ID", condition = SqlCondition.EQUAL)
+    private Long storeId;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getIsAccount() {
-        return isAccount;
-    }
-
-    public void setIsAccount(String isAccount) {
-        this.isAccount = isAccount;
-    }
-
-    public Long getGoodsId() {
-        return goodsId;
-    }
-
-    public void setGoodsId(Long goodsId) {
-        this.goodsId = goodsId;
-    }
-
-    public String getGoodsName() {
-        return goodsName;
-    }
-
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
-    }
-
-    public Integer getGoodsNum() {
-        return goodsNum;
-    }
-
-    public void setGoodsNum(Integer goodsNum) {
-        this.goodsNum = goodsNum;
-    }
-
-    public BigDecimal getAmountMoney() {
-        return amountMoney;
-    }
-
-    public void setAmountMoney(BigDecimal amountMoney) {
-        this.amountMoney = amountMoney;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
-
-    @Override
-    public String toString() {
-        return "Cart{" +
-        "id=" + id +
-        ", isAccount=" + isAccount +
-        ", goodsId=" + goodsId +
-        ", goodsName=" + goodsName +
-        ", goodsNum=" + goodsNum +
-        ", amountMoney=" + amountMoney +
-        ", userId=" + userId +
-        "}";
-    }
 }

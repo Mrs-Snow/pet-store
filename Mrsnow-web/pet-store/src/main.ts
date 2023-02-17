@@ -11,5 +11,6 @@ const app = createApp(App);
 const userInfo:User = {}
 
 app.config.globalProperties.$setUser = setUsername
+app.config.globalProperties.$userId = ''
 
 app.use(Antd).use(router).mount('#app');

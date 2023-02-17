@@ -37,10 +37,15 @@ public class CartController {
         return R.success(carts,"查询完成");
     }
 
-    @PostMapping(value = "/AddCart")
-    public R<IPage<Cart>> addCart(@RequestBody JO<Cart> jo){
-        IPage<Cart> carts = cartService.addCart(jo);
-        return R.success(carts,"查询完成");
+    @PostMapping(value = "/addCart")
+    public R addCart(@RequestBody JO<Cart> jo){
+        try {
+            cartService.addCart(jo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.fail(e.getMessage());
+        }
+        return R.success("添加完成");
     }
 
 }

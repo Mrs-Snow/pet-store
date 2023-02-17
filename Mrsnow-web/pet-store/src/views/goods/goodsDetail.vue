@@ -74,7 +74,6 @@ export default defineComponent({
 
         onBeforeMount(async ()=>{
             const goodsId = route.query.id
-            console.log(route.query)
             goodsData.value = (await request.post('/goods/goodsDetail',{data:goodsId})).data.data
             const preferential = goodsData.value.preferential
             price.value = goodsData.value.price
@@ -109,20 +108,41 @@ export default defineComponent({
         }
 
         function goStore(){
+            console.log(goodsData.value.storeId)
             router.push({
                 path: '/store',
-                query: goodsData.value.storeId
+                query: {storeId:goodsData.value.storeId}
             })
         }
 
         const handleBack =()=>{
-            router.push({
-                path: '/'
-            })
+            router.go(-1)
         }
 
         function addCart(){
-            message.success('已添加到购物车!')
+            const id = sessionStorage.getItem("userId")
+            
+            if(!id){
+                message.info("请先登录!")
+                router.push({
+                    path:'/login'
+                })
+            }else{
+                request.post('/cart/addCart',{
+                data:{
+                    isAccount:'01',
+                    goodsId: goodsData.value.id,
+                    goodsName: goodsData.value.goodsName,
+                    goodsNum: num.value,
+                    amountMoney: (num.value * price.value).toFixed(2),
+                    userId: id,
+                    storeId: goodsData.value.storeId
+                }
+            }).then(res=>{
+                if(res.data.code===200)
+                message.success('已添加到购物车!')
+            })
+            }
         }
 
         

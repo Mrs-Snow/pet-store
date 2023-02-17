@@ -19,6 +19,10 @@ import java.util.List;
 public interface GoodsService extends IService<Goods> {
     Page<Goods> searchGoods(PJO<String> jo);
 
+    Page<Goods> getStore(PJO<Long> jo);
+
     Goods goodsDetail(JO<Long> jo);
+
+
 
 }

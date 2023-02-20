@@ -85,5 +85,11 @@ public class Goods extends Model<Goods> {
      */
     @TableField(exist = false)
     private Preferential preferential;
+
+    /**
+     * 所在城市
+     */
+    @TableField(value = "CITY", condition = SqlCondition.EQUAL)
+    private String city;
 }
 

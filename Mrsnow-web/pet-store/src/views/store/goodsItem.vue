@@ -19,8 +19,9 @@
             </div>
             <div class="sales">
                 <span class="store">
-                    <div>🏠: {{ storeName }}</div>
+                    <span>🏠: {{ storeName }}</span>
                 </span>
+                <span style="margin-left: 10px;">地区:北京市</span>
             </div>
         </div>
     </div>
@@ -122,7 +123,7 @@ export default defineComponent({
         cursor: pointer;
         height: 20px;
         width: 100%;
-        text-align: center;
+        margin-left: 5px;
         text-decoration:underline
     }
     .sales{

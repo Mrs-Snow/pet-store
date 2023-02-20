@@ -36,26 +36,31 @@ public class Store extends Model<Store> {
     /**
      * 商店名
      */
+    @TableField(value = "STORE_NAME",condition = SqlCondition.LIKE)
     private String storeName;
 
     /**
      * 是否营业
      */
-    private String isOpenning;
+    @TableField(value = "IS_OPENING",condition = SqlCondition.LIKE)
+    private String isOpening;
 
     /**
      * 所在地区
      */
+    @TableField(value = "STORE_POSITION",condition = SqlCondition.LIKE)
     private String storePosition;
 
     /**
      * 管理员姓名
      */
+    @TableField(value = "MANAGER_NAME",condition = SqlCondition.LIKE)
     private String managerName;
 
     /**
      * 优惠活动id
      */
+    @TableField(value = "PREFERENTIAL_ID",condition = SqlCondition.LIKE)
     private Long preferentialId;
 
 
@@ -83,12 +88,12 @@ public class Store extends Model<Store> {
         this.storeName = storeName;
     }
 
-    public String getIsOpenning() {
-        return isOpenning;
+    public String getIsOpening() {
+        return isOpening;
     }
 
-    public void setIsOpenning(String isOpenning) {
-        this.isOpenning = isOpenning;
+    public void setIsOpening(String isOpening) {
+        this.isOpening = isOpening;
     }
 
     public String getStorePosition() {
@@ -126,7 +131,7 @@ public class Store extends Model<Store> {
         "id=" + id +
         ", managerId=" + managerId +
         ", storeName=" + storeName +
-        ", isOpenning=" + isOpenning +
+        ", isOpening=" + isOpening +
         ", storePosition=" + storePosition +
         ", managerName=" + managerName +
         ", preferentialId=" + preferentialId +

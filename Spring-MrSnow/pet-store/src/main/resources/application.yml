@@ -20,3 +20,5 @@ myFilter:
       - /goods
       - /cart
       - /goodsDetail
+      - /user
+      - /store

@@ -26,6 +26,7 @@ public class R<T> {
         this.message=message;
     }
 
+
     public R(T data) {
        this.data = data;
     }
@@ -40,6 +41,18 @@ public class R<T> {
 
     public static <E> R<E> success(E data){
         return new R(data);
+    }
+
+    public static  R success(){
+        R r = new R();
+        r.setCode(SUCCESS_CODE);
+        return r;
+    }
+
+    public static  R fail(){
+        R r = new R();
+        r.setCode(FAIL_CODE);
+        return r;
     }
 
     public static  R fail(String message){

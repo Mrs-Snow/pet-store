@@ -44,6 +44,12 @@ public class UserController {
         }
     }
 
+    @PostMapping(value = "/myself")
+    public R<User> login(@RequestBody JO<Long> jo){
+        User user = userService.getById(jo.getData());
+        return R.success(user);
+    }
+
     @PostMapping(value = "/register")
     public R<Integer> register(@RequestBody User user){
         int register = userService.register(user);

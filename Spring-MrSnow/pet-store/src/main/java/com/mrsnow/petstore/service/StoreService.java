@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-12-14
  */
 public interface StoreService extends IService<Store> {
-
+    Store getByUserId(Long userId);
 }

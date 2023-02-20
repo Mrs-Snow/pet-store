@@ -1,5 +1,7 @@
 package com.mrsnow.petstore.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mrsnow.petstore.dao.Store;
 import com.mrsnow.petstore.mapper.StoreMapper;
 import com.mrsnow.petstore.service.StoreService;
@@ -21,4 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements StoreService {
 
+    @Override
+    public Store getByUserId(Long userId) {
+        LambdaQueryWrapper<Store> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Store::getManagerId,userId);
+        return baseMapper.selectOne(wrapper);
+    }
 }

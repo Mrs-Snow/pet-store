@@ -27,6 +27,7 @@ public class Preferential extends Model<Preferential> {
      * id
      */
       @TableId(value = "id", type = IdType.ASSIGN_ID)
+
     private Long id;
 
     /**

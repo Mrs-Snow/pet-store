@@ -1,10 +1,15 @@
 package com.mrsnow.petstore.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.mrsnow.petstore.dao.Preferential;
+import com.mrsnow.petstore.service.PreferentialService;
+import com.mrsnow.petstore.utils.PJO;
+import com.mrsnow.petstore.utils.R;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -16,7 +21,16 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/preferential")
+@CrossOrigin
+@RequiredArgsConstructor
 public class PreferentialController {
+    private final PreferentialService preferentialService;
 
+    @PostMapping(value = "/list")
+    public R<IPage<Preferential>> list(@RequestBody PJO<Long> pjo){
+        pjo.setPageSize(4);
+        IPage<Preferential> pageVo = preferentialService.pageQuery(pjo);
+        return R.success(pageVo);
+    }
 }
 

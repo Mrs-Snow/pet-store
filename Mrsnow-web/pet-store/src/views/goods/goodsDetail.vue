@@ -35,6 +35,7 @@
                     <span style="color: cadetblue; margin-left: 6px;">{{ goodsData.preferential.comment }}</span>
                 </div>
             </div>
+            <div class="area">仓库所在地区: {{ goodsData.city }}</div>
             <div class="account">
                 <span style="margin-top: 6px; color: gray; font-weight: 500;">数量 :</span>
                  <a-input-number style="margin-left: 6px; font-weight: 800;"
@@ -177,6 +178,15 @@ export default defineComponent({
         left: 600px;
         top: 445px;
         border: 1px solid #000;
+    }
+    .area{
+        height: 30px;
+        width: 600px;
+        position: fixed;
+        left: 600px;
+        top: 435px;
+        text-align: justify;
+        color: rgb(162, 165, 171);
     }
     .mycart{
         height: 740px;

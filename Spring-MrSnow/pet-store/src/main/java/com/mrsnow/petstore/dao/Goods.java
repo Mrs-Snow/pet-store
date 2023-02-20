@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +31,7 @@ public class Goods extends Model<Goods> {
     /**
      * id
      */
+    @JsonSerialize(using= ToStringSerializer.class)
     @TableId(value = "ID", type = IdType.ASSIGN_ID)
     private Long id;
 

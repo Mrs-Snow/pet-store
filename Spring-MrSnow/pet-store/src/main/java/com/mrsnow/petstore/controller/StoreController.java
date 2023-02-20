@@ -2,7 +2,9 @@ package com.mrsnow.petstore.controller;
 
 
 import com.mrsnow.petstore.dao.Store;
+import com.mrsnow.petstore.dao.User;
 import com.mrsnow.petstore.service.StoreService;
+import com.mrsnow.petstore.service.UserService;
 import com.mrsnow.petstore.utils.JO;
 import com.mrsnow.petstore.utils.R;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +26,18 @@ import org.springframework.stereotype.Controller;
 @RequiredArgsConstructor
 public class StoreController {
     private final StoreService storeService;
+    private final UserService userService;
     @PostMapping(value = "/storeInfo")
-    public R<Store> storeInfo(@RequestBody JO<Long> jo){
-        Long id = jo.getData();
+    public R<Store> storeInfo(@RequestBody JO<String> jo){
+        Long id = Long.parseLong(jo.getData());
         Store store = storeService.getByUserId(id);
         if(store!=null){
             return R.success(store);
         }
-        return R.success();
+        Store newStore = new Store();
+        User user = userService.getById(id);
+        newStore.setManagerName(user.getNickName());
+        return R.success(newStore);
     }
 
 }

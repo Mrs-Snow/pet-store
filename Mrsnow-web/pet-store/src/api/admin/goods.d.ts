@@ -9,4 +9,5 @@ declare interface Goods {
     deliveryAddressId?: string;
     goodsName?: string;
     goodsPic?: string;
+    city?: string;
 }

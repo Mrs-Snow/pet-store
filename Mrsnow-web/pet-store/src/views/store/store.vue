@@ -13,7 +13,8 @@
                     <div class="list_box">
                         <span style="margin-left: 80px;" v-for="goods in record.records">
                             <goodsItem  :id="goods.id" :goodsName="goods.goodsName" :goodsPic="goods.goodsPic"
-                            :price="goods.price" :storeName="goods.storeName" :inventoryNum="goods.inventoryNum"/>
+                            :price="goods.price" :storeName="goods.storeName" :inventoryNum="goods.inventoryNum" :city="goods.goodsName"
+                            />
                         </span>
                     </div>
                     <Pagination v-model:current="current" :defaultPageSize="6" :total="record.total" show-less-items @change="changePage"/>        
@@ -39,6 +40,7 @@ export default defineComponent({
         const router = useRouter()
         const storeData = ref()
         const current = ref(1)
+        const goodsRef = ref()
         const handleBack =()=>{
             router.go(-1)
         }
@@ -58,7 +60,7 @@ export default defineComponent({
             getStore()
         }
 
-        return {handleBack,current,record,changePage}
+        return {handleBack,current,record,changePage,goodsRef}
     }
 })
 </script>

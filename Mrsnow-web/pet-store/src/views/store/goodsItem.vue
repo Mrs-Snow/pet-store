@@ -21,14 +21,14 @@
                 <span class="store">
                     <span>🏠: {{ storeName }}</span>
                 </span>
-                <span style="margin-left: 10px;">地区:北京市</span>
+                <span style="margin-left: 10px;">地区: {{ city }}</span>
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent,ref } from 'vue'
 import { number, string } from 'vue-types';
 import { Image } from 'ant-design-vue';
 import { useRouter } from 'vue-router';
@@ -40,34 +40,51 @@ export default defineComponent({
     },
     props:{
         id:{
-            type: string,
+            type: String,
             default: ''
         },
         goodsName:{
-            type: string,
-            defalt: '商品'
+            type: String,
+            default: '商品'
         },
         goodsPic:{
-            type: string,
-            defalt: 'food2.jpg'
+            type: String,
+            default: 'food2.jpg'
         },
         price:{
-            type: string,
-            defalt: '0.00'
+            type: String,
+            default: '0.00'
         },
         storeName:{
-            type: string,
-            defalt: ''
+            type: String,
+            default: ""
         },
         inventoryNum:{
-            type: number,
-            defalt: 99
-        }
+            type: Number,
+            default: 99
+        },
+        city:{
+            type: String,
+            default: "中国大陆"
+        },
     },
     setup (props) {
         const router = useRouter()
+        const item = ref()
         function getImageUrl(name:any){
             return new URL('/src/assets/goods/'+name,import.meta.url).href
+        }
+
+        function load(data){
+            item.value={
+                id:data.id,
+                goodsName:data.goodsName,
+                goodsPic:data.goodsPic,
+                price:data.price,
+                storeName:data.storeName,
+                inventoryNum:data.inventoryNum,
+                city:data.city
+            }
         }
 
         function goodsDetail(){
@@ -76,10 +93,9 @@ export default defineComponent({
                 path:'/goodsDetail',
                 query: {id: id}
             })
-            console.log('搜索id',props.id)
         }
 
-        return {getImageUrl,goodsDetail}
+        return {getImageUrl,goodsDetail,load}
     }
 })
 </script>

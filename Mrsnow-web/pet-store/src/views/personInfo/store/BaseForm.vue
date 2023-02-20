@@ -43,7 +43,6 @@ export default defineComponent({
 
         
         function load(data){
-            console.log(data.isOpening)
             formData.name = data.storeName
             if(data.isOpening==="1"){
                 formData.isOpen=true

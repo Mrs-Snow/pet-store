@@ -27,13 +27,9 @@ export default defineComponent({
         const router = useRouter()
         const cartData = ref()
         onMounted(()=>{
-            console.log(route.params.cartInfo)
-            const userString = sessionStorage.getItem('user')
-            let user
-            if (userString){
-                user = JSON.parse(userString)
-                console.log(user.data)
-                request.post('/cart/myCart',{data: user.data.id,current:1,pageSize:5}).then(res=>{
+            const userId = sessionStorage.getItem('userId')
+            if (userId){
+                request.post('/cart/myCart',{data: userId,current:1,pageSize:5}).then(res=>{
                     cartData.value = res.data.record
             })
                 
@@ -46,9 +42,7 @@ export default defineComponent({
         })
 
         const handleBack =()=>{
-            router.push({
-                path: '/'
-            })
+            router.go(-1)
         }
 
         function hasCartInfo(){

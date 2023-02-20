@@ -37,12 +37,9 @@ export default defineComponent({
 
         function myCart(){
             
-            const userString = sessionStorage.getItem('user')
-            let user
-            if (userString){
-                user = JSON.parse(userString)
-                console.log(user.data)
-                request.post('/cart/myCart',{data: user.data.id,current:1,pageSize:5}).then(res=>{
+            const userId = sessionStorage.getItem('userId')
+            if (userId){
+                request.post('/cart/myCart',{data: userId,current:1,pageSize:5}).then(res=>{
                     router.push({
                         path: '/myCart',
                         params: {

@@ -19,7 +19,7 @@
             </div>
             <div class="sales">
                 <span class="store">
-                    <div>🏠进入店铺: {{ storeName }}</div>
+                    <div>🏠: {{ storeName }}</div>
                 </span>
             </div>
         </div>

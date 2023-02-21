@@ -2,6 +2,7 @@ package com.mrsnow.petstore.service;
 
 import com.mrsnow.petstore.dao.Store;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mrsnow.petstore.utils.JO;
 
 /**
  * <p>
@@ -13,4 +14,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface StoreService extends IService<Store> {
     Store getByUserId(Long userId);
+
+    String editStore(JO<Store> jo);
 }

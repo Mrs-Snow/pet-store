@@ -15,7 +15,7 @@
                 <Input disabled v-model:value="formData.managerName"/>
             </FormItem>
             <FormItem :wrapper-col="{ offset: 3, span: 16 }">
-                 <Button type="primary" html-type="submit">保存</Button>
+                 <Button type="primary" html-type="submit" @click="handleSubmit">保存</Button>
             </FormItem>
         </Form>
     </div>
@@ -23,8 +23,9 @@
 
 <script lang="ts">
 import { defineComponent,onMounted,ref,reactive } from 'vue'
-import { Form,FormItem,Input,Button } from 'ant-design-vue';
+import { Form,FormItem,Input,Button, message } from 'ant-design-vue';
 import { string } from 'vue-types';
+import request from '../../../utils/request';
 export default defineComponent({
     
     components:{
@@ -34,6 +35,7 @@ export default defineComponent({
         Button
     },
     setup () {
+        const userId = sessionStorage.getItem('userId')
         const formData=reactive({
             name: '',
             isOpen: false,
@@ -41,7 +43,33 @@ export default defineComponent({
             managerName:''
         })
 
-        
+        function handleSubmit(){
+            let isOpen='0'
+            if(formData.isOpen){
+                isOpen='1'
+            }
+            request.post('/store/edit',
+            {
+                data:{
+                    name:formData.name,
+                    isOpening: isOpen,
+                    storePosition: formData.area,
+                    managerName: formData.managerName
+                },
+                extra: userId
+            }).then(res=>{
+                reload()
+                message.success(res.data.message)
+            })
+        }
+
+        function reload(){
+            
+            request.post('/store/storeInfo',{data:userId}).then(res=>{
+                load(res.data.data)
+            })
+        }
+
         function load(data){
             formData.name = data.storeName
             if(data.isOpening==="1"){
@@ -53,7 +81,7 @@ export default defineComponent({
             formData.managerName = data.managerName
         }
 
-        return {load,formData}
+        return {load,formData,handleSubmit}
     }
 })
 </script>

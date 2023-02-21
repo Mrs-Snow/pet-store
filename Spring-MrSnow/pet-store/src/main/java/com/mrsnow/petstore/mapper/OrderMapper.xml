@@ -13,11 +13,12 @@
         <result column="ORDER_NO" property="orderNo" />
         <result column="USER_ID" property="userId" />
         <result column="STORE_ID" property="storeId" />
+        <result column="GOODS_ID" property="goodsId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, ORDER_TIME, STATUS, AMOUNT, CART_ID, EXPRESS_NO, ORDER_NO, USER_ID, STORE_ID
+        id, ORDER_TIME, STATUS, AMOUNT, CART_ID, EXPRESS_NO, ORDER_NO, USER_ID, STORE_ID, GOODS_ID
     </sql>
 
 </mapper>

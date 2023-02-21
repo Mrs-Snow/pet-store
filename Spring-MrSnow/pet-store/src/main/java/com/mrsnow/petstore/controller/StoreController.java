@@ -40,5 +40,11 @@ public class StoreController {
         return R.success(newStore);
     }
 
+    @PostMapping(value = "/edit")
+    public R<Store> editStore(@RequestBody JO<Store> jo){
+        String message = storeService.editStore(jo);
+        return R.success(jo.getData(),message);
+    }
+
 }
 

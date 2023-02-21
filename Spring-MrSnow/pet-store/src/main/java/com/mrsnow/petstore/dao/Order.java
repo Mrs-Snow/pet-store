@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -23,6 +24,8 @@ import java.io.Serializable;
  * @since 2022-12-14
  */
 @TableName("pet_order")
+@Data
+@ToString
 public class Order extends Model<Order> {
 
     private static final long serialVersionUID=1L;
@@ -82,96 +85,12 @@ public class Order extends Model<Order> {
     @TableField(value = "STORE_ID",condition = SqlCondition.EQUAL)
     private Long storeId;
 
+    /**
+     * 商品id
+     */
+    @TableField(value = "GOODS_ID",condition = SqlCondition.EQUAL)
+    private Long goodsId;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public LocalDate getOrderTime() {
-        return orderTime;
-    }
-
-    public void setOrderTime(LocalDate orderTime) {
-        this.orderTime = orderTime;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public Long getCartId() {
-        return cartId;
-    }
-
-    public void setCartId(Long cartId) {
-        this.cartId = cartId;
-    }
-
-    public String getExpressNo() {
-        return expressNo;
-    }
-
-    public void setExpressNo(String expressNo) {
-        this.expressNo = expressNo;
-    }
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getStoreId() {
-        return storeId;
-    }
-
-    public void setStoreId(Long storeId) {
-        this.storeId = storeId;
-    }
-
-    @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
-
-    @Override
-    public String toString() {
-        return "Order{" +
-        "id=" + id +
-        ", orderTime=" + orderTime +
-        ", status=" + status +
-        ", amount=" + amount +
-        ", cartId=" + cartId +
-        ", expressNo=" + expressNo +
-        ", orderNo=" + orderNo +
-        ", userId=" + userId +
-        ", storeId=" + storeId +
-        "}";
-    }
 }

@@ -5,19 +5,19 @@
       cancel-text="取消">
             <Form>
                 <FormItem label="活动说明:" help="活动简介,不超过8个字符" >
-                    <Input v-model:value="formData.comment"/>
+                    <Input :maxlength="8" v-model:value="formData.comment"/>
                 </FormItem>
                 <FormItem label="优惠金额:" help="原价上减免的金额,不设置默认为0" >
-                    <Input v-model:value="formData.preferentialPrice"/>
+                    <Input type="number" v-model:value="formData.preferentialPrice"/>
                 </FormItem>
                 <FormItem label="折扣:" help="折扣百分比数,默认100为不打折,10为一折,85为八五折" >
-                    <Input v-model:value="formData.discount"/>
+                    <Input type="number" v-model:value="formData.discount"/>
                 </FormItem>
                 <FormItem label="触发金额:" help="活动简介,触发优惠条件的金额,不设置默认为0" >
-                    <Input v-model:value="formData.priceValue"/>
+                    <Input type="number" v-model:value="formData.priceValue"/>
                 </FormItem>
                 <FormItem label="触发数量:" help="达到优惠条件的购买数量,不设置默认为1" >
-                    <Input v-model:value="formData.countValue"/>
+                    <Input type="number" v-model:value="formData.countValue"/>
                 </FormItem>
             </Form>
         </a-modal>

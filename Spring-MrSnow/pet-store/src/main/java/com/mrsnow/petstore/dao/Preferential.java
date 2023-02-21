@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +29,7 @@ public class Preferential extends Model<Preferential> {
      * id
      */
       @TableId(value = "id", type = IdType.ASSIGN_ID)
-
+      @JsonSerialize(using= ToStringSerializer.class)
     private Long id;
 
     /**
@@ -39,7 +41,7 @@ public class Preferential extends Model<Preferential> {
     /**
      * 价钱阈值
      */
-    @TableField(value = "PREFERENTIAL_PRICE",condition = SqlCondition.EQUAL)
+    @TableField(value = "PRICE_VALUE",condition = SqlCondition.EQUAL)
     private BigDecimal priceValue;
 
     /**

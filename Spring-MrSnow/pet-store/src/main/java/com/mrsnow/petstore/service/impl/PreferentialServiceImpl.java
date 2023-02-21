@@ -31,7 +31,7 @@ public class PreferentialServiceImpl extends ServiceImpl<PreferentialMapper, Pre
     public IPage<Preferential> pageQuery(PJO<Long> pjo) {
         Page<Preferential> page = new Page<>(pjo.getCurrent(), pjo.getPageSize());
         LambdaQueryWrapper<Preferential> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Preferential::getStoreId,pjo.getData());
+        wrapper.eq(Preferential::getStoreId,pjo.getData()).orderByDesc(Preferential::getId);
         return baseMapper.selectPage(page,wrapper);
     }
 }

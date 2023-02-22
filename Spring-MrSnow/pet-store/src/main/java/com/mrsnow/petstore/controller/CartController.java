@@ -37,6 +37,18 @@ public class CartController {
         return R.success(carts,"查询完成");
     }
 
+    @PostMapping(value = "/edit")
+    public R edit(@RequestBody JO<Cart> jo){
+        cartService.numEdit(jo);
+        return R.success("更新完成");
+    }
+
+    @PostMapping(value = "/remove")
+    public R remove(@RequestBody JO<Long> jo){
+        cartService.removeById(jo.getData());
+        return R.success("删除完成");
+    }
+
     @PostMapping(value = "/addCart")
     public R addCart(@RequestBody JO<Cart> jo){
         try {

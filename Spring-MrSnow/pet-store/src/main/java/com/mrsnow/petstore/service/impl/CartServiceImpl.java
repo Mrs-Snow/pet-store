@@ -43,8 +43,14 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
         LambdaQueryWrapper<Cart> wrapper = new LambdaQueryWrapper<>();
         LambdaQueryWrapper<Cart> queryWrapper = wrapper.eq(Cart::getUserId, pjo.getData())
                 .eq(Cart::getIsAccount,"01");
-        Page<Cart> page = new Page<>(pjo.getCurrent(), pjo.getPageSize());
-        return baseMapper.selectPage(page,queryWrapper);
+        Page<Cart> page = new Page<>(pjo.getCurrent(), 4);
+        Page<Cart> cartPage = baseMapper.selectPage(page, queryWrapper);
+        for (Cart record : cartPage.getRecords()) {
+            Goods goods = goodsMapper.selectById(record.getGoodsId());
+            record.setGoodsDetail(goods);
+        }
+        return cartPage;
+
     }
 
     @Override
@@ -74,5 +80,16 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
         }else {
             save(jo.getData());
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void numEdit(JO<Cart> jo) {
+        Cart data = jo.getData();
+        Long goodsId = data.getGoodsId();
+        Goods goods = goodsMapper.selectById(goodsId);
+        BigDecimal price = goods.getPrice();
+        data.setAmountMoney(price.multiply(new BigDecimal(data.getGoodsNum())));
+        updateById(data);
     }
 }

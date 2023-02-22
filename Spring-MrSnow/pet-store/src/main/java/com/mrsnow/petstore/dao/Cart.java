@@ -78,4 +78,7 @@ public class Cart extends Model<Cart> {
     @TableField(value = "STORE_ID", condition = SqlCondition.EQUAL)
     private Long storeId;
 
+    @TableField(exist = false)
+    private Goods goodsDetail;
+
 }

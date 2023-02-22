@@ -20,4 +20,6 @@ public interface CartService extends IService<Cart> {
     IPage<Cart> getMyCart(PJO<Long> pjo);
 
     void addCart(JO<Cart> jo) throws Exception;
+
+   void numEdit(JO<Cart> jo);
 }

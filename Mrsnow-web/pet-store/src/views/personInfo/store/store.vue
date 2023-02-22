@@ -1,6 +1,5 @@
 <template>
     <div class="left_menu">
-        <h3 v-if="hasStore">您还没有店铺,请先填写基本信息申请一个店铺吧🐱</h3>
         <Tabs tab-position="left">
             <TabPane key="1" tab="商店管理">
                 <BaseForm ref="form"/>
@@ -38,11 +37,13 @@ export default defineComponent({
             const userId = sessionStorage.getItem('userId')
             request.post('/store/storeInfo',{data:userId}).then(res=>{
                 store.value = res.data.data
-                if(store.value){
+                if(store.value.id){
                     hasStore.value=false
                     form.value.load(store.value)
                     preferentialRef.value.load(store.value)
                     sessionStorage.setItem('storeId',store.value.id)
+                }else{
+                    form.value.load(store.value)
                 }
             })
            

@@ -1,6 +1,23 @@
 <template>
     <div>
-        <h2 style="text-align: justify; margin-left: 50px; padding-bottom: 20px;">基本信息</h2>
+       <div v-if="hasStore" style="margin-top: 50px;">
+            <a-empty
+            image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
+            :image-style="{
+            height: '60px',
+            }"
+            >
+            <template #description>
+                <span>
+                    您还未拥有任何店铺
+                </span>
+            </template>
+                <a-button type="primary" @click="handleApply">现在申请</a-button>
+            </a-empty>
+       </div>
+       
+        <div v-if="editable">
+            <h2 style="text-align: justify; margin-left: 50px; padding-bottom: 20px;">基本信息</h2>
         <Form>
             <FormItem label="店铺名" :label-col="{ span:8}" :wrapper-col="{span:8}">
                 <Input  v-model:value="formData.name"/>
@@ -18,6 +35,8 @@
                  <Button type="primary" html-type="submit" @click="handleSubmit">保存</Button>
             </FormItem>
         </Form>
+        </div>
+       
     </div>
 </template>
 
@@ -35,6 +54,8 @@ export default defineComponent({
         Button
     },
     setup () {
+        const hasStore = ref(true)
+        const editable = ref(false)
         const userId = sessionStorage.getItem('userId')
         const formData=reactive({
             name: '',
@@ -70,7 +91,17 @@ export default defineComponent({
             })
         }
 
+        function handleApply(){
+            editable.value=true
+            hasStore.value=false
+
+        }
+
         function load(data){
+            if(data.id){
+                hasStore.value=false
+                editable.value=true
+            }
             formData.name = data.storeName
             if(data.isOpening==="1"){
                 formData.isOpen=true
@@ -81,7 +112,7 @@ export default defineComponent({
             formData.managerName = data.managerName
         }
 
-        return {load,formData,handleSubmit}
+        return {load,formData,handleSubmit,hasStore,editable,handleApply}
     }
 })
 </script>

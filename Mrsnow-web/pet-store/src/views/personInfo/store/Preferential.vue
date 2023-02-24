@@ -1,6 +1,7 @@
 <template>
     <div>
-        <h2 style="text-align: justify; margin-left: 50px; padding-bottom: 20px;">优惠活动</h2>
+        <h2 style="text-align: justify; margin-left: 50px;">优惠活动</h2>
+        <a-divider></a-divider>
         <a-modal v-model:visible="visible" title="优惠活动" @ok="handleOk" ok-text="确认"
       cancel-text="取消">
             <Form>
@@ -58,6 +59,7 @@ export default defineComponent({
         RedoOutlined
     },
     setup () {
+        const idRows =ref([])
         const type = ref('add')
         const tableData = ref()
         const current=ref(1)
@@ -92,10 +94,21 @@ export default defineComponent({
             {
                 title: 'id',
                 dataIndex: 'id',
+                colSpan: 0,
+                customRender: (value, row, index) => {
+                let obj = {
+                    children: value,
+                    attrs: {},
+                };
+
+                obj.attrs.colSpan = 0;
+                return obj;
+                },
             },
             {
                 title: '操作',
                 key: 'operation',
+                colSpan: 2,
             },
         ]
         onActivated(()=>{
@@ -105,6 +118,7 @@ export default defineComponent({
         function handleDelete(){
             if(idRows.value.length<1){
                 message.error('请选择至少一条数据')
+                return;
             }
             request.post('/preferential/delete',{data:idRows.value}).then(res=>{
                 message.success('删除成功!')
@@ -168,7 +182,7 @@ export default defineComponent({
         //     console.log(selectedRowKeys)
         //     console.log(selectedRows[0])
         // }
-        const idRows =ref([])
+        
 
         const rowSelection: TableProps['rowSelection'] = {
             onChange: (selectedRowKeys: string[], selectedRows: DataType[]) => {

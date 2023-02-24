@@ -1,7 +1,10 @@
 package com.mrsnow.petstore.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.mrsnow.petstore.dao.Address;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mrsnow.petstore.utils.JO;
+import com.mrsnow.petstore.utils.PJO;
 
 /**
  * <p>
@@ -12,5 +15,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-12-14
  */
 public interface AddressService extends IService<Address> {
-
+    boolean addAddress(JO<Address> jo);
+    IPage<Address> page(PJO<Long> jo);
 }

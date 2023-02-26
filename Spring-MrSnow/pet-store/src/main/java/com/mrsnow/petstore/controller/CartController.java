@@ -49,6 +49,18 @@ public class CartController {
         return R.success("删除完成");
     }
 
+    @PostMapping(value = "/removeByIds")
+    public R removeByIds(@RequestBody JO<List<Long>> jo){
+        cartService.removeByIds(jo.getData());
+        return R.success("删除完成");
+    }
+
+    @PostMapping(value = "/removeAll")
+    public R removeAll(@RequestBody JO<Long> jo){
+        cartService.removeAll(jo);
+        return R.success("删除完成");
+    }
+
     @PostMapping(value = "/addCart")
     public R addCart(@RequestBody JO<Cart> jo){
         try {
@@ -59,6 +71,8 @@ public class CartController {
         }
         return R.success("添加完成");
     }
+
+
 
 }
 

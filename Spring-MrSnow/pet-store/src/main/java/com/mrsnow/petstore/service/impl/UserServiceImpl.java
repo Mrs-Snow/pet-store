@@ -72,4 +72,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return 0;
         }
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String updatePassword(String old, String newPassword,Long userId) {
+        User user = getById(userId);
+        if(!old.equals(user.getPassword())){
+            return "旧密码不正确！";
+        }
+        if(user.getPassword().equals(old)){
+            return "新密码不能是旧密码！";
+        }
+        user.setPassword(newPassword);
+        updateById(user);
+        return "修改密码成功！";
+    }
 }

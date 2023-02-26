@@ -9,7 +9,7 @@
         <div>
             
             <div v-if="hasCartInfo()" style="font-size: xxx-large; font-weight: 500; color: blueviolet; position: fixed; bottom: 500px; left: 550px;">🛒 购物车空空如也</div>
-            <div class="cart">
+            <div v-if="!hasCartInfo()" class="cart">
                 <Button style="float: right;" @click="reload()" size="large" shape="circle"><RedoOutlined/></Button>
                 <div v-for="(item,index) in cartData.records" class="items">
                     <a-checkbox style="margin-top: 40px; margin-left: 20px;" @change="onSelect" :id="index">{{ index+1 }}</a-checkbox>
@@ -23,16 +23,32 @@
                         cancel-text="还想买"
                         @confirm="confirmDec(index)"
                         @cancel="cancelDec(index)"
-                        ><Button class="numButton1" @click="numDec(index)">-</Button></a-popconfirm>
+                        >
+                        <Button class="numButton1" @click="numDec(index)">-</Button>
+                    </a-popconfirm>
                         <div>数量: {{ item.goodsNum }}</div>
                         <Button class="numButton2" @click="numInc(index)">+</Button>
                     </div>
                     <div class="price">{{ item.amountMoney }} 元</div>
+                    <div class="comment">商家可能有优惠活动,优惠价格结算时可知晓</div>
                 </div>
                 <div>
                     <div style="font-size: large; color: blueviolet; text-align: justify; margin-left: 100px; margin-top: 5px;">已选择 {{ selectList.length }} 件商品</div>
                     <div style="font-size: large; color: red; text-align: justify; margin-left: 100px; margin-top: 5px; font-weight:600;" >合计:{{ countAll }}元</div>
-                    <Button style="float: right; margin-right: 100px;"  type="primary" danger @click="goSettle">去 结 算</Button>
+                    <Button style=" background-color: blueviolet; color: aliceblue;float: right; margin-right: 100px;"  type="primary" @click="goSettle">去 结 算</Button>
+                    <a-popconfirm
+                    title="真的要这么做吗?"
+                    ok-text="清空"
+                    cancel-text="取消"
+                    @confirm="clearCart"
+                    ><Button style="float: right; margin-right: 100px;"  type="primary" danger>清 空 购 物 车</Button></a-popconfirm>
+                    <a-popconfirm
+                    title="真的要这么做吗?"
+                    ok-text="删除"
+                    cancel-text="取消"
+                    @confirm="removeSelect"
+                    ><Button style="float: right; margin-right: 100px;" type="primary" danger>删 除</Button></a-popconfirm>
+                    
                 </div>
                 
                 <Pagination :current="current" :total="cartData.total" :page-size="4" @change="pageChange" class="page"/>
@@ -40,8 +56,7 @@
         </div>
         <div class="right">
             <h2 style="color:mediumorchid;">广告区</h2>
-            <div style="width: 100px; border: 1px solid #000; margin-left: 50px; border-radius: 10px; color: aliceblue; margin-top: 300px;
-            background-color: blueviolet; cursor: pointer;">联系客服</div>
+            <div style="width: 100px; border: 1px solid #000; margin-left: 50px; border-radius: 10px; color: aliceblue; margin-top: 300px;background-color: blueviolet; cursor: pointer;">联系客服</div>
         </div>
     </div>
 </template>
@@ -180,12 +195,43 @@ export default defineComponent({
         }
 
         function hasCartInfo(){
-            if(cartData.value){
+            if(cartData.value.records.length>0){
                 return false
+            }else{
+                return true
             }
-            return true
         }
-        return {selectList,hasCartInfo,handleBack,cartData,reload,current,getImageUrl,onSelect,numInc, numDec,visible,confirmDec,cancelDec,pageChange,countAll,goSettle}
+
+        function removeSelect(){
+            const select = selectList.value
+            if(select.length<1){
+                message.info('请选择要删除的商品!');
+                return;
+            }
+            let data=[]
+            select.map(s=>{
+                data.push(s.id)
+            })
+             request.post('/cart/removeByIds',{data:data}).then(res=>{
+                message.success('删除成功');
+                selectList.value=[]
+                countAll.value=0
+                reload()
+             })
+        }
+
+        function clearCart(){
+            request.post('/cart/removeAll',{data:sessionStorage.getItem('userId')}).then(res=>{
+                message.success('已清空!');
+                selectList.value=[]
+                countAll.value=0
+                reload()
+             })
+        }
+        return {selectList,hasCartInfo,handleBack,cartData,reload,current,getImageUrl,onSelect,numInc, numDec,visible
+            ,confirmDec,cancelDec,pageChange,countAll,goSettle,removeSelect,clearCart
+            
+        }
     }
 })
 </script>
@@ -211,7 +257,13 @@ export default defineComponent({
         display: flex;
         border-radius: 10px;
     }
-    .page{
+    .comment{
+        font-size: small;
+        color: darkslategrey;
+        text-align: center;
+        width: 100px;
+        height: 40px;
+        margin-top: 12px;
     }
 
     .image{
@@ -234,12 +286,12 @@ export default defineComponent({
     .price{
         font-size: large;
         font-weight: 500;
-        width: 140px;
+        width: 180px;
         color: rgb(250, 4, 4);
         height: 50px;
         margin-top: 26px;
         text-align: justify;
-        margin-left: 200px;
+        margin-left: 50px;
         float: right;
     }
 

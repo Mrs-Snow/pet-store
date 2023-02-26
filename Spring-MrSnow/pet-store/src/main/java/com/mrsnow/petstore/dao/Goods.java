@@ -94,5 +94,8 @@ public class Goods extends Model<Goods> {
      */
     @TableField(value = "CITY", condition = SqlCondition.EQUAL)
     private String city;
+
+    @TableField(exist = false)
+    private Integer num;
 }
 

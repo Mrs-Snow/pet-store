@@ -9,11 +9,12 @@
         <result column="CONSIGNEE" property="consignee" />
         <result column="CONSIGNEE_TEL" property="consigneeTel" />
         <result column="DELIVERY_ADDRESS" property="deliveryAddress" />
+        <result column="IS_DEFAULT" property="isDefault"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, USER_ID, CONSIGNEE, CONSIGNEE_TEL, DELIVERY_ADDRESS
+        id, USER_ID, CONSIGNEE, CONSIGNEE_TEL, DELIVERY_ADDRESS,IS_DEFAULT
     </sql>
 
 </mapper>

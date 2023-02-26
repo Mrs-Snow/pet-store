@@ -6,13 +6,15 @@
         </div>
         
         <div class="tabs">
-            <Tabs 
+            <Tabs
+            :activeKey="activeKey" 
             :tabBarGutter="50"
             size="large"
             centered 
+            @change="changeTab"
             style="width: 1000px; margin-left: 120px;" >
                 <TabPane forceRender key="1" tab="个人中心">
-                    <Person/>
+                    <Person ref="person"/>
                 </TabPane>
                 <TabPane forceRender key="2" tab="店家中心">
                     <Store/>
@@ -41,19 +43,27 @@ export default defineComponent({
         Store
     },
     setup () {
+        const person=ref()
         const route = useRoute()
         const router = useRouter()
         const userData =ref()
+        const activeKey = ref("1");
         onMounted(()=>{
-            
+            console.log(route.query)
+            if(route.query.tabKey){
+                person.value.activeKey=route.query.tabKey
+            }
         })
 
         const handleBack =()=>{
             router.go(-1)
         }
 
+        const changeTab=(e)=>{
+            activeKey.value=e
+        }
        
-        return {handleBack,userData}
+        return {handleBack,userData,activeKey,person,changeTab}
     }
 })
 </script>

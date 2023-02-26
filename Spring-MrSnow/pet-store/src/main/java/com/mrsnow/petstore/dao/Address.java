@@ -57,4 +57,7 @@ public class Address extends Model<Address> {
     @TableField(value = "DELIVERY_ADDRESS",condition = SqlCondition.LIKE)
     private String deliveryAddress;
 
+    @TableField(value = "IS_DEFAULT",condition = SqlCondition.LIKE)
+    private String isDefault;
+
 }

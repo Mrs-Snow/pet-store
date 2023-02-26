@@ -92,6 +92,14 @@ public class UserController {
         }
         return R.fail("服务器开小差了！");
     }
+
+    @PostMapping(value = "/updatePassword")
+    public R updatePw(@RequestBody JO<Map<String ,String>> jo){
+        String s = userService.updatePassword(jo.getData().get("old"),
+                jo.getData().get("new"),
+                Long.parseLong(jo.getData().get("userId")));
+        return R.success(s);
+    }
     @GetMapping (value = "/testHeader")
     public R testHeader() {
         return R.success("测试成功！");

@@ -12,7 +12,7 @@
                     <Input v-model:value="formData.consigneeTel"/>
                 </FormItem>
                 <FormItem label="地址:" help="详细的收获地址" >
-                    <Input  v-model:value="formData.deliveryAddress"/>
+                    <a-textarea  v-model:value="formData.deliveryAddress"/>
                 </FormItem>
             </Form>
         </a-modal>
@@ -29,9 +29,12 @@
         >
         <template #bodyCell="{text, record, index, column}">
             <template v-if="column.key==='operation'">
-                <a @click="handleEdit(record)">✍️编辑</a>
+                <a @click="handleEdit(record)">✍️编辑 </a>
+                <a v-if="record.isDefault==='0'" @click="setDefault(record.id)"> 设为默认</a>
+                <span v-if="record.isDefault==='1'" style="color:blueviolet; font-size: small; margin-left: 5px; font-weight: 600;">默认地址</span>
             </template>
         </template>
+       
     </Table>
     </div>
 </template>
@@ -69,6 +72,7 @@ export default defineComponent({
             deliveryAddress:'',
             id: ''
         })
+        
         const columns=[
             {
                 title: '收货人',
@@ -99,7 +103,7 @@ export default defineComponent({
             {
                 title: '操作',
                 key: 'operation',
-                colSpan: 2,
+                colSpan: 3,
             },
         ]
         onActivated(()=>{
@@ -213,8 +217,17 @@ export default defineComponent({
             visible.value=true
         }
 
+        function setDefault(id){
+            console.log(id);
+            request.post('/address/setDefault',{data:id}).then(res=>{
+                message.success('设置成功');
+                reload();
+            })
+            
+        }
+
         return {load,tableData,columns,visible,handleAdd,rowSelection,
-            formData,handleOk,handleDelete,reload,pagination,handleTableChange,handleEdit
+            formData,handleOk,handleDelete,reload,pagination,handleTableChange,handleEdit,setDefault
         }
     }
 })

@@ -92,4 +92,13 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
         data.setAmountMoney(price.multiply(new BigDecimal(data.getGoodsNum())));
         updateById(data);
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void removeAll(JO<Long> jo) {
+        Long userId = jo.getData();
+        LambdaQueryWrapper<Cart> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Cart::getUserId,userId);
+        remove(wrapper);
+    }
 }

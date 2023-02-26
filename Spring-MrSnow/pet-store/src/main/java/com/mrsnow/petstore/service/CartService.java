@@ -22,4 +22,6 @@ public interface CartService extends IService<Cart> {
     void addCart(JO<Cart> jo) throws Exception;
 
    void numEdit(JO<Cart> jo);
+
+   void removeAll(JO<Long> jo);
 }

@@ -18,4 +18,5 @@ public interface UserService extends IService<User> {
    boolean verify(User user);
 
    int updatePassword(String old,String newPassword,String username);
+   String updatePassword(String old,String newPassword,Long userId);
 }

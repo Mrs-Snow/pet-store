@@ -91,6 +91,10 @@ public class Order extends Model<Order> {
     @TableField(value = "GOODS_ID",condition = SqlCondition.EQUAL)
     private Long goodsId;
 
+    @TableField(exist = false)
+    private String remark;
 
+    @TableField(exist = false)
+    private Goods goodsDetail;
 
 }

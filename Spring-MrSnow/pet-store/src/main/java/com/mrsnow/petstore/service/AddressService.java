@@ -17,4 +17,6 @@ import com.mrsnow.petstore.utils.PJO;
 public interface AddressService extends IService<Address> {
     boolean addAddress(JO<Address> jo);
     IPage<Address> page(PJO<Long> jo);
+
+    void setDefault(JO<Long> jo);
 }

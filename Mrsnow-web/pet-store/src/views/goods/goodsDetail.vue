@@ -43,9 +43,11 @@
                  v-model:value="num"
                  ></a-input-number>
                  <span style="margin-top: 6px; color: gray; font-weight: 500; margin-left: 6px;">件</span>
+                 <span v-if="goodsData.inventoryNum>0" style="margin-top: 6px; color: firebrick; font-weight: 500; margin-left: 36px; font-size: small;">库存:{{ goodsData.inventoryNum }} 件</span>
                  <span v-if="isMax()" style="margin-top: 6px; color:blueviolet; font-weight: 500; margin-left: 6px;">库存就这么多啦!!😑</span>
             </div>
             <div class="buttons">
+                <router-link :to="{name:'settle',params:{}}"></router-link>
                 <span class="button1" @click="buy">立即购买</span>
                 <span class="button2" @click="addCart">加入购物车</span>
             </div>
@@ -72,6 +74,7 @@ export default defineComponent({
         const num = ref<number>(1);
         const price = ref<any>(0);
         const discount = ref(100);
+        const order = ref()
 
         onBeforeMount(async ()=>{
             const goodsId = route.query.id
@@ -101,7 +104,20 @@ export default defineComponent({
         }
 
         function buy(){
-            
+            const id = sessionStorage.getItem("userId")
+            if(!id){
+                message.info("请先登录!")
+                router.push({
+                    path:'/login'
+                })
+            }else{
+                goodsData.value.num=num.value
+                router.push({
+                        path: '/settle',
+                        query:{num:num.value,goodsId:goodsData.value.id}
+                    })
+                
+            }
         }
 
         function kefu(){
@@ -147,7 +163,7 @@ export default defineComponent({
         }
 
         
-        return {getImageUrl,handleBack,goodsData,num,isMax,price,buy,addCart,goStore,kefu,discount}
+        return {getImageUrl,handleBack,goodsData,num,isMax,price,buy,addCart,goStore,kefu,discount,order}
     }
 })
 </script>

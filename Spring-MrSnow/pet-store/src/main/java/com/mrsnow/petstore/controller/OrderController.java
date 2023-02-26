@@ -3,11 +3,15 @@ package com.mrsnow.petstore.controller;
 
 
 
+import com.mrsnow.petstore.dao.BuyInfo;
+import com.mrsnow.petstore.dao.Goods;
+import com.mrsnow.petstore.dao.Order;
+import com.mrsnow.petstore.service.OrderService;
+import com.mrsnow.petstore.utils.JO;
+import com.mrsnow.petstore.utils.R;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -22,6 +26,16 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RequiredArgsConstructor
 public class OrderController {
+    private final OrderService orderService;
 
+    @PostMapping(value = "/buyFromDetail")
+    public R buyFromDetail(@RequestBody JO<BuyInfo> jo){
+        try {
+            Order order = orderService.byFromDetail(jo);
+            return R.success(order,"创建订单成功!");
+        } catch (Exception e) {
+            return R.fail(e.getMessage());
+        }
+    }
 }
 

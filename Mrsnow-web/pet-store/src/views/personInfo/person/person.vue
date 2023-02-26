@@ -1,11 +1,11 @@
 <template>
     <div class="left_menu">
-        <Tabs tab-position="left">
+        <Tabs tab-position="left" :activeKey="activeKey" @change="changeTab">
             <TabPane key="1" tab="基本信息">
                 <BaseForm  ref="form"/>
             </TabPane>
             <TabPane :forceRender="true" key="2" tab="密码修改">
-                <Password/>
+                <Password ref="passwordRef"/>
             </TabPane>
             <TabPane :forceRender="true" key="3" tab="收获地址">
                 <Address ref="addressRef"></Address>
@@ -36,9 +36,16 @@ export default defineComponent({
         Address
     },
     setup () {
+        const passwordRef=ref()
         const addressRef=ref()
         const form = ref();
         const router = useRouter()
+        const route =useRoute()
+        const activeKey =ref("1")
+
+        const changeTab=(e)=>{
+            activeKey.value=e
+        }
         onMounted(()=>{
             const userId = sessionStorage.getItem('userId')
             if (userId){
@@ -55,7 +62,12 @@ export default defineComponent({
             }
         })
 
-        return {form,addressRef}
+        function setTabKey(key){
+            console.log(key)
+            activeKey.value=key;
+        }
+
+        return {form,addressRef,activeKey,setTabKey,changeTab,passwordRef}
     }
 })
 </script>

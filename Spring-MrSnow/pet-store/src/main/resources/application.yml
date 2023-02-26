@@ -24,3 +24,5 @@ myFilter:
       - /store
       - /preferential
       - /address
+      - /order
+      - /shipAddress

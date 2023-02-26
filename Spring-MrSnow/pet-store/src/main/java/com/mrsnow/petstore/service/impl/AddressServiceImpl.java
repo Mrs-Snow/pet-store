@@ -1,6 +1,7 @@
 package com.mrsnow.petstore.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mrsnow.petstore.dao.Address;
@@ -45,5 +46,18 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
         LambdaQueryWrapper<Address> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Address::getUserId,jo.getData());
         return page(page,wrapper);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void setDefault(JO<Long> jo) {
+        //把当前默认的设置成不默认
+        LambdaUpdateWrapper<Address> wrapper1 = new LambdaUpdateWrapper<>();
+        wrapper1.eq(Address::getIsDefault,"1").set(Address::getIsDefault,"0");
+        update(wrapper1);
+        //设置当前默认
+        LambdaUpdateWrapper<Address> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.set(Address::getIsDefault,"1").eq(Address::getId,jo.getData());
+        update(wrapper);
     }
 }

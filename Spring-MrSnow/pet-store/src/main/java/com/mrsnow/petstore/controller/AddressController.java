@@ -1,7 +1,10 @@
 package com.mrsnow.petstore.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.mrsnow.petstore.dao.Address;
 import com.mrsnow.petstore.service.AddressService;
@@ -56,6 +59,20 @@ public class AddressController {
     public R remove(@RequestBody JO<List<Long>> jo){
         addressService.removeByIds(jo.getData());
         return R.success("删除完成");
+    }
+
+    @PostMapping(value = "/setDefault")
+    public R setDefault(@RequestBody JO<Long> jo){
+        addressService.setDefault(jo);
+        return R.success("设置完成");
+    }
+
+    @PostMapping(value = "/getDefault")
+    public R getDefault(@RequestBody JO<Long> jo){
+        LambdaQueryWrapper<Address> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Address::getUserId,jo.getData()).eq(Address::getIsDefault,"1");
+        Address address = addressService.getOne(wrapper);
+        return R.success(address,"ok");
     }
 }
 

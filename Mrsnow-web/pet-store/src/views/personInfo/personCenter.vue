@@ -73,13 +73,13 @@ export default defineComponent({
         position: fixed;
         width: 200px;
         background-color: rgb(242, 149, 189);
-        height: 700px;
+        height: 650px;
         float: right;
         font-weight: 600;
         font-size: large;
         color: blueviolet;
         left: 1320px;
-        top: 100px;
+        top: 60px;
     }
     .tabs{
         border: 3px solid rgba(243, 27, 157, 0.3);
@@ -88,6 +88,6 @@ export default defineComponent({
         margin-left: 30px;
     }
     .mycart{
-        height: 800px;
+        height: 750px;
     }
 </style>

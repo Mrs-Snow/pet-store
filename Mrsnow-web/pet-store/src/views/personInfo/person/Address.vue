@@ -137,6 +137,7 @@ export default defineComponent({
                 consignee: formData.consignee,
                 consigneeTel:formData.consigneeTel,
                 deliveryAddress:formData.deliveryAddress,
+                isDefault:0
             }}).then(res=>{
                 visible.value=false
                 message.success('新增成功!')
@@ -192,6 +193,7 @@ export default defineComponent({
         request.post('/address/list',{data:id,current:pagination.value.current}).then(res=>{
                 tableData.value=res.data.data.records
                 total.value = res.data.data.total
+                pagination.value.current=1
             })
        }
        function handleTableChange(e){

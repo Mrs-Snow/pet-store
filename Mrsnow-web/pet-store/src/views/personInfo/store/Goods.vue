@@ -1,24 +1,38 @@
 <template>
     <div>
-        <h2 style="text-align: justify; margin-left: 50px;">优惠活动</h2>
+        <h2 style="text-align: justify; margin-left: 50px;">商品管理</h2>
         <a-divider></a-divider>
         <a-modal v-model:visible="visible" title="优惠活动" @ok="handleOk" ok-text="确认"
       cancel-text="取消">
             <Form>
-                <FormItem label="活动说明:" help="活动简介,不超过8个字符" >
-                    <Input :maxlength="8" v-model:value="formData.comment"/>
+                <FormItem label="商品名:" help="商品名称" >
+                    <Input :maxlength="8" v-model:value="formData.goodsName"/>
                 </FormItem>
-                <FormItem label="优惠金额:" help="原价上减免的金额,不设置默认为0" >
-                    <Input type="number" v-model:value="formData.preferentialPrice"/>
+                <FormItem label="单价:" help="单价" >
+                    <Input type="number" min="0.01" v-model:value="formData.price"/>
                 </FormItem>
-                <FormItem label="折扣:" help="折扣百分比数,默认100为不打折,10为一折,85为八五折" >
-                    <Input type="number" v-model:value="formData.discount"/>
+                <FormItem label="类别:" help="商品类别" >
+                    <a-select v-model:value="formData.className"></a-select>
                 </FormItem>
-                <FormItem label="触发金额:" help="活动简介,触发优惠条件的金额,不设置默认为0" >
-                    <Input type="number" v-model:value="formData.priceValue"/>
+                <FormItem label="优惠活动:" help="活动" >
+                    <a-select v-model:value="formData.preferentialId"></a-select>
                 </FormItem>
-                <FormItem label="触发数量:" help="达到优惠条件的购买数量,不设置默认为1" >
-                    <Input type="number" v-model:value="formData.countValue"/>
+                <FormItem label="图片:" help="展示图" >
+                    <a-upload
+                    v-model:file-list="fileList"
+                    name="file"
+                    action=""
+                    list-type="picture-card"
+                    >
+                    <div v-if="fileList.length < 1">
+                    <PlusOutlined/>
+                    <div style="margin-top: 8px">点击上传</div>
+                    </div>
+                        
+                    </a-upload>
+                </FormItem>
+                <FormItem label="城市:" help="所在城市" >
+                    <Input  v-model:value="formData.city"/>
                 </FormItem>
             </Form>
         </a-modal>
@@ -35,7 +49,7 @@
         >
         <template #bodyCell="{text, record, index, column}">
             <template v-if="column.key==='operation'">
-                <a @click="handleEdit(record)">✍️编辑</a>
+                <a @click="handleEdit(record)">✍️详情</a>
             </template>
         </template>
     </Table>
@@ -44,10 +58,20 @@
 
 <script lang="ts">
 import { defineComponent,onMounted,ref,reactive,onActivated,computed } from 'vue'
-import { Form,FormItem,Input,Button,Table, TableProps, message, } from 'ant-design-vue';
+import { Form,FormItem,Input,Button,Table, TableProps, message, UploadProps } from 'ant-design-vue';
+import {PlusOutlined} from '@ant-design/icons-vue';
 import request from '../../../utils/request';
 import { Key } from 'ant-design-vue/lib/table/interface';
 import { RedoOutlined } from '@ant-design/icons-vue';
+
+function getBase64(file: File) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
 export default defineComponent({
     name: 'Preferential',
     components:{
@@ -56,9 +80,14 @@ export default defineComponent({
         Table,
         Form,
         FormItem,
-        RedoOutlined
+        RedoOutlined,
+        PlusOutlined
     },
     setup () {
+        const previewVisible = ref(false);
+        const previewImage = ref('');
+        const previewTitle = ref('');
+        const fileList = ref<UploadProps['fileList']>([]);
         const idRows =ref([])
         const type = ref('add')
         const tableData = ref()
@@ -71,25 +100,26 @@ export default defineComponent({
             pageSize: 4,
         }));
         const formData=reactive({
-            comment: '',
-            preferentialPrice:'0',
-            discount:'100',
-            priceValue:'0',
-            countValue:'1',
+            price:'',
+            goodsName:'',
+            preferentialId: '',
+            className:'',
+            city:'',
+            goodsPic:'',
             id: ''
         })
         const columns=[
             {
-                title: '活动内容',
-                dataIndex: 'comment',
+                title: '商品名',
+                dataIndex: 'goodsName',
             },
             {
-                title: '优惠金额',
-                dataIndex: 'preferentialPrice',
+                title: '单价',
+                dataIndex: 'price',
             },
             {
-                title: '折扣',
-                dataIndex: 'discount',
+                title: '类别',
+                dataIndex: 'className',
             },
             {
                 title: 'id',
@@ -129,11 +159,11 @@ export default defineComponent({
 
         function handleAdd(){
             type.value='add'
-            formData.comment= '',
-            formData.preferentialPrice='0',
-            formData.discount='100',
-            formData.priceValue='0',
-            formData.countValue='1'
+            formData.price= '',
+            formData.goodsName='',
+            formData.goodsPic='',
+            formData.className='',
+            formData.preferentialId=''
             visible.value=true
         }
 
@@ -141,11 +171,11 @@ export default defineComponent({
             if(type.value==='add'){
                 request.post('/preferential/add',{data:{
                 storeId: sessionStorage.getItem('storeId'),
-                comment: formData.comment,
-                preferentialPrice:formData.preferentialPrice,
-                discount:formData.discount,
-                priceValue:formData.priceValue,
-                countValue:formData.countValue
+                price: formData.price,
+                goodsPic:formData.goodsPic,
+                className:formData.className,
+                preferentialId:formData.preferentialId,
+                goodsName:formData.goodsName
             }}).then(res=>{
                 visible.value=false
                 message.success('新增成功!')
@@ -156,11 +186,11 @@ export default defineComponent({
             if(type.value==='edit'){
                 request.post('/preferential/edit',{data:{
                 storeId: sessionStorage.getItem('storeId'),
-                comment: formData.comment,
-                preferentialPrice:formData.preferentialPrice,
-                discount:formData.discount,
-                priceValue:formData.priceValue,
-                countValue:formData.countValue,
+                price: formData.price,
+                goodsPic:formData.goodsPic,
+                className:formData.className,
+                preferentialId:formData.preferentialId,
+                goodsName:formData.goodsName,
                 id: formData.id
             }}).then(res=>{
                 visible.value=false
@@ -203,14 +233,12 @@ export default defineComponent({
         request.post('/preferential/list',{data:id,current:pagination.value.current}).then(res=>{
                 tableData.value=res.data.data.records
                 total.value = res.data.data.total
-                pagination.value.current=1
             })
        }
        function handleTableChange(e){
             console.log(e)
             const { current } = e
             pagination.value.current=current
-            current.value=current
             reload()
        }
         
@@ -223,17 +251,17 @@ export default defineComponent({
 
         function handleEdit(record){
             type.value='edit'
-            formData.comment=record.comment
-            formData.preferentialPrice=record.preferentialPrice
-            formData.discount=record.discount
-            formData.countValue=record.countValue
-            formData.priceValue =record.priceValue
+            formData.goodsName=record.comment
+            formData.goodsPic=record.preferentialPrice
+            formData.className=record.discount
+            formData.price=record.countValue
+            formData.preferentialId =record.priceValue
             formData.id = record.id
             visible.value=true
         }
 
         return {load,tableData,columns,visible,handleAdd,rowSelection,
-            formData,handleOk,handleDelete,reload,pagination,handleTableChange,handleEdit
+            formData,handleOk,handleDelete,reload,pagination,handleTableChange,handleEdit,fileList
         }
     }
 })

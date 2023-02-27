@@ -37,5 +37,11 @@ public class OrderController {
             return R.fail(e.getMessage());
         }
     }
+
+    @PostMapping(value = "/pay")
+    public R pay(@RequestBody JO<Order> jo){
+        String str = orderService.pay(jo.getData());
+        return R.success(str);
+    }
 }
 

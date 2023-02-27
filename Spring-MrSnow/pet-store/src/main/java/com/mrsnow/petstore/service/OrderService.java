@@ -16,4 +16,6 @@ import com.mrsnow.petstore.utils.JO;
  */
 public interface OrderService extends IService<Order> {
     Order byFromDetail(JO<BuyInfo> jo) throws Exception;
+
+    String pay(Order order);
 }

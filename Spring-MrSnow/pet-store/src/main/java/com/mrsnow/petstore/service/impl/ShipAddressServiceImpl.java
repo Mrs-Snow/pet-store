@@ -37,11 +37,20 @@ public class ShipAddressServiceImpl extends ServiceImpl<ShipAddressMapper, ShipA
     @Transactional(rollbackFor = Exception.class)
     public ShipAddress updateInfo(JO<ShipAddress> jo) {
         ShipAddress shipAddress = jo.getData();
-        ArgUtils.ifNotNull(shipAddress.getId(),()->updateById(shipAddress));
-        String storeId = shipAddress.getStoreId();
-        Store store = storeMapper.selectById(storeId);
-        shipAddress.setStoreName(store.getStoreName());
-        ArgUtils.ifNull(shipAddress.getId(),()->save(shipAddress));
+
+        LambdaQueryWrapper<ShipAddress> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ShipAddress::getStoreId,jo.getData());
+        ShipAddress one = getOne(wrapper);
+
+        if(one!=null){
+            updateById(shipAddress);
+        }else {
+            String storeId = shipAddress.getStoreId();
+            Store store = storeMapper.selectById(storeId);
+            shipAddress.setStoreName(store.getStoreName());
+            ArgUtils.ifNull(shipAddress.getId(),()->save(shipAddress));
+        }
+
         return shipAddress;
     }
 }

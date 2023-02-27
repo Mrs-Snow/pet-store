@@ -1,5 +1,6 @@
 package com.mrsnow.petstore.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mrsnow.petstore.dao.Goods;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -22,6 +23,8 @@ public interface GoodsService extends IService<Goods> {
     Page<Goods> getStore(PJO<Long> jo);
 
     Goods goodsDetail(JO<Long> jo);
+//    Page<Goods> searchGoods(Long id,int current,int pageSize);
+
 
 
 

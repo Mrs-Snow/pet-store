@@ -1,11 +1,10 @@
 package com.mrsnow.petstore.service.impl;
 
-import com.mrsnow.petstore.dao.BuyInfo;
-import com.mrsnow.petstore.dao.Goods;
-import com.mrsnow.petstore.dao.Order;
-import com.mrsnow.petstore.dao.Preferential;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.mrsnow.petstore.dao.*;
 import com.mrsnow.petstore.mapper.GoodsMapper;
 import com.mrsnow.petstore.mapper.OrderMapper;
+import com.mrsnow.petstore.mapper.ShipAddressMapper;
 import com.mrsnow.petstore.service.OrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mrsnow.petstore.utils.ArgUtils;
@@ -35,6 +34,7 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements OrderService {
     private final GoodsMapper goodsMapper;
+    private final ShipAddressMapper shipAddressMapper;
 
     @Override
     public Order byFromDetail(JO<BuyInfo> jo) throws Exception {
@@ -64,7 +64,23 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         order.setStatus("01");
         order.setUserId(userId);
         order.setStoreId(goods.getStoreId());
+
+        //发货信息
+        LambdaQueryWrapper<ShipAddress> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ShipAddress::getStoreId,goods.getStoreId());
+        ShipAddress shipAddress = shipAddressMapper.selectOne(wrapper);
+        order.setShipAddress(shipAddress);
+
         return order;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String pay(Order order) {
+        //设置待发货
+        order.setStatus("02");
+        save(order);
+        return "支付完成";
     }
 
     /**

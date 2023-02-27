@@ -96,5 +96,7 @@ public class Order extends Model<Order> {
 
     @TableField(exist = false)
     private Goods goodsDetail;
+    @TableField(exist = false)
+    private ShipAddress shipAddress;
 
 }

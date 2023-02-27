@@ -1,6 +1,7 @@
 package com.mrsnow.petstore.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mrsnow.petstore.dao.Goods;
 import com.mrsnow.petstore.service.GoodsService;
@@ -30,6 +31,13 @@ public class GoodsController {
     @Autowired
     private GoodsService goodsService;
 
+
+    @PostMapping(value = "/getStoreGoods")
+    public R getStoreGoods(@RequestBody PJO<Long> jo){
+        Page<Goods> page = goodsService.getStore(jo);
+        return R.success(page,"查询完成");
+
+    }
     @PostMapping(value = "/searchGoods")
     public R searchByKey(@RequestBody PJO<String> jo){
         Page<Goods> goods = goodsService.searchGoods(jo);

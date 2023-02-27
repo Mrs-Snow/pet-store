@@ -7,8 +7,13 @@
             <TabPane :forceRender="true" :disabled="hasStore" key="2" tab="优惠活动">
                 <Preferential ref="preferentialRef"/>
             </TabPane>
-            <TabPane :forceRender="true" :disabled="hasStore" key="3" tab="商品管理"></TabPane>
+            <TabPane :forceRender="true" :disabled="hasStore" key="3" tab="商品管理">
+                <Goods ref="goodsRef"/>
+            </TabPane>
             <TabPane :forceRender="true" :disabled="hasStore" key="4" tab="订单中心"></TabPane>
+            <TabPane :forceRender="true" :disabled="hasStore" key="5" tab="发货信息">
+                <ShipAddress ref="shipAddressRef"/>
+            </TabPane>
         </Tabs>
     </div>
 </template>
@@ -19,6 +24,8 @@ import { message,TabPane,Tabs } from 'ant-design-vue';
 import request from '../../../utils/request';
 import BaseForm from './BaseForm.vue';
 import Preferential from './Preferential.vue';
+import ShipAddress from './ShipAddress.vue';
+import Goods from './Goods.vue';
 export default defineComponent({
     name: 'Store',
 
@@ -26,12 +33,16 @@ export default defineComponent({
         TabPane,
         Tabs,
         BaseForm,
-        Preferential
+        Preferential,
+        ShipAddress,
+        Goods
     },
     setup () {
+        const goodsRef=ref()
         const hasStore = ref(true)
         const store = ref()
         const form = ref()
+        const shipAddressRef=ref()
         const preferentialRef = ref()
         onMounted(()=>{
             const userId = sessionStorage.getItem('userId')
@@ -42,6 +53,9 @@ export default defineComponent({
                     form.value.load(store.value)
                     preferentialRef.value.load(store.value)
                     sessionStorage.setItem('storeId',store.value.id)
+                    request.post('/shipAddress/getInfo',{data:store.value.id}).then(sa=>{
+                        shipAddressRef.value.load(sa.data.data)
+                    })
                 }else{
                     form.value.load(store.value)
                 }
@@ -49,7 +63,7 @@ export default defineComponent({
            
         })
 
-        return {hasStore,form,preferentialRef}
+        return {hasStore,form,preferentialRef,shipAddressRef,goodsRef}
     }
 })
 </script>

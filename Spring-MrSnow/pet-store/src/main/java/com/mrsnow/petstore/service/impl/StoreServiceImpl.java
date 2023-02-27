@@ -2,7 +2,9 @@ package com.mrsnow.petstore.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.mrsnow.petstore.dao.ShipAddress;
 import com.mrsnow.petstore.dao.Store;
+import com.mrsnow.petstore.mapper.ShipAddressMapper;
 import com.mrsnow.petstore.mapper.StoreMapper;
 import com.mrsnow.petstore.service.StoreService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements StoreService {
+    private final ShipAddressMapper shipAddressMapper;
 
     @Override
     public Store getByUserId(Long userId) {
@@ -38,7 +41,15 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
         Long userId = Long.parseLong(extra);
         Store store = getByUserId(userId);
         Store data = jo.getData();
+
+
         if(store!=null){
+            LambdaQueryWrapper<ShipAddress> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(ShipAddress::getStoreId,store.getId());
+            ShipAddress shipAddress = shipAddressMapper.selectOne(wrapper);
+            if(shipAddress==null && data.getIsOpening().equals("1")){
+                return "开店必须补全发货信息！";
+            }
             data.setId(store.getId());
             updateById(data);
             return "修改成功！";

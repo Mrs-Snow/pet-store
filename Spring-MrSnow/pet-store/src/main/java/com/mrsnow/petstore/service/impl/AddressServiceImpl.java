@@ -42,7 +42,7 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
 
     @Override
     public IPage<Address> page(PJO<Long> jo) {
-        Page<Address> page = new Page<>(jo.getCurrent(), 5);
+        Page<Address> page = new Page<>(jo.getCurrent(), 4);
         LambdaQueryWrapper<Address> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Address::getUserId,jo.getData());
         return page(page,wrapper);

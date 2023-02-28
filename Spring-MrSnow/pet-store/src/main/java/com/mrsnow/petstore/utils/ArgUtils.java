@@ -9,10 +9,9 @@ import java.util.regex.Pattern;
  *  参数校验工具类
  **/
 public class ArgUtils {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Integer a=null;
-        Integer b= 1;
-        ifNotNull(a,()-> System.out.println(b));
+        ifNull(a,"a不能为空！！！！");
         System.out.println(getValue(a,10));
     }
 
@@ -67,10 +66,11 @@ public class ArgUtils {
      * @param <T>
      * @throws Exception
      */
-    public static <T> void ifNull(T data,String message) throws Exception {
+    public static <T> T ifNull(T data,String message) throws Exception {
         if(data==null){
             throw new Exception(message);
         }
+        return data;
     }
 
     /**

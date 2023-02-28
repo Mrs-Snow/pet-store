@@ -1,6 +1,7 @@
 package com.mrsnow.petstore.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.mrsnow.petstore.dao.Preferential;
 import com.mrsnow.petstore.service.PreferentialService;
@@ -34,6 +35,14 @@ public class PreferentialController {
         pjo.setPageSize(4);
         IPage<Preferential> pageVo = preferentialService.pageQuery(pjo);
         return R.success(pageVo);
+    }
+
+    @PostMapping(value = "/simpleList")
+    public R<List<Preferential>> simpleList(@RequestBody JO<Long> jo){
+        LambdaQueryWrapper<Preferential> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Preferential::getStoreId,jo.getData());
+        List<Preferential> list = preferentialService.list(wrapper);
+        return R.success(list,"查询完成！");
     }
 
     @PostMapping(value = "/delete")

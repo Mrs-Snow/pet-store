@@ -89,5 +89,6 @@ export default defineComponent({
     }
     .mycart{
         height: 750px;
+        background: white;
     }
 </style>

@@ -33,7 +33,7 @@ public class GoodsController {
 
 
     @PostMapping(value = "/getStoreGoods")
-    public R getStoreGoods(@RequestBody PJO<Long> jo){
+    public R getStoreGoods(@RequestBody PJO<Goods> jo){
         Page<Goods> page = goodsService.getStore(jo);
         return R.success(page,"查询完成");
 
@@ -52,8 +52,33 @@ public class GoodsController {
 
     @PostMapping(value = "/getStore")
     public R getStore(@RequestBody PJO<Long> jo){
-        Page<Goods> goods = goodsService.getStore(jo);
+        Page<Goods> goods = goodsService.getStoreByStoreId(jo);
         return R.success(goods,"查询完成！");
+    }
+
+    @PostMapping(value = "/delete")
+    public R delete(@RequestBody JO<List<Long>> jo){
+        List<Long> data = jo.getData();
+        goodsService.removeByIds(data);
+        return R.success("删除完成");
+    }
+
+    @PostMapping(value = "/edit")
+    public R edit(@RequestBody JO<Goods> jo){
+        Goods goods = jo.getData();
+        goodsService.edit(goods);
+        return R.success("保存完成！");
+    }
+
+    @PostMapping(value = "/add")
+    public R add(@RequestBody JO<Goods> jo)  {
+        Goods goods = jo.getData();
+        try {
+            goodsService.addGoods(goods);
+            return R.success("保存完成！");
+        } catch (Exception e) {
+            return R.fail(e.getMessage());
+        }
     }
 
 

@@ -18,11 +18,16 @@ import java.util.List;
  * @since 2022-12-14
  */
 public interface GoodsService extends IService<Goods> {
+    Goods edit(Goods goods);
     Page<Goods> searchGoods(PJO<String> jo);
 
-    Page<Goods> getStore(PJO<Long> jo);
+    Page<Goods> getStore(PJO<Goods> jo);
+
+    Page<Goods> getStoreByStoreId(PJO<Long> jo);
 
     Goods goodsDetail(JO<Long> jo);
+
+    Goods addGoods(Goods goods) throws Exception;
 //    Page<Goods> searchGoods(Long id,int current,int pageSize);
 
 

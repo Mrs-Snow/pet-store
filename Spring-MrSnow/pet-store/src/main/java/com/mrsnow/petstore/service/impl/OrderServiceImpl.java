@@ -61,7 +61,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         order.setOrderTime(LocalDate.now());
         order.setGoodsId(goods.getId());
         //状态码：01未支付 02待发货 03已发货 04已签收 05退款中 06已完成
-        order.setStatus("01");
+        order.setStatus("未支付");
         order.setUserId(userId);
         order.setStoreId(goods.getStoreId());
 
@@ -78,7 +78,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Transactional(rollbackFor = Exception.class)
     public String pay(Order order) {
         //设置待发货
-        order.setStatus("02");
+        order.setStatus("待发货");
         save(order);
         return "支付完成";
     }

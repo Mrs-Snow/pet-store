@@ -25,6 +25,7 @@ a:hover {
 }
 
 body {
+  overflow-x: hidden;
   position: absolute;
   margin: 0;
   height: 100%;

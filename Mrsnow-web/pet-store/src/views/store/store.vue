@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent,onMounted,ref } from 'vue'
+import { defineComponent,onBeforeMount,onMounted,ref } from 'vue'
 import { useRoute,useRouter } from 'vue-router';
 import { Pagination } from 'ant-design-vue';
 import goodsItem from './goodsItem.vue';
@@ -44,13 +44,13 @@ export default defineComponent({
         const handleBack =()=>{
             router.go(-1)
         }
-        onMounted(()=>{
+        onBeforeMount(()=>{
             getStore()
             
         })
         async function getStore(){
             request.post('/goods/getStore',{
-                data: route.query.storeId
+                data: route.query.storeId,current:current.value
             }).then(res=>{
                 record.value=res.data.data
             })

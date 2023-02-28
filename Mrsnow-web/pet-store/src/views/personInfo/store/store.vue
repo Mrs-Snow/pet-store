@@ -46,12 +46,14 @@ export default defineComponent({
         const preferentialRef = ref()
         onMounted(()=>{
             const userId = sessionStorage.getItem('userId')
-            request.post('/store/storeInfo',{data:userId}).then(res=>{
+            if(userId){
+                request.post('/store/storeInfo',{data:userId}).then(res=>{
                 store.value = res.data.data
                 if(store.value.id){
                     hasStore.value=false
                     form.value.load(store.value)
                     preferentialRef.value.load(store.value)
+                    goodsRef.value.load(store.value.id)
                     sessionStorage.setItem('storeId',store.value.id)
                     request.post('/shipAddress/getInfo',{data:store.value.id}).then(sa=>{
                         shipAddressRef.value.load(sa.data.data)
@@ -60,6 +62,8 @@ export default defineComponent({
                     form.value.load(store.value)
                 }
             })
+            }
+            
            
         })
 

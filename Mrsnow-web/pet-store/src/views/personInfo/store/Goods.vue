@@ -226,6 +226,7 @@ export default defineComponent({
         }
 
         function handleAdd(){
+            fileList.value=[]
             type.value='add'
             formData.price= ''
             formData.goodsName=''
@@ -238,15 +239,15 @@ export default defineComponent({
         }
 
         function handleOk(){
-            preferentialOptions.value?.map(p=>{
-                console.log(p.label)
-                console.log(formData.preferentialId)
-                if(p.label+''===formData.preferentialId+''){
-                    formData.preferentialId=p.value+''
-                    console.log(formData.preferentialId)
-                }
-            })
-
+            if(formData.preferentialId){
+                preferentialOptions.value?.map(p=>{
+                    if(p.label+''===formData.preferentialId+''){
+                        formData.preferentialId=p.value+''
+                        console.log(formData.preferentialId)
+                    }
+                })
+            }
+            
             if(type.value==='add'){
                 request.post('/goods/add',{data:{
                 storeId: sessionStorage.getItem('storeId'),
@@ -255,7 +256,8 @@ export default defineComponent({
                 className:formData.className,
                 preferentialId:formData.preferentialId,
                 goodsName:formData.goodsName,
-                inventoryNum:formData.inventoryNum
+                inventoryNum:formData.inventoryNum,
+                city:formData.city
             }}).then(res=>{
                 visible.value=false
                 message.success('新增成功!')
@@ -356,20 +358,34 @@ export default defineComponent({
             })
         }
 
+        function getImageUrl(str){
+            return new URL('/src/assets/goods/'+str,import.meta.url).href
+        }
+
         function handleEdit(record){
             type.value='edit'
             formData.goodsName=record.goodsName
             formData.goodsPic=record.goodsPic
             formData.className=record.className
             formData.price=record.price
-            preferentialOptions.value?.map(p=>{
-                console.log(p.value)
-                console.log(record.preferentialId)
-                if(p.value+''===record.preferentialId+''){
-                    formData.preferentialId=p.label
-                    console.log(formData.preferentialId)
-                }
-            })
+            fileList.value=[{
+                uid:'1',
+                name:record.goodsPic,
+                status:'done',
+                url:getImageUrl(record.goodsPic)
+            }]
+            if(record.preferentialId){
+                preferentialOptions.value?.map(p=>{
+                    if(p.value+''===record.preferentialId+''){
+                        formData.preferentialId=p.label
+                        console.log(formData.preferentialId)
+                    }
+                })
+            }else{
+                formData.preferentialId=''
+            }
+            
+            
             formData.id = record.id
             formData.city = record.city
             visible.value=true

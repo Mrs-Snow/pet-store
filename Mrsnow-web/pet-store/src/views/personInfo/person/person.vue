@@ -11,7 +11,7 @@
                 <Address ref="addressRef"></Address>
             </TabPane>
             <TabPane :forceRender="true" key="4" tab="我的订单">
-                <Password/>
+                <Orders ref="ordersRef"/>
             </TabPane>
         </Tabs>
     </div>
@@ -23,6 +23,7 @@ import { message,TabPane,Tabs } from 'ant-design-vue';
 import BaseForm from './BaseForm.vue';
 import Password from './Password.vue';
 import Address from './Address.vue';
+import Orders from './Orders.vue';
 import request from '../../../utils/request';
 import { useRoute,useRouter } from 'vue-router';
 export default defineComponent({
@@ -33,9 +34,11 @@ export default defineComponent({
         Tabs,
         BaseForm,
         Password,
-        Address
+        Address,
+        Orders
     },
     setup () {
+        const ordersRef=ref()
         const passwordRef=ref()
         const addressRef=ref()
         const form = ref();
@@ -52,6 +55,7 @@ export default defineComponent({
                 request.post('/user/myself',{data: userId}).then(res=>{
                     form.value.load(res.data.data)
                     addressRef.value.load(res.data.data)
+                    ordersRef.value.load(res.data.data)
             })
                 
             } else{
@@ -67,7 +71,7 @@ export default defineComponent({
             activeKey.value=key;
         }
 
-        return {form,addressRef,activeKey,setTabKey,changeTab,passwordRef}
+        return {form,addressRef,activeKey,setTabKey,changeTab,passwordRef,ordersRef}
     }
 })
 </script>

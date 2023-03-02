@@ -39,7 +39,7 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
      * @return
      */
     @Override
-    public IPage<Cart> getMyCart(@RequestBody PJO<Long> pjo) {
+    public IPage<Cart> getMyCart(PJO<Long> pjo) {
         LambdaQueryWrapper<Cart> wrapper = new LambdaQueryWrapper<>();
         LambdaQueryWrapper<Cart> queryWrapper = wrapper.eq(Cart::getUserId, pjo.getData())
                 .eq(Cart::getIsAccount,"01");

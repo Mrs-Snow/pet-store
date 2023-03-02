@@ -49,6 +49,7 @@ public class ShipAddress extends Model<ShipAddress> {
      * 商店id
      */
     @TableField(value = "STORE_ID",condition = SqlCondition.LIKE)
+    @JsonSerialize(using= ToStringSerializer.class)
     private String storeId;
 
     /**

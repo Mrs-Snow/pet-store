@@ -37,6 +37,7 @@ public class Address extends Model<Address> {
      * 用户id
      */
     @TableField(value = "USER_ID",condition = SqlCondition.LIKE)
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long userId;
 
     /**

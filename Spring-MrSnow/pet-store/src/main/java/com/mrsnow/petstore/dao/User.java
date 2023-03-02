@@ -66,6 +66,7 @@ public class User extends Model<User> {
      * 收货地址id
      */
     @TableField(value = "DELIVERY_ADDRESS_ID", condition = SqlCondition.EQUAL)
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long deliveryAddressId;
 
     /**
@@ -78,6 +79,7 @@ public class User extends Model<User> {
      * 商店id
      */
     @TableField(value = "STORE_ID", condition = SqlCondition.EQUAL)
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long storeId;
 
     /**

@@ -2,6 +2,7 @@ package com.mrsnow.petstore.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.mrsnow.petstore.dao.*;
+import com.mrsnow.petstore.mapper.AddressMapper;
 import com.mrsnow.petstore.mapper.GoodsMapper;
 import com.mrsnow.petstore.mapper.OrderMapper;
 import com.mrsnow.petstore.mapper.ShipAddressMapper;
@@ -17,9 +18,7 @@ import sun.util.resources.LocaleData;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * <p>
@@ -35,6 +34,43 @@ import java.util.UUID;
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements OrderService {
     private final GoodsMapper goodsMapper;
     private final ShipAddressMapper shipAddressMapper;
+
+    private final AddressMapper addressMapper;
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void removeOrder(Order order) throws Exception {
+        String status = order.getStatus();
+        if(!status.equals("已完成")&&!status.equals("已退款")){
+            throw new Exception("订单尚未完成！");
+        }
+
+        removeById(order.getId());
+    }
+
+    @Override
+    public List<Order> buyFromCart(JO<List<BuyInfo>> jo) throws Exception {
+        List<BuyInfo> buyInfos = jo.getData();
+
+        ArrayList<Order> orders = new ArrayList<>();
+        for (BuyInfo info:buyInfos){
+            Long goodsId = info.getGoodsId();
+            Goods goods = goodsMapper.selectById(goodsId);
+            int num = info.getNum();
+            goods.setNum(num);
+            //校验
+            if(goods.getInventoryNum()<1){
+                throw new Exception(goods.getGoodsName()+"的库存已告罄！");
+            }
+            if(goods.getInventoryNum()<num){
+                throw new Exception(goods.getGoodsName()+"的库存不足！");
+            }
+            Order order = setOrder(goods, num, info.getUserId());
+            orders.add(order);
+        }
+
+        return orders;
+    }
 
     @Override
     public Order byFromDetail(JO<BuyInfo> jo) throws Exception {
@@ -52,10 +88,15 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         if(goods.getInventoryNum()<num){
             throw new Exception("库存不足！");
         }
+        return setOrder(goods, num, userId);
+    }
 
+    private Order setOrder(Goods goods,int num,Long userId){
         //生成订单
         Order order = new Order();
         order.setGoodsDetail(goods);
+        order.setGoodsNum(num);
+        order.setGoodsName(goods.getGoodsName());
         order.setOrderNo(getOrderNo());
         order = setAmount(order, goods, num);
         order.setOrderTime(LocalDate.now());
@@ -65,12 +106,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         order.setUserId(userId);
         order.setStoreId(goods.getStoreId());
 
+        //收获信息
+        LambdaQueryWrapper<Address> addressLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        addressLambdaQueryWrapper.eq(Address::getUserId,userId).eq(Address::getIsDefault,"1");
+        Address address = addressMapper.selectOne(addressLambdaQueryWrapper);
+        order.setAddress(address);
+        order.setAddressId(address.getId());
+
         //发货信息
         LambdaQueryWrapper<ShipAddress> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(ShipAddress::getStoreId,goods.getStoreId());
         ShipAddress shipAddress = shipAddressMapper.selectOne(wrapper);
         order.setShipAddress(shipAddress);
-
         return order;
     }
 
@@ -82,6 +129,68 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         save(order);
         return "支付完成";
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String send(Order order) {
+        //设置待发货
+        order.setStatus("已发货");
+
+        //修改库存量
+        Long goodsId = order.getGoodsId();
+        Goods goods = goodsMapper.selectById(goodsId);
+        goods.setInventoryNum(goods.getInventoryNum()-order.getGoodsNum());
+
+        goodsMapper.updateById(goods);
+        updateById(order);
+
+        return "已发货";
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String receive(Order order) {
+        //设置待发货
+        order.setStatus("已签收");
+        updateById(order);
+        return "签收完成";
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String confirm(Order order) {
+        //设置待发货
+        order.setStatus("已完成");
+
+        //修改库存量
+        Long goodsId = order.getGoodsId();
+        Goods goods = goodsMapper.selectById(goodsId);
+        goods.setInventoryNum(goods.getInventoryNum()+order.getGoodsNum());
+
+        goodsMapper.updateById(goods);
+        updateById(order);
+        return "修改完成";
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String cancel(Order order) {
+        //设置待发货
+        order.setStatus("已退款");
+        updateById(order);
+        return "退款完成";
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String cancelApply(Order order) {
+        //设置待发货
+        order.setStatus("退款中");
+        updateById(order);
+        return "已申请";
+    }
+
+
 
     /**
      * uuid简易实现生成一个不重复的订单号

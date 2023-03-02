@@ -46,6 +46,7 @@ public class Cart extends Model<Cart> {
      * 商品id
      */
     @TableField(value = "GOODS_ID", condition = SqlCondition.LIKE)
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long goodsId;
 
     /**
@@ -70,12 +71,14 @@ public class Cart extends Model<Cart> {
      * 用户id
      */
     @TableField(value = "USER_ID", condition = SqlCondition.LIKE)
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long userId;
 
     /**
      * 用户id
      */
     @TableField(value = "STORE_ID", condition = SqlCondition.EQUAL)
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long storeId;
 
     @TableField(exist = false)

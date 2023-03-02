@@ -48,6 +48,7 @@ public class Preferential extends Model<Preferential> {
      * 商店id
      */
     @TableField(value = "STORE_ID",condition = SqlCondition.EQUAL)
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long storeId;
 
     /**

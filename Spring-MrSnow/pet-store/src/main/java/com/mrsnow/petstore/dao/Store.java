@@ -34,6 +34,7 @@ public class Store extends Model<Store> {
      * 管理员id
      */
     @TableField(value = "MANAGER_ID",condition = SqlCondition.LIKE)
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long managerId;
 
     /**
@@ -64,6 +65,7 @@ public class Store extends Model<Store> {
      * 优惠活动id
      */
     @TableField(value = "PREFERENTIAL_ID",condition = SqlCondition.LIKE)
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long preferentialId;
 
 

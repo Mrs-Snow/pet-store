@@ -94,4 +94,30 @@ public class ArgUtils {
             supplier.help();
         }
     }
+
+    /**
+     * 校验不通过则抛出异常
+     * @param b 校验
+     * @param message 异常信息
+     * @throws Exception
+     */
+    public static void check(boolean b,String message) throws Exception {
+        if(!b){
+            throw new Exception(message);
+        }
+    }
+
+    /**
+     * 校验不通过则抛出异常,否则就do
+     * @param b 校验
+     * @param message 异常信息
+     * @throws Exception
+     */
+    public static void check(boolean b,String message,Supplier supplier) throws Exception {
+        if(b){
+            supplier.help();
+        }else {
+            throw new Exception(message);
+        }
+    }
 }

@@ -34,6 +34,7 @@ public class Favorite extends Model<Favorite> {
      * 商店id
      */
     @TableField(value = "STORE_ID",condition = SqlCondition.LIKE)
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long storeId;
 
     /**
@@ -52,6 +53,7 @@ public class Favorite extends Model<Favorite> {
      * 商品id
      */
     @TableField(value = "GOODS_ID",condition = SqlCondition.LIKE)
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long goodsId;
 
 

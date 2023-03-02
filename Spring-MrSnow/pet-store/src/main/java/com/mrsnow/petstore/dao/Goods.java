@@ -45,6 +45,7 @@ public class Goods extends Model<Goods> {
      * 商店id
      */
     @TableField(value = "STORE_ID", condition = SqlCondition.EQUAL)
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long storeId;
 
     /**
@@ -63,6 +64,7 @@ public class Goods extends Model<Goods> {
      * 优惠活动id
      */
     @TableField(value = "PREFERENTIAL_ID", condition = SqlCondition.LIKE)
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long preferentialId;
 
     /**

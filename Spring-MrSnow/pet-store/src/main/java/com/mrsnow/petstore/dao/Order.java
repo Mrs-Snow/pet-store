@@ -59,6 +59,7 @@ public class Order extends Model<Order> {
      * 购物车id
      */
     @TableField(value = "CART_ID",condition = SqlCondition.LIKE)
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long cartId;
 
     /**
@@ -77,19 +78,33 @@ public class Order extends Model<Order> {
      * 买家id
      */
     @TableField(value = "USER_ID",condition = SqlCondition.EQUAL)
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long userId;
 
     /**
      * 卖家id
      */
     @TableField(value = "STORE_ID",condition = SqlCondition.EQUAL)
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long storeId;
 
     /**
      * 商品id
      */
     @TableField(value = "GOODS_ID",condition = SqlCondition.EQUAL)
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long goodsId;
+
+    @TableField(value = "GOODS_NAME",condition = SqlCondition.LIKE)
+    private String goodsName;
+
+    @TableField(value = "GOODS_NUM",condition = SqlCondition.LIKE)
+    private Integer goodsNum;
+
+    @TableField(value = "ADDRESS_ID",condition = SqlCondition.EQUAL)
+    @JsonSerialize(using= ToStringSerializer.class)
+    private Long addressId;
+
 
     @TableField(exist = false)
     private String remark;
@@ -98,5 +113,9 @@ public class Order extends Model<Order> {
     private Goods goodsDetail;
     @TableField(exist = false)
     private ShipAddress shipAddress;
+    @TableField(exist = false)
+    private Address address;
+
+
 
 }

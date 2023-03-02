@@ -58,12 +58,20 @@
                             </template>
                             <span v-if="item.status==='退款中'"  class="cancel"> 确认退款 </span>
                         </a-popconfirm>
-                        
+                        <span v-if="item.status==='待发货'"  class="cancel" @click="openModal(item)"> 去发货 </span>
                     </div>
                 </div>
             </div>   
         </div>
         <Pagination :current="pagination.current" :total="total" :page-size="6" @change="pageChange" class="page"/>
+        <Modal title="发货" :visible="ShowModal" @ok="handleOK" @cancel="closeModal" ok-text="提交单号" cancel-text="返回">
+            <h3 style="color: brown;">请填写发货单号,确认无误后提交</h3>
+            <Form>
+                <FormItem label="快递单号">
+                    <Input v-model:value="expressNo"></Input>
+                </FormItem>
+            </Form>
+        </Modal>
         <Drawer
             v-model:visible="showDrawer" title="订单详情" placement="right" :close="closeDrawer" width="
             500"
@@ -105,7 +113,7 @@
 
 <script lang="ts">
 import { defineComponent,onMounted,ref,reactive,onActivated,computed } from 'vue'
-import { Form,FormItem,Input,Button,Table, TableProps, message, SelectProps,Pagination,Image,Drawer } from 'ant-design-vue';
+import { Form,FormItem,Input,Button,Table, Modal, message, SelectProps,Pagination,Image,Drawer } from 'ant-design-vue';
 import request from '../../../utils/request';
 import { Key } from 'ant-design-vue/lib/table/interface';
 import { RedoOutlined } from '@ant-design/icons-vue';
@@ -121,21 +129,27 @@ export default defineComponent({
         RedoOutlined,
         Pagination,
         Image,
-        Drawer
+        Drawer,
+        Modal
+
     },
     setup () {
+        const ShowModal=ref(false)
         const orderData=ref()
         const showDrawer=ref(false)
         const tableData = ref()
         const current=ref(1)
         const visible=ref(false)
         const total=ref()
-        
+        const expressNo=ref()
+        const modalInfo=ref()
         const pagination = computed(() => ({
             total: total.value,
             current: current.value,
             pageSize: 6,
         }));
+
+        
         const statusOptions=ref<SelectProps['options']>([
             {
                 label: '待付款',
@@ -237,6 +251,15 @@ export default defineComponent({
                 total.value = res.data.data.total
             })
        }
+
+       function openModal(data){
+            ShowModal.value=true
+            modalInfo.value=data
+       }
+
+       function closeModal(){
+            ShowModal.value=false
+       }
         
         function load(data){
             request.post('/order/userList',{data:{userId:data.id}}).then(res=>{
@@ -274,10 +297,20 @@ export default defineComponent({
                 reload()
             })
         }
+
+        function handleOK(){
+            modalInfo.value.expressNo=expressNo.value
+            request.post('/order/send',{data:modalInfo.value}).then(res=>{
+                message.info(res.data.message)
+                ShowModal.value=false
+                reload()
+            })
+            
+        }
         
 
-        return {load,tableData,statusOptions,visible,current,total,showDrawer,removeOrder,closeDrawer,orderData,handleCancel,
-            handleDelete,reload,pagination,pageChange,searchForm,handleSearch,getImageUrl,goStore,orderDetail
+        return {load,tableData,statusOptions,visible,current,total,showDrawer,removeOrder,closeDrawer,orderData,handleCancel,ShowModal,handleOK,
+            handleDelete,reload,pagination,pageChange,searchForm,handleSearch,getImageUrl,goStore,orderDetail,expressNo,openModal,closeModal
         }
     }
 })

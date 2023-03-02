@@ -10,7 +10,9 @@
             <TabPane :forceRender="true" :disabled="hasStore" key="3" tab="商品管理">
                 <Goods ref="goodsRef"/>
             </TabPane>
-            <TabPane :forceRender="true" :disabled="hasStore" key="4" tab="订单中心"></TabPane>
+            <TabPane :forceRender="true" :disabled="hasStore" key="4" tab="订单中心">
+                <Orders ref="ordersRef"/>
+            </TabPane>
             <TabPane :forceRender="true" :disabled="hasStore" key="5" tab="发货信息">
                 <ShipAddress ref="shipAddressRef"/>
             </TabPane>
@@ -26,6 +28,7 @@ import BaseForm from './BaseForm.vue';
 import Preferential from './Preferential.vue';
 import ShipAddress from './ShipAddress.vue';
 import Goods from './Goods.vue';
+import Orders from './Orders.vue';
 export default defineComponent({
     name: 'Store',
 
@@ -35,9 +38,11 @@ export default defineComponent({
         BaseForm,
         Preferential,
         ShipAddress,
-        Goods
+        Goods,
+        Orders
     },
     setup () {
+        const ordersRef=ref()
         const goodsRef=ref()
         const hasStore = ref(true)
         const store = ref()
@@ -54,6 +59,7 @@ export default defineComponent({
                     form.value.load(store.value)
                     preferentialRef.value.load(store.value)
                     goodsRef.value.load(store.value.id)
+                    ordersRef.value.load(store.value)
                     sessionStorage.setItem('storeId',store.value.id)
                     request.post('/shipAddress/getInfo',{data:store.value.id}).then(sa=>{
                         shipAddressRef.value.load(sa.data.data)
@@ -67,7 +73,7 @@ export default defineComponent({
            
         })
 
-        return {hasStore,form,preferentialRef,shipAddressRef,goodsRef}
+        return {hasStore,form,preferentialRef,shipAddressRef,goodsRef,ordersRef}
     }
 })
 </script>

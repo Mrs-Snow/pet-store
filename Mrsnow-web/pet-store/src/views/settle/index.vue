@@ -82,6 +82,7 @@ export default defineComponent({
             request.post('/order/buyFromDetail',{data:{
                     userId:userId,
                     goodsId:goodsId,
+                    addressId:address.value.id,
                     num: num
                 }}).then(res=>{
                     console.log(res.data.data)

@@ -69,6 +69,12 @@ public class OrderController {
         return R.success(str);
     }
 
+    @PostMapping(value = "/send")
+    public R send(@RequestBody JO<Order> jo){
+        String str = orderService.send(jo.getData());
+        return R.success(str);
+    }
+
     @PostMapping(value = "/cancelApply")
     public R cancelApply(@RequestBody JO<Order> jo){
         String str = orderService.cancelApply(jo.getData());

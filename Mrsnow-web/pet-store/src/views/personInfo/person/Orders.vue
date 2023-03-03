@@ -54,7 +54,17 @@
                         >
                             <span class="cancel" v-if="item.status!=='已完成'&&item.status!=='已退款'&&item.status!=='退款中'"> 申请退款 </span>
                         </a-popconfirm>
-                        
+                        <a-popconfirm
+                        ok-text="确定"
+                        cancel-text="取消"
+                        @confirm="handleConfirm(item)"
+                        >
+                            <template #title>
+                                <p>请确保您已收到货物</p>
+                                <p>确定要签收吗?</p>
+                            </template>
+                            <span v-if="item.status!=='已完成'&&item.status!=='已退款'" class="cancel" style="background-color: cornflowerblue; left: 40px;"> 确认收货 </span>
+                        </a-popconfirm>
                     </div>
                 </div>
             </div>   
@@ -271,8 +281,15 @@ export default defineComponent({
             })   
         }
 
+        function handleConfirm(order){
+            request.post('/order/confirm',{data:order}).then(res=>{
+                message.info(res.data.message)
+                reload()
+            })   
+        }
+
         return {load,tableData,statusOptions,visible,current,total,showDrawer,removeOrder,closeDrawer,orderData,handleCancel,
-            handleDelete,reload,pagination,pageChange,searchForm,handleSearch,getImageUrl,goStore,orderDetail
+            handleDelete,reload,pagination,pageChange,searchForm,handleSearch,getImageUrl,goStore,orderDetail,handleConfirm
         }
     }
 })
@@ -283,7 +300,7 @@ export default defineComponent({
         padding: 3px;
         height: 100%;
         position: relative;
-        left: 80px;
+        left: -40px;
         bottom: 8px;
         cursor: pointer;
         color: white;

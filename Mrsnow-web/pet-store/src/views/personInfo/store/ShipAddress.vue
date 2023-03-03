@@ -75,7 +75,7 @@ export default defineComponent({
             formData.consignerAddress = data.consignerAddress
         }
 
-        return {load,formData,handleSubmit,hasStore,editable,handleApply}
+        return {load,formData,handleSubmit,hasStore,editable,handleApply,reload}
     }
 })
 </script>

@@ -55,6 +55,11 @@ const routes: RouteRecordRaw[] =[
         component: ()=> import('../views/settle/index.vue')
     },
     {
+        name: 'orders',
+        path: '/orders/:cartIds',
+        component: ()=> import('../views/settle/Orders.vue')
+    },
+    {
         path: '/:pathMatch(.*)*',
         component: ()=> import('../views/notFound.vue')
     }

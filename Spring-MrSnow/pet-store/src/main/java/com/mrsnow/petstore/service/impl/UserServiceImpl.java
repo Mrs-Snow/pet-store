@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.NumberFormatter;
+import java.text.NumberFormat;
+
 /**
  * <p>
  * 用户表 服务实现类
@@ -45,6 +48,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(user2!=null){
             return 20;
         }
+        int count = count();
+        String formattedNum = String.format("%03d", count);
+        user.setNickName("用户"+formattedNum);
         return getBaseMapper().insert(user);
     }
 

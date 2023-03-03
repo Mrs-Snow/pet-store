@@ -54,7 +54,7 @@ public class OrderController {
     }
 
     @PostMapping(value = "/buyFromCart")
-    public R buyFromCart(@RequestBody JO<List<BuyInfo>> jo){
+    public R buyFromCart(@RequestBody JO<List<Long>> jo){
         try {
             List<Order> orders = orderService.buyFromCart(jo);
             return R.success(orders,"创建订单成功!");
@@ -78,6 +78,24 @@ public class OrderController {
     @PostMapping(value = "/cancelApply")
     public R cancelApply(@RequestBody JO<Order> jo){
         String str = orderService.cancelApply(jo.getData());
+        return R.success(str);
+    }
+
+    @PostMapping(value = "/receive")
+    public R receive(@RequestBody JO<Order> jo){
+        String str = orderService.receive(jo.getData());
+        return R.success(str);
+    }
+
+    @PostMapping(value = "/confirm")
+    public R confirm(@RequestBody JO<Order> jo){
+        String str = orderService.confirm(jo.getData());
+        return R.success(str);
+    }
+
+    @PostMapping(value = "/refuse")
+    public R refuse(@RequestBody JO<Order> jo){
+        String str = orderService.refuse(jo.getData());
         return R.success(str);
     }
 

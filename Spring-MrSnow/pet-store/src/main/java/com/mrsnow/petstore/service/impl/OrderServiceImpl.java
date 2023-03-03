@@ -2,10 +2,7 @@ package com.mrsnow.petstore.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.mrsnow.petstore.dao.*;
-import com.mrsnow.petstore.mapper.AddressMapper;
-import com.mrsnow.petstore.mapper.GoodsMapper;
-import com.mrsnow.petstore.mapper.OrderMapper;
-import com.mrsnow.petstore.mapper.ShipAddressMapper;
+import com.mrsnow.petstore.mapper.*;
 import com.mrsnow.petstore.service.OrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mrsnow.petstore.utils.ArgUtils;
@@ -17,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sun.util.resources.LocaleData;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -34,8 +32,10 @@ import java.util.*;
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements OrderService {
     private final GoodsMapper goodsMapper;
     private final ShipAddressMapper shipAddressMapper;
-
+    private final CartMapper cartMapper;
     private final AddressMapper addressMapper;
+    private final PreferentialMapper preferentialMapper;
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -49,14 +49,19 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public List<Order> buyFromCart(JO<List<BuyInfo>> jo) throws Exception {
-        List<BuyInfo> buyInfos = jo.getData();
+    public List<Order> buyFromCart(JO<List<Long>> jo) throws Exception {
+        List<Long> cartIds = jo.getData();
+
 
         ArrayList<Order> orders = new ArrayList<>();
-        for (BuyInfo info:buyInfos){
-            Long goodsId = info.getGoodsId();
+        for (Long id:cartIds){
+            Cart cart = cartMapper.selectById(id);
+            Long goodsId = cart.getGoodsId();
             Goods goods = goodsMapper.selectById(goodsId);
-            int num = info.getNum();
+            Long preferentialId = goods.getPreferentialId();
+            Preferential preferential = preferentialMapper.selectById(preferentialId);
+            ArgUtils.ifNotNull(preferential,()->goods.setPreferential(preferential));
+            int num = cart.getGoodsNum();
             goods.setNum(num);
             //校验
             if(goods.getInventoryNum()<1){
@@ -65,7 +70,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             if(goods.getInventoryNum()<num){
                 throw new Exception(goods.getGoodsName()+"的库存不足！");
             }
-            Order order = setOrder(goods, num, info.getUserId());
+
+            Order order = setOrder(goods, num, cart.getUserId());
+            order.setCartId(id);
             orders.add(order);
         }
 
@@ -124,8 +131,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String pay(Order order) {
-        //设置待发货
+        //设置
         order.setStatus("待发货");
+
+        //购物车清除记录
+        Long cartId = order.getCartId();
+        ArgUtils.ifNotNull(cartId,()->{
+            cartMapper.deleteById(cartId);
+        });
         save(order);
         return "支付完成";
     }
@@ -133,8 +146,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String send(Order order) {
-        //设置待发货
-        order.setStatus("已发货");
+        //设置
+        order.setStatus("待签收");
 
         //修改库存量
         Long goodsId = order.getGoodsId();
@@ -150,7 +163,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String receive(Order order) {
-        //设置待发货
+        //设置
         order.setStatus("已签收");
         updateById(order);
         return "签收完成";
@@ -159,7 +172,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String confirm(Order order) {
-        //设置待发货
+        //设置
         order.setStatus("已完成");
 
         //修改库存量
@@ -174,8 +187,27 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    public String refuse(Order order) {
+        //设置
+        if(order.getExpressNo()!=null){
+            order.setStatus("待签收");
+        }else{
+            order.setStatus("待发货");
+        }
+        //修改库存量
+        Long goodsId = order.getGoodsId();
+        Goods goods = goodsMapper.selectById(goodsId);
+        goods.setInventoryNum(goods.getInventoryNum()+order.getGoodsNum());
+
+        goodsMapper.updateById(goods);
+        updateById(order);
+        return "修改完成";
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public String cancel(Order order) {
-        //设置待发货
+        //设置
         order.setStatus("已退款");
         updateById(order);
         return "退款完成";
@@ -184,7 +216,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String cancelApply(Order order) {
-        //设置待发货
+        //设置
         order.setStatus("退款中");
         updateById(order);
         return "已申请";
@@ -238,17 +270,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 }
                 //打折不为100，有打折
                 if(!preferential.getDiscount().equals(new BigDecimal(100))){
-
-                    //折扣系数
-                    BigDecimal ratio = new BigDecimal("0.01");
-                    BigDecimal value = new BigDecimal(countValue);
-                    BigDecimal discount = ratio.multiply(value);
+                    //折扣
+                    BigDecimal discount = getDiscount(countValue);
                     //折后价格
                     before=before.multiply(discount);
                     remark=remark+countValue+"折，";
                 }
                 order.setAmount(before);
-                remark=remark+"已为您优惠："+price.multiply(goodsNum).subtract(before)+"元";
+                remark=remark+"已为您优惠："+(price.multiply(goodsNum).subtract(before)).setScale(2, RoundingMode.HALF_UP)+"元";
                 order.setRemark(remark);
             }else {
                 //未达条件,没优惠
@@ -262,5 +291,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             order.setRemark("无优惠活动");
             return order;
         }
+    }
+
+    private BigDecimal getDiscount(int countValue){
+        //折扣率
+        BigDecimal ratio = new BigDecimal("0.01");
+
+        if(countValue>0&&countValue<10){
+            countValue*=10;
+        }
+        BigDecimal value=new BigDecimal(countValue);
+        return ratio.multiply(value);
     }
 }

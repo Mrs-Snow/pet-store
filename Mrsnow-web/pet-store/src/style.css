@@ -24,6 +24,32 @@ a:hover {
   color: #535bf2;
 }
 
+.info1{
+  color: blueviolet;
+  font-weight: 400;
+  margin-left: 10px;
+}
+
+.info2{
+  color: rgb(126, 125, 127);
+  font-weight: 400;
+  margin-left: 20px;
+}
+
+.info3{
+  color: rgb(219, 45, 149);
+  font-weight: 500;
+  margin-top: 10px;
+  margin-left: 5px;
+}
+
+.info4{
+  color: rgb(219, 45, 149);
+  font-weight: 500;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 body {
   overflow-x: hidden;
   position: absolute;

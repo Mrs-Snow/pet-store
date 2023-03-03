@@ -80,6 +80,7 @@ export default defineComponent({
         const searchRef = ref();
 
         const showTab = (val:Ref) =>{
+            current.value=1
             tabProxy.value = val.value.tabName
             showGoods.value=true
             showCarousel.value=val.value.showCarousel
@@ -242,7 +243,8 @@ export default defineComponent({
 
     .content {
         display: flex;
-        height: 80vh;
+        height: 800px;
         width: 100%;
+        background-color: white;
     }
 </style>

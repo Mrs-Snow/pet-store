@@ -48,6 +48,15 @@ export default defineComponent({
 
         const changeTab=(e)=>{
             activeKey.value=e
+            if(e==='1'){
+                form.value.reload()
+            }
+            if(e==='3'){
+                addressRef.value.reload()
+            }
+            if(e==='4'){
+                ordersRef.value.reload()
+            }
         }
         onMounted(()=>{
             const userId = sessionStorage.getItem('userId')

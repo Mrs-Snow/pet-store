@@ -1,6 +1,6 @@
 <template>
     <div id="container">
-      <index-title></index-title>
+      <index-title style="float: left; margin-left: 120px; margin-top: 20px;"></index-title>
     <a-form
     id="register_form"
     :model="formState"

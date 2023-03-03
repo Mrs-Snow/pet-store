@@ -34,7 +34,7 @@
                 </div>
                 <div>
                     <div style="font-size: large; color: blueviolet; text-align: justify; margin-left: 100px; margin-top: 5px;">已选择 {{ selectList.length }} 件商品</div>
-                    <div style="font-size: large; color: red; text-align: justify; margin-left: 100px; margin-top: 5px; font-weight:600;" >合计:{{ countAll }}元</div>
+                    <div style="font-size: large; color: red; text-align: justify; margin-left: 100px; margin-top: 5px; font-weight:600;" >合计:{{ countAll.toFixed(2) }}元</div>
                     <Button style=" background-color: blueviolet; color: aliceblue;float: right; margin-right: 100px;"  type="primary" @click="goSettle">去 结 算</Button>
                     <a-popconfirm
                     title="真的要这么做吗?"
@@ -191,7 +191,14 @@ export default defineComponent({
             if(selectList.value.length===0){
                 message.error('请选择至少一件商品!')
             }
-            // router.push('/settle')
+            let ids=[]
+            selectList.value.map(s=>{
+                ids.push(s.id)
+            })
+            router.push({
+                name: 'orders',
+                params:{cartIds:ids.toString()}
+            })
         }
 
         function hasCartInfo(){
@@ -239,6 +246,7 @@ export default defineComponent({
 <style scoped>
     .mycart{
         height: 800px;
+        background-color: white;
     }
 
     .cart{
@@ -264,6 +272,7 @@ export default defineComponent({
         width: 100px;
         height: 40px;
         margin-top: 12px;
+        overflow-y: scroll;
     }
 
     .image{

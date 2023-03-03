@@ -58,6 +58,18 @@
                             </template>
                             <span v-if="item.status==='退款中'"  class="cancel"> 确认退款 </span>
                         </a-popconfirm>
+                        <a-popconfirm
+                        ok-text="确定"
+                        cancel-text="取消"
+                        @confirm="handleRefuse(item)"
+                        >
+                            <template #title>
+                                <p>多次重复退款流程,平台将会介入</p>
+                                <p>确定要拒绝退款吗?</p>
+                            </template>
+                            <span v-if="item.status==='退款中'"  class="cancel" style="background-color: blueviolet; left: -60px;"> 拒绝退款 </span>
+                        </a-popconfirm>
+                        
                         <span v-if="item.status==='待发货'"  class="cancel" @click="openModal(item)"> 去发货 </span>
                     </div>
                 </div>
@@ -305,12 +317,18 @@ export default defineComponent({
                 ShowModal.value=false
                 reload()
             })
-            
+        }
+
+        function handleRefuse(order){
+            request.post('/order/refuse',{data:order}).then(res=>{
+                message.info(res.data.message)
+                reload()
+            })
         }
         
 
         return {load,tableData,statusOptions,visible,current,total,showDrawer,removeOrder,closeDrawer,orderData,handleCancel,ShowModal,handleOK,
-            handleDelete,reload,pagination,pageChange,searchForm,handleSearch,getImageUrl,goStore,orderDetail,expressNo,openModal,closeModal
+            handleDelete,reload,pagination,pageChange,searchForm,handleSearch,getImageUrl,goStore,orderDetail,expressNo,openModal,closeModal,handleRefuse
         }
     }
 })

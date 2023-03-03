@@ -1,7 +1,7 @@
 <template>
     <div class="left_menu">
-        <Tabs tab-position="left">
-            <TabPane key="1" tab="商店管理">
+        <Tabs tab-position="left" @change="changeTab">
+            <TabPane key="1" tab="商店管理" >
                 <BaseForm ref="form"/>
             </TabPane>
             <TabPane :forceRender="true" :disabled="hasStore" key="2" tab="优惠活动">
@@ -49,6 +49,26 @@ export default defineComponent({
         const form = ref()
         const shipAddressRef=ref()
         const preferentialRef = ref()
+
+        const changeTab=(e)=>{
+            console.log(e)
+            if(e==='1'){
+                form.value.reload()
+            }
+            if(e==='2'){
+                preferentialRef.value.reload()
+            }
+            if(e==='3'){
+                goodsRef.value.reload()
+            }
+            if(e==='4'){
+                ordersRef.value.reload()
+            }
+            if(e==='5'){
+                shipAddressRef.value.reload()
+            }
+        }
+
         onMounted(()=>{
             const userId = sessionStorage.getItem('userId')
             if(userId){
@@ -73,7 +93,7 @@ export default defineComponent({
            
         })
 
-        return {hasStore,form,preferentialRef,shipAddressRef,goodsRef,ordersRef}
+        return {hasStore,form,preferentialRef,shipAddressRef,goodsRef,ordersRef,changeTab}
     }
 })
 </script>

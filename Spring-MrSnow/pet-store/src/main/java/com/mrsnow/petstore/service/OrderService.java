@@ -20,7 +20,7 @@ public interface OrderService extends IService<Order> {
 
     void removeOrder(Order order) throws Exception;
 
-    List<Order> buyFromCart(JO<List<BuyInfo>> jo) throws Exception;
+    List<Order> buyFromCart(JO<List<Long>> jo) throws Exception;
 
     Order byFromDetail(JO<BuyInfo> jo) throws Exception;
 
@@ -30,4 +30,6 @@ public interface OrderService extends IService<Order> {
     String cancel(Order order);
     String cancelApply(Order order);
     String confirm(Order order);
+
+    String refuse(Order order);
 }

@@ -76,18 +76,19 @@ export default defineComponent({
         onBeforeMount(()=>{
             request.post('/address/getDefault',{data:userId}).then(res=>{
                 address.value=res.data.data
-            })
-            const goodsId = route.query.goodsId
-            const num = route.query.num
-            request.post('/order/buyFromDetail',{data:{
+                request.post('/order/buyFromDetail',{data:{
                     userId:userId,
                     goodsId:goodsId,
-                    addressId:address.value.id,
+                    addressId:address?.value.id,
                     num: num
                 }}).then(res=>{
                     console.log(res.data.data)
                     record.value=res.data.data          
                 })
+            })
+            const goodsId = route.query.goodsId
+            const num = route.query.num
+            
         })
         function handleBack(){
             router.go(-1)

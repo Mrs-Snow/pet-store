@@ -50,7 +50,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public List<Order> buyFromCart(JO<List<Long>> jo) throws Exception {
+    public synchronized List<Order> buyFromCart(JO<List<Long>> jo) throws Exception {
         List<Long> cartIds = jo.getData();
 
 
@@ -81,7 +81,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public Order byFromDetail(JO<BuyInfo> jo) throws Exception {
+    public synchronized Order byFromDetail(JO<BuyInfo> jo) throws Exception {
         //参数处理
         BuyInfo buyInfo = jo.getData();
         Goods goods = goodsMapper.selectById(buyInfo.getGoodsId());

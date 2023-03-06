@@ -39,13 +39,13 @@ public class ShipAddressServiceImpl extends ServiceImpl<ShipAddressMapper, ShipA
         ShipAddress shipAddress = jo.getData();
 
         LambdaQueryWrapper<ShipAddress> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(ShipAddress::getStoreId,jo.getData());
+        wrapper.eq(ShipAddress::getStoreId,jo.getData().getStoreId());
         ShipAddress one = getOne(wrapper);
 
         if(one!=null){
             updateById(shipAddress);
         }else {
-            String storeId = shipAddress.getStoreId();
+            Long storeId = shipAddress.getStoreId();
             Store store = storeMapper.selectById(storeId);
             shipAddress.setStoreName(store.getStoreName());
             ArgUtils.ifNull(shipAddress.getId(),()->save(shipAddress));

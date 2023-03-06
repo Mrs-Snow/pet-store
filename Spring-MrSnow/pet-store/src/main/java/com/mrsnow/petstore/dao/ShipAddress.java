@@ -50,7 +50,7 @@ public class ShipAddress extends Model<ShipAddress> {
      */
     @TableField(value = "STORE_ID",condition = SqlCondition.LIKE)
     @JsonSerialize(using= ToStringSerializer.class)
-    private String storeId;
+    private Long storeId;
 
     /**
      * 商店名称
@@ -91,11 +91,11 @@ public class ShipAddress extends Model<ShipAddress> {
         this.consignerAddress = consignerAddress;
     }
 
-    public String getStoreId() {
+    public Long getStoreId() {
         return storeId;
     }
 
-    public void setStoreId(String storeId) {
+    public void setStoreId(Long storeId) {
         this.storeId = storeId;
     }
 

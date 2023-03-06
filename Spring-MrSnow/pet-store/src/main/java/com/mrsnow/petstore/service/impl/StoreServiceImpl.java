@@ -54,6 +54,7 @@ public class StoreServiceImpl extends ServiceImpl<StoreMapper, Store> implements
             updateById(data);
             return "修改成功！";
         }else {
+            data.setIsOpening("0");
             data.setManagerId(userId);
             save(data);
             return "申请店铺完成！";

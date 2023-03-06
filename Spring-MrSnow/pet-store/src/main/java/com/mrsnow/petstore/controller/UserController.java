@@ -50,6 +50,12 @@ public class UserController {
         return R.success(user);
     }
 
+    @PostMapping(value = "/update")
+    public R update(@RequestBody JO<User> jo){
+        userService.updateById(jo.getData());
+        return R.success("保存成功！");
+    }
+
     @PostMapping(value = "/register")
     public R<Integer> register(@RequestBody User user){
         int register = userService.register(user);

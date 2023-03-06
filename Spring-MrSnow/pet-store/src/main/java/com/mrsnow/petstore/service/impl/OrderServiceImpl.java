@@ -35,6 +35,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private final CartMapper cartMapper;
     private final AddressMapper addressMapper;
     private final PreferentialMapper preferentialMapper;
+    private final StoreMapper storeMapper;
 
 
     @Override
@@ -88,7 +89,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         int num = buyInfo.getNum();
         goods.setNum(num);
 
+
+
         //校验
+        Long storeId = goods.getStoreId();
+        Store store = storeMapper.selectById(storeId);
+        if(store.getIsOpening().equals("0")){
+            throw new Exception(store.getStoreName()+"暂未营业！");
+        }
         if(goods.getInventoryNum()<1){
             throw new Exception("库存已告罄！");
         }
@@ -117,8 +125,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         LambdaQueryWrapper<Address> addressLambdaQueryWrapper = new LambdaQueryWrapper<>();
         addressLambdaQueryWrapper.eq(Address::getUserId,userId).eq(Address::getIsDefault,"1");
         Address address = addressMapper.selectOne(addressLambdaQueryWrapper);
-        order.setAddress(address);
-        order.setAddressId(address.getId());
+        if(address!=null){
+            order.setAddress(address);
+            order.setAddressId(address.getId());
+        }
+
+
 
         //发货信息
         LambdaQueryWrapper<ShipAddress> wrapper = new LambdaQueryWrapper<>();

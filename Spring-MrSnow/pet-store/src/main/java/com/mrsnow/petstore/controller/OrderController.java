@@ -49,7 +49,7 @@ public class OrderController {
             Order order = orderService.byFromDetail(jo);
             return R.success(order,"创建订单成功!");
         } catch (Exception e) {
-            return R.fail(e.getMessage());
+            return R.info(e.getMessage());
         }
     }
 
@@ -59,7 +59,7 @@ public class OrderController {
             List<Order> orders = orderService.buyFromCart(jo);
             return R.success(orders,"创建订单成功!");
         } catch (Exception e) {
-            return R.fail(e.getMessage());
+            return R.info(e.getMessage());
         }
     }
 

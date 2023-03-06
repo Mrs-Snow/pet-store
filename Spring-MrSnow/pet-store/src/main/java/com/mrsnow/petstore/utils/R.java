@@ -15,6 +15,8 @@ import lombok.ToString;
 @AllArgsConstructor
 public class R<T> {
     private static final int SUCCESS_CODE = 200;
+
+    private static final int INFO_CODE = 10;
     private static final int LOGIN_CODE = 110;
     private static final int FAIL_CODE = -1;
     private int code;
@@ -57,6 +59,10 @@ public class R<T> {
 
     public static  R fail(String message){
         return new R(FAIL_CODE,message);
+    }
+
+    public static  R info(String message){
+        return new R(INFO_CODE,message);
     }
 
     public static  R noLogin(String message){

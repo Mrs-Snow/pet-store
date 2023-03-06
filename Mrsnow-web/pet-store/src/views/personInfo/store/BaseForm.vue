@@ -72,20 +72,23 @@ export default defineComponent({
             request.post('/store/edit',
             {
                 data:{
-                    name:formData.name,
+                    storeName:formData.name,
                     isOpening: isOpen,
                     storePosition: formData.area,
                     managerName: formData.managerName
                 },
                 extra: userId
             }).then(res=>{
-                reload()
                 message.success(res.data.message)
+                setTimeout(() => {
+                //需要定时执行的代码
+                location.reload()
+                }, 2000)
+                
             })
         }
 
         function reload(){
-            
             request.post('/store/storeInfo',{data:userId}).then(res=>{
                 load(res.data.data)
             })

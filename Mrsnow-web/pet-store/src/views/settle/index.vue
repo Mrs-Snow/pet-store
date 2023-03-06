@@ -74,20 +74,28 @@ export default defineComponent({
         const userId = sessionStorage.getItem("userId")
 
         onBeforeMount(()=>{
-            request.post('/address/getDefault',{data:userId}).then(res=>{
-                address.value=res.data.data
-                request.post('/order/buyFromDetail',{data:{
-                    userId:userId,
-                    goodsId:goodsId,
-                    addressId:address?.value.id,
-                    num: num
-                }}).then(res=>{
-                    console.log(res.data.data)
-                    record.value=res.data.data          
-                })
-            })
             const goodsId = route.query.goodsId
             const num = route.query.num
+            request.post('/order/buyFromDetail',{data:{
+                    userId:userId,
+                    goodsId:goodsId,
+                    num: num
+                }}).then(res=>{
+                    console.log(res.data)
+                    if(res.data.code===10){
+                        message.info(res.data.message)
+                        setTimeout(()=>{
+                            location.replace('/')
+                        },2000)
+                        
+                    }
+                    if(res.data.code===200){
+                        record.value=res.data.data
+                        address.value=res.data.data.address   
+                    }
+                           
+                })
+            
             
         })
         function handleBack(){

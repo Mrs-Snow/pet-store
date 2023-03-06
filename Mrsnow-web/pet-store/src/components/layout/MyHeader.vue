@@ -1,6 +1,7 @@
 <template>
     <div class="header">
         <div class="base">
+            <span class="index" @click="goIndex">回到首页</span>
             <span class="welcome" ref="uname">您好, {{ $setUser() }}!</span>
             <span class="exit" v-if="showExit" @click="exit">退出登录</span>
             <cart :cartNum="5"></cart>
@@ -52,6 +53,11 @@ export default defineComponent({
             message.info('已退出登录~')
         }
         
+        function goIndex(){
+            router.replace({
+                path: '/'
+            })
+        }
         
         
         // const setUsername =()=> {
@@ -73,7 +79,8 @@ export default defineComponent({
             uname,
             userLoginOut,
             showExit,
-            exit
+            exit,
+            goIndex
         }
     }
 })
@@ -82,6 +89,16 @@ export default defineComponent({
 </script>
 
 <style scoped>
+    .index{
+        margin-top: 10px;
+        color: white;
+        font-size: large;
+        position: absolute;
+        font-weight:600;
+        left: 50px;
+        text-decoration:underline;
+        cursor: pointer;
+    }
     .exit{
         color: rgb(248, 248, 248);
         text-decoration:underline;

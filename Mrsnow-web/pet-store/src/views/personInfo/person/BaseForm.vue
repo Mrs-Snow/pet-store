@@ -15,16 +15,17 @@
                 <Input v-model:value="formData.nickName"/>
             </FormItem>
             <FormItem :wrapper-col="{ offset: 3, span: 16 }">
-                 <Button type="primary" html-type="submit">保存</Button>
+                 <Button type="primary" html-type="submit" @click="save">保存</Button>
             </FormItem>
         </Form>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent,onMounted,ref,reactive } from 'vue'
-import { Form,FormItem,Input,Button } from 'ant-design-vue';
+import { defineComponent,onMounted,ref,reactive,inject } from 'vue'
+import { Form,FormItem,Input,Button, message } from 'ant-design-vue';
 import { string } from 'vue-types';
+import request from '../../../utils/request';
 export default defineComponent({
     
     components:{
@@ -34,13 +35,40 @@ export default defineComponent({
         Button
     },
     setup () {
+        const updateHeader =  inject('reload')
         const formData=reactive({
             userName: '',
             phone: '',
             email:'',
             nickName:''
         })
+        const userId = sessionStorage.getItem('userId')
 
+        function save(){
+            request.post('/user/update',{data:{
+                id: userId,
+                userName: formData.userName,
+                phone: formData.phone,
+                email: formData.email,
+                nickName: formData.nickName,
+            }
+            }).then(res=>{
+                message.info(res.data.message)
+                reload()
+            })
+            message.success('部分更改下次登录生效')
+        }
+
+        function reload(){
+            request.post('/user/myself',{data: userId}).then(res=>{
+                const data = res.data.data
+                formData.userName = data.userName
+                formData.phone = data.mobile
+                formData.email = data.email
+                formData.nickName = data.nickName
+            })
+            
+        }
         
         function load(data){
             formData.userName = data.userName
@@ -49,7 +77,7 @@ export default defineComponent({
             formData.nickName = data.nickName
         }
 
-        return {load,formData}
+        return {load,formData,save}
     }
 })
 </script>

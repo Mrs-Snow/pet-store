@@ -13,10 +13,10 @@
                         <span class="info1">{{ item.goodsDetail.goodsName }}</span>
                         <span class="info2">数量: {{ item.goodsNum }}</span>
                         <span class="info2" style="color: red;">单价: {{ item.goodsDetail.price }} ¥</span>
-                        <span class="info2" style="color: chocolate; margin-left: 60px;">{{ item.goodsDetail.preferential.comment }} </span>
+                        <span v-if="item.goodsDetail.preferential" class="info2" style="color: chocolate; margin-left: 60px;">{{ item.goodsDetail.preferential.comment }} </span>
                     </div>
-                    <div class="address">
-                        <span v-if="item.address" style=" margin-left: 300px; text-decoration: underline; color: blue; font-size: small; cursor: pointer;" @click="changeAddress">更换地址</span>
+                    <div v-if="item.address" class="address">
+                        <span style=" margin-left: 300px; text-decoration: underline; color: blue; font-size: small; cursor: pointer;" @click="changeAddress">更换地址</span>
                         <div style="float: left; text-align: justify; height: 20px; color:crimson; font-weight: 700; margin-left: 5px;">收货信息</div>
                         <br/>
                         <div class="info3">收货人: {{item.address.consignee}}</div>
@@ -66,7 +66,16 @@ export default defineComponent({
             let array=ids.split(',');
             console.log(array)
             request.post('/order/buyFromCart',{data:array}).then(res=>{
-                record.value=res.data.data
+                if(res.data.code===10){
+                        message.info(res.data.message)
+                        setTimeout(()=>{
+                            location.replace('/')
+                        },2000)
+                    }
+                    if(res.data.code===200){
+                        record.value=res.data.data  
+                    }
+                
             })
         })
         function handleBack(){

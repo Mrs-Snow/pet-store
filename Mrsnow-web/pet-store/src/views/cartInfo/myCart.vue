@@ -10,9 +10,9 @@
             
             <div v-if="hasCartInfo()" style="font-size: xxx-large; font-weight: 500; color: blueviolet; position: fixed; bottom: 500px; left: 550px;">🛒 购物车空空如也</div>
             <div v-if="!hasCartInfo()" class="cart">
-                <Button style="float: right;" @click="reload()" size="large" shape="circle"><RedoOutlined/></Button>
+                <!-- <Button style="float: right;" @click="reload()" size="large" shape="circle"><RedoOutlined/></Button> -->
                 <div v-for="(item,index) in cartData.records" class="items">
-                    <a-checkbox style="margin-top: 40px; margin-left: 20px;" @change="onSelect" :id="index">{{ index+1 }}</a-checkbox>
+                    <a-checkbox style="margin-top: 40px; margin-left: 20px;" @change="onSelect" :id="index" v-model:checked="checked[index]">{{ index+1 }}</a-checkbox>
                     <div class="image"><Image  :src="getImageUrl(item.goodsDetail.goodsPic)" :width="80"/></div>
                     <div class="name">{{ item.goodsDetail.goodsName }}</div>
                     <div class="num">
@@ -79,13 +79,18 @@ export default defineComponent({
         const current =ref(1)
         const router = useRouter()
         const cartData = ref()
+        const checked = ref([])
         onBeforeMount(()=>{
             const userId = sessionStorage.getItem('userId')
             if (userId){
                 request.post('/cart/myCart',{data: userId,current:1,pageSize:5}).then(res=>{
                     cartData.value = res.data.data
+                    visible.value=[]
+                    checked.value=[]
                     for(var i=0;i<cartData.value.records.length;i++){
                         visible.value.push(false)
+                        checked.value.push(false)
+                        console.log(checked.value)
                     }
             })
                 
@@ -102,9 +107,16 @@ export default defineComponent({
         }
 
         function numInc(index){
+      
             const max =  cartData.value.records[index].goodsDetail.inventoryNum
             if(cartData.value.records[index].goodsNum<max){
                 cartData.value.records[index].goodsNum+=1
+                selectList.value=[]
+                countAll.value=0
+                
+                checked.value.map(c=>{
+                    c=false
+                })
                 request.post('/cart/edit',{data:cartData.value.records[index]}).then(res=>{
                     reload()
                 })
@@ -114,12 +126,20 @@ export default defineComponent({
         
 
         function numDec(index){
+
             if(cartData.value.records[index].goodsNum>0){
                 if(cartData.value.records[index].goodsNum - 1===0){
                     visible.value[index]=true
                     return;
                 }
                 cartData.value.records[index].goodsNum-=1
+                selectList.value=[]
+                countAll.value=0
+                checked.value.map(c=>{
+                    console.log(c)
+                })
+                
+                
                 request.post('/cart/edit',{data:cartData.value.records[index]}).then(res=>{
                     reload()
                 })
@@ -128,13 +148,16 @@ export default defineComponent({
         }
         
         function reload(){
-            selectList.value=[]
+            // selectList.value=[]
             const userId = sessionStorage.getItem('userId')
             if (userId){
                 request.post('/cart/myCart',{data: userId,current:1,pageSize:5}).then(res=>{
                     cartData.value = res.data.data
+                    visible.value=[]
+                    checked.value=[]
                     for(var i=0;i<cartData.value.records.length;i++){
                         visible.value.push(false)
+                        checked.value.push(false)
                     }     
             })
             }
@@ -152,6 +175,11 @@ export default defineComponent({
                 })
                 }
             visible.value[index]=false
+            selectList.value=[]
+            countAll.value=0
+            checked.value.map(c=>{
+                c=false
+            })
         }
 
         function cancelDec(index){
@@ -160,9 +188,13 @@ export default defineComponent({
 
         function onSelect(e){
            const goods = cartData.value.records[e.target.id]
+           goods.checkIndex=e.target.id
+           
            if(e.target.checked){
+                checked.value[e.target.id]=true
                 selectList.value.push(goods)
            }else{
+                checked.value[e.target.id]=false
                 const index = selectList.value.indexOf(goods)
                 selectList.value.splice(index,1)
            }
@@ -182,6 +214,7 @@ export default defineComponent({
                     cartData.value = res.data.data
                     for(var i=0;i<cartData.value.records.length;i++){
                         visible.value.push(false)
+                        checked.value.push(false)
                     }     
             })
             }
@@ -236,7 +269,7 @@ export default defineComponent({
              })
         }
         return {selectList,hasCartInfo,handleBack,cartData,reload,current,getImageUrl,onSelect,numInc, numDec,visible
-            ,confirmDec,cancelDec,pageChange,countAll,goSettle,removeSelect,clearCart
+            ,confirmDec,cancelDec,pageChange,countAll,goSettle,removeSelect,clearCart,checked
             
         }
     }

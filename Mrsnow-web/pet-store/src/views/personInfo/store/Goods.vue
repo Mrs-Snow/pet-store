@@ -208,10 +208,10 @@ export default defineComponent({
                 colSpan: 2,
             },
         ]
-        onActivated(()=>{
-            reload()
+        // onActivated(()=>{
+        //     reload()
             
-        })
+        // })
 
         function handleDelete(){
             if(idRows.value.length<1){
@@ -313,13 +313,19 @@ export default defineComponent({
         
 
        function reload(){
+        const storeId= sessionStorage.getItem('storeId')
         request.post('/goods/getStoreGoods',{data:{storeId:storeId,goodsName:searchForm.goodsName,
                     className:searchForm.className},current:pagination.value.current}).then(res=>{
                 tableData.value=res.data.data.records
                 total.value = res.data.data.total
+                if(pagination.value.current>res.data.data.pages){
+                    pagination.value.current-=1
+                }
+
             })
             request.post('/preferential/simpleList',{data:storeId}).then(res=>{
                 let list=res.data.data
+                preferentialOptions.value=[];
                 list.map(p=>{
                     preferentialOptions.value?.push(
                         {

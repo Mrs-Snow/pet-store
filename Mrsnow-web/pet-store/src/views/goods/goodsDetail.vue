@@ -24,9 +24,9 @@
                 <div class="price_title1">原价:
                     <span style="text-decoration:line-through; margin-left: 10px; font-size: small;">{{ goodsData.price }} 元</span>
                 </div>
-                <div class="price_title2">特惠价:
+                <div class="price_title2">现价:
                     <span style=" margin-left: 10px; font-size: x-large; color: red;">{{ price }} 元</span>
-                    <span v-if="goodsData.preferential" style=" color:deeppink; position: fixed; top:360px; left: 620px;">-{{ goodsData.preferential.preferentialPrice }} 元</span>
+                    <span v-if="goodsData.preferential" style=" color:deeppink; position: fixed; top:360px; left: 620px;">满足条件可 -{{ goodsData.preferential.preferentialPrice }} 元</span>
                     <span v-if="discount!==100" style=" color:blueviolet; position: fixed; top:334px; left: 710px;">{{ discount }} 折</span>
                 </div>
                 <div class="price_title3">月销量: 999+</div>
@@ -84,10 +84,12 @@ export default defineComponent({
             if(preferential){
                 discount.value = preferential.discount
                 if(preferential.discount<100){
-                    price.value = (goodsData.value.price * preferential.discount).toFixed(2)
+                    // price.value = (goodsData.value.price * preferential.discount).toFixed(2)
+                    price.value=goodsData.value.price
                 }
                 if(preferential.preferentialPrice>0){
-                    price.value = (goodsData.value.price - preferential.preferentialPrice).toFixed(2)
+                    // price.value = (goodsData.value.price - preferential.preferentialPrice).toFixed(2)
+                    price.value=goodsData.value.price
                 }
             }else{return;}
         })

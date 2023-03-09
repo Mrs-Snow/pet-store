@@ -13,7 +13,7 @@
             </div>
              <div class="inventoryNum">
                 <span style="margin-left: 5px;">库存: {{ inventoryNum }} 件</span>
-                <span style="width: 50%; color: gray; margin-left: 35px;">
+                <span style="width: 50%; color: gray; margin-left: 15px;">
                 月销量: 999 +
                 </span>
             </div>

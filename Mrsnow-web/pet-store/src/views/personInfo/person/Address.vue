@@ -193,7 +193,9 @@ export default defineComponent({
         request.post('/address/list',{data:id,current:pagination.value.current}).then(res=>{
                 tableData.value=res.data.data.records
                 total.value = res.data.data.total
-                pagination.value.current=1
+                if(pagination.value.current>res.data.data.pages){
+                    pagination.value.current-=1
+                }
             })
        }
        function handleTableChange(e){

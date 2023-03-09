@@ -75,13 +75,14 @@
             500"
         >
             <a-descriptions layout="vertical" bordered size="small">
-            <a-descriptions-item label="商品名" span="2">{{ orderData.goodsName }}</a-descriptions-item>
+            <a-descriptions-item label="商品名" >{{ orderData.goodsName }}</a-descriptions-item>
+            <a-descriptions-item label="单价/元" >{{ orderData.goodsDetail.price }} 元</a-descriptions-item>
             <a-descriptions-item label="订单状态">{{ orderData.status }}</a-descriptions-item>
             <a-descriptions-item label="商品图">
                 <Image  :width="100" :src="getImageUrl(orderData.goodsDetail.goodsPic)"/>
             </a-descriptions-item>
             <a-descriptions-item label="数量">{{ orderData.goodsNum }}</a-descriptions-item>
-            <a-descriptions-item label="总金额/元">{{ orderData.amount }}</a-descriptions-item>
+            <a-descriptions-item label="总金额/元">{{ orderData.amount }} 元</a-descriptions-item>
             <a-descriptions-item label="订单编号" span="3">{{ orderData.orderNo }}</a-descriptions-item>
             <a-descriptions-item label="收货人">{{ orderData.address.consignee }}</a-descriptions-item>
             <a-descriptions-item label="手机号">{{ orderData.address.consigneeTel }}</a-descriptions-item>
@@ -220,6 +221,9 @@ export default defineComponent({
         ).then(res=>{
                 tableData.value=res.data.data.records
                 total.value = res.data.data.total
+                if(pagination.value.current>res.data.data.pages){
+                    pagination.value.current-=1
+                }
             })
        }
 
@@ -240,6 +244,7 @@ export default defineComponent({
         request.post('/order/userList',params).then(res=>{
                 tableData.value=res.data.data.records
                 total.value = res.data.data.total
+                
             })
        }
         

@@ -70,6 +70,7 @@ export default defineComponent({
             current: current.value,
             pageSize: 4,
         }));
+        
         const formData=reactive({
             comment: '',
             preferentialPrice:'0',
@@ -203,14 +204,15 @@ export default defineComponent({
         request.post('/preferential/list',{data:id,current:pagination.value.current}).then(res=>{
                 tableData.value=res.data.data.records
                 total.value = res.data.data.total
-                pagination.value.current=1
+                if(pagination.value.current>res.data.data.pages){
+                    pagination.value.current-=1
+                }
             })
        }
        function handleTableChange(e){
             console.log(e)
-            const { current } = e
-            pagination.value.current=current
-            current.value=current
+            current.value=e.current
+            pagination.value.current=e.current
             reload()
        }
         

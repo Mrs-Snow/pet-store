@@ -60,11 +60,19 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             Long goodsId = cart.getGoodsId();
             Goods goods = goodsMapper.selectById(goodsId);
             Long preferentialId = goods.getPreferentialId();
-            Preferential preferential = preferentialMapper.selectById(preferentialId);
-            ArgUtils.ifNotNull(preferential,()->goods.setPreferential(preferential));
+            if(preferentialId!=null){
+                Preferential preferential = preferentialMapper.selectById(preferentialId);
+                ArgUtils.ifNotNull(preferential,()->goods.setPreferential(preferential));
+            }
+
             int num = cart.getGoodsNum();
             goods.setNum(num);
             //校验
+            Long storeId = goods.getStoreId();
+            Store store = storeMapper.selectById(storeId);
+            if(store.getIsOpening().equals("0")){
+                throw new Exception(store.getStoreName()+"暂未营业！");
+            }
             if(goods.getInventoryNum()<1){
                 throw new Exception(goods.getGoodsName()+"的库存已告罄！");
             }
@@ -88,7 +96,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         Long userId = buyInfo.getUserId();
         int num = buyInfo.getNum();
         goods.setNum(num);
-
+        Long preferentialId = goods.getPreferentialId();
+        if (preferentialId!=null){
+            Preferential preferential = preferentialMapper.selectById(preferentialId);
+            ArgUtils.ifNotNull(preferential,()->goods.setPreferential(preferential));
+        }
 
 
         //校验

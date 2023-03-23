@@ -200,11 +200,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         order.setStatus("已完成");
 
         //修改库存量
-        Long goodsId = order.getGoodsId();
-        Goods goods = goodsMapper.selectById(goodsId);
-        goods.setInventoryNum(goods.getInventoryNum()+order.getGoodsNum());
+//        Long goodsId = order.getGoodsId();
+//        Goods goods = goodsMapper.selectById(goodsId);
+//        goods.setInventoryNum(goods.getInventoryNum()-order.getGoodsNum());
 
-        goodsMapper.updateById(goods);
+//        goodsMapper.updateById(goods);
         updateById(order);
         return "修改完成";
     }
@@ -219,11 +219,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             order.setStatus("待发货");
         }
         //修改库存量
-        Long goodsId = order.getGoodsId();
-        Goods goods = goodsMapper.selectById(goodsId);
-        goods.setInventoryNum(goods.getInventoryNum()+order.getGoodsNum());
-
-        goodsMapper.updateById(goods);
+//        Long goodsId = order.getGoodsId();
+//        Goods goods = goodsMapper.selectById(goodsId);
+//        goods.setInventoryNum(goods.getInventoryNum()+order.getGoodsNum());
+//
+//        goodsMapper.updateById(goods);
         updateById(order);
         return "修改完成";
     }
@@ -233,6 +233,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     public String cancel(Order order) {
         //设置
         order.setStatus("已退款");
+
+        //退库存
+        Long goodsId = order.getGoodsId();
+        Goods update = goodsMapper.selectById(goodsId);
+        update.setInventoryNum(update.getInventoryNum()+order.getGoodsNum());
+        goodsMapper.updateById(update);
         updateById(order);
         return "退款完成";
     }

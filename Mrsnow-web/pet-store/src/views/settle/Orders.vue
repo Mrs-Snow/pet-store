@@ -96,6 +96,10 @@ export default defineComponent({
         }
 
         function pay(order){
+            if(!address.value){
+                message.error("您还没有填写收货信息!")
+                return;
+            }
             request.post('/order/pay',{data:order}).then(res=>{
                 message.info(res.data.message)
                 record.value.splice(order,1)

@@ -34,23 +34,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int register(User user) {
+        //用户输入的手机号
         String mobile = user.getMobile();
+        //用户输入的用户名
         String userName = user.getUserName();
+        //查询是否存在相同的用户名
         LambdaQueryWrapper<User> nameWrapper = new LambdaQueryWrapper<>();
         nameWrapper.eq(User::getUserName,userName);
         LambdaQueryWrapper<User> phoneWrapper = new LambdaQueryWrapper<>();
+        //查询是否存在相同的手机号
         User user1 = getBaseMapper().selectOne(nameWrapper);
         phoneWrapper.eq(User::getMobile,mobile);
         User user2 = getBaseMapper().selectOne(phoneWrapper);
+        //根据查询结果返回相应状态
         if(user1!=null){
             return 10;
         }
         if(user2!=null){
             return 20;
         }
+        //配置默认昵称
         int count = count();
         String formattedNum = String.format("%03d", count);
         user.setNickName("用户"+formattedNum);
+        //插入数据
         return getBaseMapper().insert(user);
     }
 

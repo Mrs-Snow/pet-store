@@ -116,6 +116,10 @@ export default defineComponent({
         }
 
         function pay(){
+            if(!address.value){
+                message.error("您还没有填写收货信息!")
+                return;
+            }
             request.post('/order/pay',{data:record.value}).then(res=>{
                 message.success(res.data.message)
                 router.replace({

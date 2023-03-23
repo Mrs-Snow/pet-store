@@ -272,9 +272,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
             //先拿到达到优惠条件的阈值
             int countValue = ArgUtils.getValue(preferential.getCountValue(),1);
-            BigDecimal priceValue = ArgUtils.getValue(preferential.getPriceValue(),new BigDecimal(0));
+            BigDecimal discountValue = ArgUtils.getValue(preferential.getDiscount(),new BigDecimal("100"));
+            BigDecimal priceValue = ArgUtils.getValue(preferential.getPreferentialPrice(),new BigDecimal(0));
             //不优惠 无论是否满足优惠条件，都按原价计算
-            if(countValue==0 && priceValue.equals(new BigDecimal(0))){
+            if(discountValue.compareTo(new BigDecimal("100"))==0 && priceValue.equals(new BigDecimal("0.00"))){
                 amount=goodsNum.multiply(price);
                 order.setRemark("无实际优惠活动或未达到优惠条件");
                 order.setAmount(amount);

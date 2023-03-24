@@ -11,6 +11,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * <p>
@@ -96,6 +98,9 @@ public class Goods extends Model<Goods> {
      */
     @TableField(value = "CITY", condition = SqlCondition.EQUAL)
     private String city;
+
+    @TableField(value = "UPDATE_TIME",condition = SqlCondition.LIKE)
+    private Date updateTime;
 
     @TableField(exist = false)
     private Integer num;

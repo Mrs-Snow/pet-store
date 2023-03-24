@@ -138,7 +138,7 @@ public class OrderController {
         ArgUtils.ifNotNull(order.getOrderNo(),()->wrapper.like(Order::getOrderNo,order.getOrderNo()));
         ArgUtils.ifNotNull(order.getStatus(),()->wrapper.like(Order::getStatus,order.getStatus()));
         ArgUtils.ifNotNull(order.getGoodsName(),()->wrapper.like(Order::getGoodsName,order.getGoodsName()));
-
+        wrapper.orderByDesc(Order::getId);
         IPage<Order> orders = orderService.page(page,wrapper);
 
         for (Order record : orders.getRecords()) {
@@ -160,7 +160,7 @@ public class OrderController {
         ArgUtils.ifNotNull(order.getOrderNo(),()->wrapper.like(Order::getOrderNo,order.getOrderNo()));
         ArgUtils.ifNotNull(order.getStatus(),()->wrapper.like(Order::getStatus,order.getStatus()));
         ArgUtils.ifNotNull(order.getGoodsName(),()->wrapper.like(Order::getGoodsName,order.getGoodsName()));
-
+        wrapper.orderByDesc(Order::getId);
         IPage<Order> orders = orderService.page(page,wrapper);
 
         for (Order record : orders.getRecords()) {

@@ -279,7 +279,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             //先拿到达到优惠条件的阈值
             int countValue = ArgUtils.getValue(preferential.getCountValue(),1);
             BigDecimal discountValue = ArgUtils.getValue(preferential.getDiscount(),new BigDecimal("100"));
-            BigDecimal priceValue = ArgUtils.getValue(preferential.getPreferentialPrice(),new BigDecimal(0));
+            BigDecimal priceValue = ArgUtils.getValue(preferential.getPreferentialPrice(),new BigDecimal("0.00"));
             //不优惠 无论是否满足优惠条件，都按原价计算
             if(discountValue.compareTo(new BigDecimal("100"))==0 && priceValue.equals(new BigDecimal("0.00"))){
                 amount=goodsNum.multiply(price);
@@ -295,17 +295,17 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 BigDecimal before = price.multiply(goodsNum);
 
                 //立减不为0 有立减
-                if(!preferential.getPreferentialPrice().equals(new BigDecimal(0))){
+                if(!preferential.getPreferentialPrice().equals(new BigDecimal("0.00"))){
                     before = before.subtract(preferential.getPreferentialPrice());
                     remark=remark+"立减"+preferential.getPreferentialPrice().toString()+"元，";
                 }
                 //打折不为100，有打折
                 if(!preferential.getDiscount().equals(new BigDecimal(100))){
                     //折扣
-                    BigDecimal discount = getDiscount(countValue);
+                    BigDecimal discount = getDiscount(preferential.getDiscount().intValue());
                     //折后价格
                     before=before.multiply(discount);
-                    remark=remark+countValue+"折，";
+                    remark=remark+discountValue+"折，";
                 }
                 order.setAmount(before);
                 remark=remark+"已为您优惠："+(price.multiply(goodsNum).subtract(before)).setScale(2, RoundingMode.HALF_UP)+"元";

@@ -93,7 +93,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(!old.equals(user.getPassword())){
             return "旧密码不正确！";
         }
-        if(user.getPassword().equals(old)){
+        if(newPassword.equals(old)){
             return "新密码不能是旧密码！";
         }
         user.setPassword(newPassword);

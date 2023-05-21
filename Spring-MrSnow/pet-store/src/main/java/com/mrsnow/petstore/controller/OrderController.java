@@ -43,6 +43,11 @@ public class OrderController {
     private final OrderService orderService;
     private final GoodsService goodsService;
 
+    /**
+     * 单个下单
+     * @param jo
+     * @return
+     */
     @PostMapping(value = "/buyFromDetail")
     public R buyFromDetail(@RequestBody JO<BuyInfo> jo){
         try {
@@ -52,7 +57,11 @@ public class OrderController {
             return R.info(e.getMessage());
         }
     }
-
+    /**
+     * 批量下单
+     * @param jo
+     * @return
+     */
     @PostMapping(value = "/buyFromCart")
     public R buyFromCart(@RequestBody JO<List<Long>> jo){
         try {

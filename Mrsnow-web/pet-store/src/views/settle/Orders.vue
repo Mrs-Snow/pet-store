@@ -73,7 +73,8 @@ export default defineComponent({
                         },2000)
                     }
                     if(res.data.code===200){
-                        record.value=res.data.data  
+                        record.value=res.data.data
+                        address.value = record.value[0].address
                     }
                 
             })

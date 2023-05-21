@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -64,7 +67,7 @@ public class GoodsController {
     }
 
     @PostMapping(value = "/edit")
-    public R edit(@RequestBody JO<Goods> jo){
+    public R edit(@RequestBody JO<Goods> jo, HttpServletRequest request){
         Goods goods = jo.getData();
         goodsService.edit(goods);
         return R.success("保存完成！");

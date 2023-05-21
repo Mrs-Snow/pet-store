@@ -39,13 +39,13 @@ import java.util.Random;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements GoodsService {
-    private final static String[] GOODS_IMG_FOOD= {"food2.jpg","food3.jpg","food4.jpg","food5.jpg","food6.jpg","food7.jpg"};
-    private final static String[] GOODS_IMG_MAOTIAO={"maotiao1.webp","maotiao2.webp"};
-    private final static String[] GOODS_IMG_FANPEN={"fanpen1.webp","fanpen2.webp"};
-    private final static String[] GOODS_IMG_BOHE={"bohe1.webp","bohe2.webp"};
-    private final static String[] GOODS_IMG_DG={"donggan1.webp","donggan2.webp"};
-    private final static String[] GOODS_IMG_GT={"guantou1.webp","guantou2.webp"};
-    private final static String[] GOODS_IMG_MOYA={"moya1.webp","maocao1.webp","maocao2.webp"};
+    private final static String[] GOODS_IMG_FOOD = {"food2.jpg", "food3.jpg", "food4.jpg", "food5.jpg", "food6.jpg", "food7.jpg"};
+    private final static String[] GOODS_IMG_MAOTIAO = {"maotiao1.webp", "maotiao2.webp"};
+    private final static String[] GOODS_IMG_FANPEN = {"fanpen1.webp", "fanpen2.webp"};
+    private final static String[] GOODS_IMG_BOHE = {"bohe1.webp", "bohe2.webp"};
+    private final static String[] GOODS_IMG_DG = {"donggan1.webp", "donggan2.webp"};
+    private final static String[] GOODS_IMG_GT = {"guantou1.webp", "guantou2.webp"};
+    private final static String[] GOODS_IMG_MOYA = {"moya1.webp", "maocao1.webp", "maocao2.webp"};
     private final StoreMapper storeMapper;
     private final PreferentialMapper PreferentialMapper;
 
@@ -63,11 +63,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         //关键词过滤
         wrapper.like(Goods::getGoodsName, jo.getData());
         //如果有分类参数
-        if(StringUtils.isNotEmpty(jo.getExtra())){
-            wrapper.like(Goods::getClassName,jo.getExtra());
+        if (StringUtils.isNotEmpty(jo.getExtra())) {
+            wrapper.like(Goods::getClassName, jo.getExtra());
         }
         //分页查询
-        return baseMapper.selectPage(goodsPage,wrapper);
+        return baseMapper.selectPage(goodsPage, wrapper);
 
     }
 
@@ -77,25 +77,25 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         Page<Goods> goodsPage = new Page<>(jo.getCurrent(), 4);
         LambdaQueryWrapper<Goods> wrapper = new LambdaQueryWrapper<>();
 
-        wrapper.eq(Goods::getStoreId,goods.getStoreId());
-        ArgUtils.ifNotNull(goods.getGoodsName(),()->wrapper.like(Goods::getGoodsName,goods.getGoodsName()));
-        ArgUtils.ifNotNull(goods.getClassName(),()->wrapper.like(Goods::getClassName,goods.getClassName()));
-        return baseMapper.selectPage(goodsPage,wrapper);
+        wrapper.eq(Goods::getStoreId, goods.getStoreId());
+        ArgUtils.ifNotNull(goods.getGoodsName(), () -> wrapper.like(Goods::getGoodsName, goods.getGoodsName()));
+        ArgUtils.ifNotNull(goods.getClassName(), () -> wrapper.like(Goods::getClassName, goods.getClassName()));
+        return baseMapper.selectPage(goodsPage, wrapper);
     }
 
     @Override
     public Page<Goods> getStoreByStoreId(PJO<Long> jo) {
         Page<Goods> goodsPage = new Page<>(jo.getCurrent(), jo.getPageSize());
         LambdaQueryWrapper<Goods> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Goods::getStoreId,jo.getData());
-        return baseMapper.selectPage(goodsPage,wrapper);
+        wrapper.eq(Goods::getStoreId, jo.getData());
+        return baseMapper.selectPage(goodsPage, wrapper);
     }
 
     @Override
     public Goods goodsDetail(JO<Long> jo) {
         Goods goods = baseMapper.selectById(jo.getData());
         //查优惠活动
-        if (goods.getPreferentialId()!=null){
+        if (goods.getPreferentialId() != null) {
             Preferential preferential = PreferentialMapper.selectById(goods.getPreferentialId());
             goods.setPreferential(preferential);
         }
@@ -115,9 +115,10 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         save(goods1);
         return goods1;
     }
-    private Goods setImg(Goods goods){
-        String s = goods.getGoodsName();
-        switch (s){
+
+    private Goods setImg(Goods goods) {
+        String s = goods.getClassName();
+        switch (s) {
             case "罐头":
                 goods.setGoodsPic(randomImg(GOODS_IMG_GT));
                 break;
@@ -137,14 +138,18 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
                 goods.setGoodsPic(randomImg(GOODS_IMG_BOHE));
                 break;
             case "饭盆":
+                goods.setGoodsPic(randomImg(GOODS_IMG_FANPEN));
+                break;
             case "饮料":
                 goods.setGoodsPic(randomImg(GOODS_IMG_FANPEN));
                 break;
-            default:goods.setGoodsPic("food2.jpg");
+            default:
+                goods.setGoodsPic("food2.jpg");
         }
         return goods;
     }
-    private String randomImg(String[] imgs){
+
+    private String randomImg(String[] imgs) {
         Random random = new Random();
         int index = random.nextInt(imgs.length);
         return imgs[index];
